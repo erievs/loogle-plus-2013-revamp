@@ -9,87 +9,40 @@ include("important/db.php");
 
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <title>Loogle+</title>
+  
     <link rel="stylesheet" href="assets/css/2013isamess.css">
     <link rel="stylesheet" href="assets/css/2013indexres.css">
-    <link rel="icon" 
-      type="image/png" 
-      href="../assets/important-images/fav.png" />
-
+    <link rel="stylesheet" href="assets/css/2013profile.css">
 </head>
 <body>
 
-<div class="sticky-header" style="display: none;">
-    <div class="menu">
-
-    <span id="loogle-logo" class="loogle-logo"></span>
-    <span id="open-sidebar-1" class="home-h-icon home-icon"></span>
-    <p style="font-size: 16px;
-top: 2px;
-position: relative;"> > </p>
-
-
-        <span class="divider"></span>
-        <ul class="nav nav-tabs" style="  margin: 0 auto;">
-            <li role="presentation" class="active"><a href="#">All</a></li>
-            <li role="presentation"><a href="#">Family</a></li>
-            <li role="presentation"><a href="#">Friends</a></li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    More <span class="caret"></span>
-                </a>
-                
-                <ul class="dropdown-menu">
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div class="main-header">
-    <img class="logo"
-         src="https://i.imgur.com/hhai2zl.png"
-         alt="Logo">
-    <div class="search-container">
-        <input class="search-bar" type="text">
-        <div class="search-text"></div>
-    </div>  
-
-<div class="username-header"><?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : "Your Username"; ?></div>
-
-</div>
 
 <div class="sidebar">
     <ul>
-        <li><span class="icon" id="sel"><div class="home-icon-side"></div> <p>Home</p></span></li>
-        <li><span class="icon" id="non-sel"><div class="profile-icon-side"></div> <p>Profile</p></span></li>
-        <li><span class="icon" id="non-sel"><div class="people-icon-side"></div> <p>People </p></span></li>
-
-        <hr>
-
-        <li><span class="icon" id="non-sel"><div class="wh-icon-side"></div> <p>What's Hot<p></span></li>
-        <li><span class="icon" id="non-sel"><div class="com-icon-side"></div> <p>Communties<p></span></li>
-        <li><span class="icon" id="non-sel"><div class="events-icon-side"></div> <p>Events<p></li>
-        <li><span class="icon" id="non-sel"><div class="settings-icon-side"></div> <p>Settings<p></li>
+        <li><span class="icon">Home</span></li>
+        <li><span class="icon">Profile</span></li>
+        <li><span class="icon">People</span></li>
+        <li><span class="icon">Photos</span></li>
+        <li><span class="icon">What's Hot</span></li>
+        <li><span class="icon">Communities</span></li>
+        <li><span class="icon">Events</span></li>
+        <li><span class="icon">Settings</span></li>
     </ul>
 </div>
+
 <div class="sub-header">
 <span id="open-sidebar" class="home-h-icon home-icon"></span>
 
     <span class="home-icon">Home </span>
     <span class="arrow-icon"> ></span>
-
     <div class="menu">
         <span class="divider"></span>
         <ul class="nav nav-tabs">
@@ -102,9 +55,9 @@ position: relative;"> > </p>
                     More <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
+                    <li><a href="#">Option 1</a></li>
+                    <li><a href="#">Option 2</a></li>
+                    <li><a href="#">Option 3</a></li>
                 </ul>
             </li>
         </ul>
@@ -114,8 +67,35 @@ position: relative;"> > </p>
 
 
 <div class="banner">
-    <!-- LOADED IN A SUCH   -->
+    <!-- Banner content will be loaded dynamically -->
 </div>
+
+
+<div class="sticky-header" style="display: none;">
+    <div class="menu">
+    <span id="open-sidebar-1" class="home-h-icon home-icon"></span>
+    <span class="home-icon">Home </span>
+    <span class="arrow-icon"> ></span>
+        <span class="divider"></span>
+        <ul class="nav nav-tabs" style="margin:0 auto;">
+            <li role="presentation" class="active"><a href="#">All</a></li>
+            <li role="presentation"><a href="#">Family</a></li>
+            <li role="presentation"><a href="#">Friends</a></li>
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">
+                    More <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Placeholer</a></li>
+                    <li><a href="#">Placeholer</a></li>
+                    <li><a href="#">Placeholer</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
 
 <div class="write-post-expanded">
 
@@ -127,46 +107,33 @@ position: relative;"> > </p>
     </div>
 </div>
 
+
+
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 
-<script>
-$(document).ready(function () {
-    var mainHeader = $(".main-header");
-    var subHeader = $(".sub-header");
-    var stickyHeader = $(".sticky-header");
-    var sidebar = $(".sidebar");
-    var offset = mainHeader.offset().top;
-    var sidebarTopPosition = 60; 
-
-    $(window).scroll(function () {
-        var scrollTop = $(window).scrollTop();
-        var mainHeaderHeight = mainHeader.height();
-        var subHeaderHeight = subHeader.height();
-        var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
-
-        if (scrollTop >= offset + totalHeaderHeight) {
-            stickyHeader.css('display', 'block');
-            sidebarTopPosition = 40; 
-        } else {
-            stickyHeader.css('display', 'none');
-            sidebarTopPosition = 60; 
-        }
-
-        sidebar.css('top', sidebarTopPosition + 'px');
-    });
-});
 
 </script>
+
 <script>
+
+
 function formatTime(timestamp) {
     const date = new Date(timestamp);
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
     return date.toLocaleString('en-US', options);
 }
 
+var urlParams = new URLSearchParams(window.location.search);
+        var profileValue = urlParams.get('profile');
+
+var apiUrl = 'http://localhost:8090/apiv1/fetch_posts_api.php?username=' + encodeURIComponent(profileValue);
+
+
     function fetchPosts() {
-    fetch('http://kspc.serv00.net/apiv1/fetch_posts_api.php')
+    fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
@@ -467,7 +434,7 @@ $('.share-button').click(function () {
 
     $.ajax({
         type: 'POST',
-        url: 'http://kspc.serv00.net/apiv1-internal/submit_post_api.php', 
+        url: 'http://localhost:8090/apiv1-internal/submit_post_api.php', 
         data: formData,
         processData: false, 
         contentType: false, 
@@ -493,7 +460,7 @@ $('.share-button').click(function () {
 
 });
 
-const apiEndpoint = 'http://kspc.serv00.net/apiv1/fetch_comments.php?id=';
+const apiEndpoint = 'http://localhost:8090/apiv1/fetch_comments.php?id=';
 
 let currentColumnIndex = 0;
 
@@ -659,7 +626,7 @@ for (let i = 0; i < data.length; i++) {
 });
 
     $.ajax({
-        url: 'http://kspc.serv00.net/apiv1-internal/submit_comment.php',
+        url: 'http://localhost:8090/apiv1-internal/submit_comment.php',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -777,80 +744,45 @@ $(document).ready(function() {
     });
 });
 
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-
-
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
 </script>
-
 <script>
-$(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar-1');
-    let sidebarOpen = false;
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
 
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
+        var profileValue = getUrlParameter('profile');
+        var apiUrl = "http://localhost:8090/apiv1/fetch_banner_api.php?name=" + profileValue;
+        var img = $('<img>');
+        img.attr('src', apiUrl);
+        $(".banner").append(img);
 
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-});
+        $(".sub-header").addClass("fixed");
 
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
+        var scrollThreshold = 50;
 
-
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-
-
-
-</script>
-
-<script>
-    $(document).ready(function() {
-        $(".dropdown-toggle").click(function(e) {
-            e.preventDefault(); 
-            var $dropdownMenu = $(this).next(".dropdown-menu");
-            $dropdownMenu.toggleClass("show");
-        });
-
-        $(document).click(function(e) {
-            if (!$(e.target).closest(".dropdown-toggle").length && $(".dropdown-menu").hasClass("show")) {
-                $(".dropdown-menu").removeClass("show");
+        $(".sticky-header").css("display", "none");
+                $(".sub-header").css("position", "");
+                $(".banner img").css({"height": "150px", "position": "", "z-index": "999"});
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > scrollThreshold) {
+                $(".sticky-header").css("display", "block");
+                $(".sub-header").css("position", "fixed");
+                $(".banner img").css({"height": "100px", "position": "fixed"});
+                $(".sticky-header .nav-tabs > li.active > a").css("margin-top", "-3px");
+                $(".nav-tabs").css("border-bottom", "none");
+            } else {
+                $(".sticky-header").css("display", "none");
+                $(".sub-header").css("position", "");
+                $(".banner img").css({"height": "150px", "position": "", "z-index": "999"});
             }
         });
-    });
+
 </script>
+
+
 
 </body>
 </html>

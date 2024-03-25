@@ -1,14 +1,10 @@
 <?php
-// Retrieve the id parameter from the URL
 $id = $_GET['id'];
 ?>
 
     
         <script type="text/javascript">
-        // Pass the PHP $id to JavaScript
         var idFromPHP = <?php echo json_encode($id); ?>;
-
-        // Now, you can use idFromPHP in your JavaScript code
         console.log(idFromPHP);
     </script>
 
@@ -19,12 +15,16 @@ $id = $_GET['id'];
                 <meta name="viewport" content="width=device-width, initial-scale=1">
                     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
                     <link rel="stylesheet" href="assets/css/post1.css">
+                    <link rel="stylesheet" href="assets/css/2013isamess.css">
+                    <link rel="icon" 
+      type="image/png" 
+      href="../assets/important-images/fav.png" />
       <style>
         @media (max-width: 1280px) {
     .container {
        
-        scale: 0.85; /* Add scale property */
-        margin-left: 6%; /* Add margin-left property */
+        scale: 0.85; 
+        margin-left: 6%; 
     }
 }
 
@@ -66,47 +66,60 @@ $id = $_GET['id'];
                         </div>
                     </div>
                     <div class="main-header">
-                        <img class="logo" src="https://media.discordapp.net/attachments/1151242578604326922/1165090139261902878/catull-loogle.png" alt="Logo">
-                            <div class="search-container">
-                                <input class="search-bar" type="text">
-                                    <div class="search-text"></div>
-                            </div>
-                            <div class="username-header">Your Username</div>
-                    </div>
-                    <div class="sidebar">
-                        <ul>
-                            <li><span class="icon">Home</span></li>
-                            <li><span class="icon">Profile</span></li>
-                            <li><span class="icon">People</span></li>
-                            <li><span class="icon">Photos</span></li>
-                            <li><span class="icon">What's Hot</span></li>
-                            <li><span class="icon">Communities</span></li>
-                            <li><span class="icon">Events</span></li>
-                            <li><span class="icon">Settings</span></li>
-                        </ul>
-                    </div>
-                    <div class="sub-header">
-                        <span id="open-sidebar" class="home-h-icon home-icon"></span>
-                        <span class="home-icon">Home </span>
-                        <span class="arrow-icon"> ></span>
-                        <div class="menu">
-                            <span class="divider"></span>
-                            <ul class="nav nav-tabs">
-                                <li role="presentation" class="active"><a href="#">All</a></li>
-                                <li role-presentation"><a href="#">Family</a></li>
-                            <li role="presentation"><a href="#">Friends</a></li>
-                            <li role="presentation" class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> More <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Option 1</a></li>
-                                    <li><a href="#">Option 2</a></li>
-                                    <li><a href="#">Option 3</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+    <img class="logo"
+         src="https://i.imgur.com/hhai2zl.png"
+         alt="Logo">
+    <div class="search-container">
+        <input class="search-bar" type="text">
+        <div class="search-text"></div>
+    </div>
+
+<div class="username-header"><?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : "Error"; ?></div>
+
+</div>
+
+
+<div class="sidebar">
+    <ul>
+        <li><span class="icon" id="sel"><div class="home-icon-side"></div> <p>Home</p></span></li>
+        <li><span class="icon" id="non-sel"><div class="profile-icon-side"></div> <p>Profile</p></span></li>
+        <li><span class="icon" id="non-sel"><div class="people-icon-side"></div> <p>People </p></span></li>
+
+        <hr>
+
+        <li><span class="icon" id="non-sel"><div class="wh-icon-side"></div> <p>What's Hot<p></span></li>
+        <li><span class="icon" id="non-sel"><div class="com-icon-side"></div> <p>Communties<p></span></li>
+        <li><span class="icon" id="non-sel"><div class="events-icon-side"></div> <p>Events<p></li>
+        <li><span class="icon" id="non-sel"><div class="settings-icon-side"></div> <p>Settings<p></li>
+    </ul>
+</div>
+
+<div class="sub-header">
+<span id="open-sidebar" class="home-h-icon home-icon"></span>
+
+    <span class="home-icon">Home </span>
+    <span class="arrow-icon"> ></span>
+
+    <div class="menu">
+        <span class="divider"></span>
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#">All</a></li>
+            <li role="presentation"><a href="#">Family</a></li>
+            <li role="presentation"><a href="#">Friends</a></li>
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">
+                    More <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Placeholer</a></li>
+                    <li><a href="#">Placeholer</a></li>
+                    <li><a href="#">Placeholer</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
 
                 <div class="container">
                     <div class="user-card">
@@ -140,7 +153,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://loogleplus.free.nf/apiv1/fetch_single_post.php?id=' + id,
+                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (userData) {
@@ -170,7 +183,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://loogleplus.free.nf/apiv1/fetch_single_post.php?id=' + id,
+                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id= + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (postData) {
@@ -231,7 +244,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://loogleplus.free.nf/apiv1/fetch_single_post.php?id=' + id,
+                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (postData) {
@@ -260,7 +273,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://loogleplus.free.nf/apiv1/fetch_single_post.php?id=' + id,
+                        url: 'http://kspc.serv00.netf/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (postData) {
