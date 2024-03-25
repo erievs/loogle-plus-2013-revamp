@@ -1,0 +1,20 @@
+
+Google Plus theme is Copyright (C) 2011 Andras Barthazi <andras at barthazi dot hu>
+
+Some portions of this theme are copyright to their individual authors. Please refer to
+the individual source files and/or to the commit history:
+
+  https://github.com/boogie/gplustheme/commits/master
+
+This Google Plus theme is not endorsed by Google and has been created for making the
+World a better place. I respect Google and use it many times everyday. So Google...
+I mean you no harm, I like our relationship and will delete these pages upon request.
+
+Google, the Google logo, all names and pictures, vehicles and any other Google related
+items are registered trademarks and/or copyrights of Google., or their respective
+trademark and copyright holders.
+
+The license is:
+
+  Creative Commons CC-BY
+  http://creativecommons.org/licenses/by/3.0/
