@@ -14,15 +14,14 @@ include("../important/db.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
     if ($isCommandLine) {
-        $postContent = $argv[1]; // Instead of username
+        $postContent = $argv[1];
     } else {
-        $username = $_POST['username']; // Assuming it's sent as 'username'
+        $username = $_POST['username']; 
         $postContent = $_POST['postContent'];
      
     }
 
-    // Verify that the request comes from the expected URL
-    $expectedReferer = $siteurl; // Replace with your expected URL
+    $expectedReferer = "http://kspc.serv00.net/"; 
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
     if (parse_url($referer, PHP_URL_HOST) !== parse_url($expectedReferer, PHP_URL_HOST)) {
@@ -32,7 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
         exit;
     }
 
-    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt'; // Removed the API key from the filename
+    
+
+    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt'; 
     if (!isRateLimited($rateLimitFile, $rateLimit)) {
         $imageURL = '';
 

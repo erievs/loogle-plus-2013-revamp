@@ -1,0 +1,20 @@
+.banner {
+    width: 100%;
+    height: 10%;    
+    overflow: hidden;
+}
+
+.banner img {
+    width: 100%;
+    height: auto;
+}
+
+.scrolled .banner {
+    height: 5%; 
+}
+
+.sticky-header .menu {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+  }

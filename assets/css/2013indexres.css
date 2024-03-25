@@ -1,0 +1,58 @@
+
+
+/* This is to fix smartphones with width less than 400 px long */
+
+@media screen and (max-width: 450px) {
+
+
+      .nav-tabs > li > a {
+        margin-right: 0px;
+      }
+      .main-header .search-bar {
+        width: 154px;
+      }
+
+.write-post-expanded {
+    scale: 0.60;
+    margin-left: -93px;
+        }
+  
+
+      .content {
+        scale: 0.7;
+  margin-left: -61px;
+      }
+
+      .container {
+        margin-top: -493%;
+  
+      }
+}
+  
+@media screen and (min-width: 401px) and (max-width: 450px) {
+    .container {
+        margin-top: -454%;
+    }
+}
+
+@media screen and (min-width: 401px) and (max-width: 425px) {
+    .container {
+        margin-top: -469%;
+    }
+}
+
+#openFileDialog {
+  margin-bottom: 20px;
+}
+
+.openFileDialog {
+  margin-bottom: 20px;
+}
+
+.upload-button {
+  margin-bottom: 20px;
+}
+
+#upload-button {
+  margin-bottom: 20px;
+}

@@ -10,6 +10,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $postID = $_POST['postID'];
     $username = $_POST['username'];
 
+
+    if (empty($commentContent)) {
+        $response['status'] = 'error';
+        $response['message'] = 'Comment content cannot be blank';
+        echo json_encode($response);
+        exit();
+    }
+
+    if (trim($commentContent) === '') {
+        $response['status'] = 'error';
+        $response['message'] = 'Comment cannot consist only of spaces';
+        echo json_encode($response);
+        exit();
+    }
+
+
     include("../important/db.php");
 
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
@@ -25,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $response['status'] = 'success';
             $response['message'] = 'Comment successfully added';
+            $response['commentContent'] = $commentContent;
+            $response['postID'] = $postID;
+            $response['username'] = $username;
         } else {
             $response['status'] = 'error';
             $response['message'] = "Error: " . $conn->error;
@@ -39,3 +58,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 echo json_encode($response);
+?>

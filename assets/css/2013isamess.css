@@ -177,7 +177,7 @@
         }
 
         .upload-time {
-            margin-left: 10px;
+            margin-left: -8PX;
         }
 
         .post-content {
@@ -387,6 +387,19 @@
           scale: 0.85;
           margin-right: 5px;
           }
+          .loogle-logo {
+            background-image: url('assets/icons/astlas2.png');
+            background-position: 104px 363px;
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            vertical-align: middle;
+            scale: 1.05;
+            margin-right: 5px;
+            margin-left: 1px;
+            margin-top: -7px;
+          }
+  
         .home-icon {
           margin-right: 5px;
           font-size: 13px;
@@ -404,7 +417,7 @@
   top: 0;
   left: 0;
   width: 250px;
-  height: 500px;
+  height: 1250px;
   background: #fff;
   z-index: 999;
   transform: translateX(-100%);
@@ -1254,10 +1267,215 @@ overflow: auto;
 }
 
 .comment-main {
- display: none;
+
  
 }
 
 #postTextArea {
     text-indent: 2ch; 
 }
+
+
+.comment-input {
+    width: 400px;
+    height: 30px;
+   
+  }
+
+  .post-create textarea {
+
+    line-height: 1.5;
+
+  }
+  
+  .cancel {
+    background: #fff;
+    margin-top: 5px;
+    margin-right: 2px;
+    border: none;
+    color: black;
+    padding: 0;
+    cursor: pointer;
+    height: 35x;
+    border-radius: 2px;
+    text-align: center;
+    position: relative;
+    line-height: 33px;
+    width: 100px;
+    border: 1px solid rgb(204, 204, 204);
+      }
+      
+      
+  
+
+  .submit-button {
+    background: #55a644;
+    margin-top: 5px;
+    margin-right: 2px;
+    border: none;
+    color: #fff;
+    padding: 0;
+    cursor: pointer;
+    height: 33px;
+    border-radius: 2px;
+    text-align: center;
+    position: relative;
+    line-height: 33px; /* Set line-height equal to the height */
+    width: 100px;
+  }
+
+
+.pfp {
+    background-image: url('assets/images/regan.png');
+    background-size: cover; /* Adjusts the background image size to cover the entire element */
+    background-position: center; /* Centers the background image within the element */
+}
+
+.comment-main {
+    max-height: 200px;
+}
+
+.sticky-header-profile {
+    background: #f6f6f6;
+    font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+  }
+  
+  .openFileDialog {
+    margin-bottom: 20px;
+  }
+
+  .sidebar .icon {
+    color: #9f9f9f;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  
+#sel {
+    color: black;
+ 
+}
+
+.sidebar li {
+    margin-bottom: 25px;
+}
+
+#sel:hover {
+ background-color: #f7f7f7;
+}
+
+
+.home-icon-side {
+  background-image: url('assets/icons/astlas2.png');
+  background-position: -167px -63px;
+  width: 22px;
+  height: 22px;
+  scale: 1.05;
+  margin-right: 8px;
+  margin-left: 5px;
+
+}
+
+.profile-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -167px -63px;
+    width: 22px;
+    height: 22px;
+    transform: scale(1.25,1.25);
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.profile-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -355px -19px;
+    width: 22px;
+    height: 22px;
+    transform: scale(1.25,1.25);
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.people-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -226px 0px;
+    width: 22px;
+    height: 20px;
+    margin-right: 8px;
+    transform: scale(1.25,1.25);
+    margin-left: 5px;
+  }
+
+
+  .events-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -483px -41px;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    transform: scale(1.25,1.25);
+    margin-left: 5px;
+  }
+
+
+.com-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -315px 172px;
+    width: 22px;
+    height: 20px;
+    margin-right: 8px;
+    transform: scale(1.25,1.25);
+    margin-left: 5px;
+  }
+
+
+.wh-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -270px 0px;
+    width: 22px;
+    height: 20px;
+    margin-right: 8px;
+    transform: scale(1.25,1.25);
+    margin-left: 5px;
+  }
+
+  .settings-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -187px -296px;
+    width: 22px;
+    height: 20px;
+    margin-right: 10px;
+    transform: scale(1.25,1.25);
+    margin-left: 5px;
+  }
+
+#sel p{
+    position: relative;
+    top: 8px;
+    color: #797b7b  ;
+}
+
+#non-sel p{
+    position: relative;
+    top: 8px;
+    color: #9f9f9f  ;
+}
+
+
+#non-sel:hover {
+    background-color: #f7f7f7;
+   }
+   
+
+   .icon {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
