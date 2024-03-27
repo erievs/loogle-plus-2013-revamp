@@ -12,6 +12,8 @@ include("important/db.php");
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<title>Loogle+</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -19,11 +21,16 @@ include("important/db.php");
     <title>Loogle+</title>
     <link rel="stylesheet" href="assets/css/2013isamess.css">
     <link rel="stylesheet" href="assets/css/2013indexres.css">
+    <link rel="stylesheet" href="assets/css/2013notes.css">
     <link rel="icon" 
       type="image/png" 
-      href="../assets/important-images/fav.png" />
+      href="/assets/icons/fav.png" />
 
 </head>
+
+
+<link rel="icon" href="/assets/icons/fav.png">
+
 <body>
 
 <div class="sticky-header" style="display: none;">
@@ -31,9 +38,13 @@ include("important/db.php");
 
     <span id="loogle-logo" class="loogle-logo"></span>
     <span id="open-sidebar-1" class="home-h-icon home-icon"></span>
+
+    
     <p style="font-size: 16px;
 top: 2px;
 position: relative;"> > </p>
+
+
 
 
         <span class="divider"></span>
@@ -58,13 +69,28 @@ position: relative;"> > </p>
 </div>
 
 <div class="main-header">
-    <img class="logo"
-         src="https://i.imgur.com/hhai2zl.png"
-         alt="Logo">
+                  
+<a href="index.php">
+          <img class="logo" src="https://i.imgur.com/hhai2zl.png" alt="Logo">
+ </a>
+
     <div class="search-container">
         <input class="search-bar" type="text">
         <div class="search-text"></div>
     </div>  
+
+
+<div class="settings-icon-side">
+    <span id="notfication-header">
+    <div class="sb-card-body-arrow"></div>
+    <div id="notificationContainer" style="color: #aaa; max-height: 500px; overflow-y: auto;">
+            <span class="title" style="color: #6f6f6f; text-align: center; font-size: 15px;">Loogle notification</span>
+            <br />
+            <br />
+            <div id="mentionsContainer"></div>
+    </div>
+    </span>
+</div>
 
 <div class="username-header"><?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : "Your Username"; ?></div>
 
@@ -109,12 +135,6 @@ position: relative;"> > </p>
             </li>
         </ul>
     </div>
-</div>
-
-
-
-<div class="banner">
-    <!-- LOADED IN A SUCH   -->
 </div>
 
 <div class="write-post-expanded">
@@ -850,6 +870,87 @@ $(document).ready(function() {
             }
         });
     });
+</script>
+
+<script>
+$(document).ready(function () {
+    // Toggle notification container visibility
+    $("#showNotification").click(function () {
+        $("#notificationContainer, #notificationTriangle").toggle();
+    });
+
+    // Fetch mentions initially and every 2500000 milliseconds (approx. 41.6 minutes)
+    fetchMentions();
+    setInterval(fetchMentions, 5000);
+});
+
+function fetchMentions() {
+    $("#mentionsContainer").empty();
+
+    // Fetch mentions from the API
+    $.ajax({
+        url: "http://localhost:8090/apiv1/fetch_mentions.php",
+        type: "GET",
+        data: {
+            username: "d" // Replace "d" with actual username
+        },
+        success: function (data) {
+            const mentions = JSON.parse(data);
+
+            if (mentions.length > 0) {
+                // Append each mention to the mentions container
+                $.each(mentions, function (index, mention) {
+                    const mentionDiv = $("<div>").addClass("mention");
+                    const pfpImage = $("<img>").attr({
+                        src: "https://yt3.ggpht.com/ytc/APkrFKaEi25zAXv7eUtMEtWm99TSnR49Qn29zBQVYr16FA=s96-c-k-c0x00000000-no-cc-rj-rp",
+                        alt: "PFP",
+                    }).addClass("not-pfp-image");
+
+                    const textContainer = $("<div>").addClass("not-text-container");
+                    const usernameDiv = $("<div>").text(mention.sender).addClass("not-username");
+                    const contentDiv = $("<div>").text(mention.content).addClass("not-content");
+
+                    textContainer.append(usernameDiv, contentDiv);
+                    mentionDiv.append(pfpImage, textContainer);
+
+                    $("#mentionsContainer").append(mentionDiv);
+
+                    // Attach click event to dismiss mention
+                    mentionDiv.click(function () {
+                        dismissMention($(this), mention.post_id);
+                    });
+                });
+            } else {
+                $("#mentionsContainer").html("No new mentions.");
+            }
+        },
+    });
+}
+
+function dismissMention(mentionElement, postId) {
+    // Fade out the mention element and remove it from the DOM
+    mentionElement.fadeOut(300, function () {
+        $(this).remove();
+    });
+
+    // Send AJAX request to mark the notification as read
+    $.ajax({
+        url: "http://localhost:8090/apiv1/toggle_notification_status.php",
+        type: "POST",
+        data: {
+            username: "d", // Replace "d" with actual username
+            post_id: postId
+        },
+        success: function (response) {
+            // Handle success if needed
+        },
+        error: function (xhr, status, error) {
+            // Handle error if needed
+        }
+    });
+}
+
+
 </script>
 
 </body>

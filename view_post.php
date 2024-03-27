@@ -8,6 +8,12 @@ $id = $_GET['id'];
         console.log(idFromPHP);
     </script>
 
+<link rel="icon" 
+      type="image/png" 
+      href="assets/icons/fav.png" />
+
+      <title>Loogle+ View Post</title>
+
     <html lang="en">
 
         <head>
@@ -44,6 +50,10 @@ $id = $_GET['id'];
 
 </head>
 
+<link rel="icon" 
+      type="image/png" 
+      href="/assets/icons/fav.png" />
+
                     <body>
                         <div class="sticky-header" style="display: none;">
                             <div class="menu">
@@ -51,7 +61,7 @@ $id = $_GET['id'];
                                 <span class="divider"></span>
                                 <ul class="nav nav-tabs">
                                     <li role="presentation" class="active"><a href="#">All</a></li>
-                                    <li role-presentation"><a href="#">Family</a></li>
+                                    <li role="presentation"><a href="#">Family</a></li>
                                 <li role="presentation"><a href="#">Friends</a></li>
                                 <li role="presentation" class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> More <span class="caret"></span>
@@ -66,9 +76,11 @@ $id = $_GET['id'];
                         </div>
                     </div>
                     <div class="main-header">
-    <img class="logo"
-         src="https://i.imgur.com/hhai2zl.png"
-         alt="Logo">
+                    
+        <a href="index.php">
+          <img class="logo" src="https://i.imgur.com/hhai2zl.png" alt="Logo">
+        </a>
+
     <div class="search-container">
         <input class="search-bar" type="text">
         <div class="search-text"></div>
@@ -183,7 +195,8 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id= + id,
+                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
+
                         type: 'GET',
                         dataType: 'json',
                         success: function (postData) {
@@ -273,7 +286,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://kspc.serv00.netf/apiv1/fetch_single_post.php?id=' + id,
+                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (postData) {
