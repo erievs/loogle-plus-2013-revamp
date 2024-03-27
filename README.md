@@ -7,8 +7,6 @@ Default DB Password
 Root
 Password
 
-Nicholas
-
 Note: PHP 7 and 8 should run it, idk about other stuff.
 
 https://ubuntu.com/server/docs/databases-mysql (I tested it on Ubuntu 23.10 and Fedora 39, php-mysql must be installed for myphpadmin)
@@ -21,3 +19,4 @@ https://ubuntu.com/server/docs/databases-mysql (I tested it on Ubuntu 23.10 and 
 
 4. Make sure you properly update all the URLs for the url, for the index.php and others. It will be added to a config file soon.
 
+5. The mobile app will also need to be patched.
