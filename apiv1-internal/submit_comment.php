@@ -5,11 +5,29 @@ header("Content-Type: application/json");
 
 $response = array();
 
+$rateLimit = 2.5;
+
+function isRateLimited($rateLimitFile, $rateLimit) {
+    if (!file_exists($rateLimitFile) || (time() - filemtime($rateLimitFile)) > $rateLimit) {
+        touch($rateLimitFile);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+$rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit_comments.txt';
+if (isRateLimited($rateLimitFile, $rateLimit)) {
+    $response['status'] = 'error';
+    $response['message'] = "Error: You can only comment once every $rateLimit second(s).";
+    echo json_encode($response);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commentContent = $_POST['commentContent'];
     $postID = $_POST['postID'];
     $username = $_POST['username'];
-
 
     if (empty($commentContent)) {
         $response['status'] = 'error';
@@ -24,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($response);
         exit();
     }
-
 
     include("../important/db.php");
 

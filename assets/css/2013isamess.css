@@ -185,9 +185,10 @@
             word-wrap: break-word;
             white-space: pre-wrap;
             line-height: 1.5;
+            margin-left: 3%;
         }
         .main-header .search-text {
-            background: url(search.png) no-repeat;
+            background: url(assets/icons/search.png) no-repeat;
             width: 62px;
             height: 30px;
             display: block;
@@ -523,7 +524,7 @@
 .post-image {
     width: 95%;
 margin: 2.5% 0;
-margin-left: 2.5%;
+margin-left: 6.5%;
 }
 .container {
     padding: 15px;
@@ -1478,4 +1479,10 @@ overflow: auto;
     cursor: pointer;
     border-radius: 5px;
   }
-  
+  .post-image {
+    margin-left: 6.5%;
+  }
+
+  .logo {
+    margin-right: -157px;
+  }  

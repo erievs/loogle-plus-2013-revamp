@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
     }
 
     // Verify that the request comes from the expected URL
-    $expectedReferer = "http://localhost:8090/"; // Replace with your expected URL
+    $expectedReferer = "http://http://kspc.serv00.net/"; // Replace with your expected URL
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
     if (parse_url($referer, PHP_URL_HOST) !== parse_url($expectedReferer, PHP_URL_HOST)) {

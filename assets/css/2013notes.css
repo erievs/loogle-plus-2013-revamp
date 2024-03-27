@@ -1,0 +1,92 @@
+.settings-icon-side {
+    background-image: url("assets/icons/ncon.png");
+    background-position: -427px -793px;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    transform: scale(1,1);
+    margin-left: -647px;
+    left: -198%;
+  }
+
+#notificationContainer {
+    background-color: rgba(229, 229, 229, 1);
+    width: 400px;
+    padding: 10px;
+    margin: 10px;
+      margin-left: 10px;
+    display: block;
+    left: 0%;
+    text-align: center;
+    position: relative;
+    transform: translateX(-50%);
+    right: 100.953125px;
+    top: 115%;
+    box-shadow: 0 2px 1px #aaa;
+    border-bottom-color: #bbb;
+    color: #404040;
+    font: 13px Roboto, arial, sans-serif;
+    border-radius: none;
+  }
+
+  .sb-card-body-arrow {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    margin-left: -10px;
+    width: 0;  
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgba(229, 229, 229, 1);;
+    
+}
+
+.mention {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background: #fff;
+    box-shadow: 0 2px 1px #aaa;
+  }
+
+.not-pfp-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.not-text-container {
+    flex-grow: 1;
+}
+
+.not-sender {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.not-message {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.not-text-container {
+    margin-left: 100px; /* Adjust as needed */
+    margin-top: -20px; /* Adjust to position username */
+}
+
+.not-username {
+    font-weight: bold;
+    left: -80%;
+    position: relative;
+    color: black;
+  }
+
+.not-content {
+    margin-top: 10px; /* Adjust as needed */
+    color: #333;
+    left: -93%;
+    position: relative;
+}

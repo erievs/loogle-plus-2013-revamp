@@ -23,7 +23,7 @@ function getPostById($postId) {
         $post = $result->fetch_assoc();
 
         if (!empty($post['image_url'])) {
-            $image_url = 'http://localhost:8080/' . $post['image_url'];
+            $image_url = 'http://kspc.serv00.net/' . ltrim(str_replace('..', '', $post['image_url']), '/');
         } else {
             $image_url = null;
         }

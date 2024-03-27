@@ -73,4 +73,4 @@ $data = getPostsAndComments($username);
 
 echo json_encode($data);
 ?>
-    
+
