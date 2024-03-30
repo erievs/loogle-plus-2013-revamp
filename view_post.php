@@ -1,8 +1,5 @@
 <?php
 $id = $_GET['id'];
-?>
-
-<?php
 session_start();
 if (!isset($_SESSION["username"])) {
     echo '<script>window.location.href = "../user/login.php";</script>';
@@ -11,6 +8,7 @@ if (!isset($_SESSION["username"])) {
 
 include("important/db.php");
 
+$icon = "home";
 ?>
 
     

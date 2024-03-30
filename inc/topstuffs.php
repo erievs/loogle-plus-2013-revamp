@@ -1,3 +1,6 @@
+<?php if (!isset($icon)) {
+	$icon = "home";
+}?>
 <script>
 
 $(document).ready(function() {
