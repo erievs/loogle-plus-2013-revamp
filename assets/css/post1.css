@@ -654,7 +654,7 @@ body {
 	width: 550px;
 	border-radius: -1px;
 	height: 500px;
-	margin-left: -163px;
+	margin-left: 141px;
 }
 .post {
 	background: #ffffff;
@@ -797,7 +797,7 @@ body {
     display: inline-block;
     vertical-align: top;
     margin-top: 6%;
-    margin-left: 3%;
+    margin-left: -5%;
 		margin-bottom: 10px;
   }
 

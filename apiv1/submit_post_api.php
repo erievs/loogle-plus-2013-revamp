@@ -10,17 +10,17 @@ $rateLimit = 2.5;
 
 $response = array();
 
+include("../important/db.php");
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
     if ($isCommandLine) {
-        $postContent = $argv[1]; // Instead of username
+        $postContent = $argv[1];
     } else {
-        $username = $_POST['username']; // Assuming it's sent as 'username'
+        $username = $_POST['username']; 
         $postContent = $_POST['postContent'];
-     
     }
 
-    // Verify that the request comes from the expected URL
-    $expectedReferer = "http://http://kspc.serv00.net/"; // Replace with your expected URL
+    $expectedReferer = "http://localhost:8080/"; 
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
     if (parse_url($referer, PHP_URL_HOST) !== parse_url($expectedReferer, PHP_URL_HOST)) {
@@ -30,7 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
         exit;
     }
 
-    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt'; // Removed the API key from the filename
+    // Function to extract mentioned usernames from post content
+    function extractMentions($content) {
+        preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
+        return $matches[1];
+    }
+
+    $mentions = extractMentions($postContent);
+
+    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt'; 
     if (!isRateLimited($rateLimitFile, $rateLimit)) {
         $imageURL = '';
 
@@ -43,19 +51,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
             }
         }
 
-        include("../important/db.php");
-
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
         if ($conn->connect_error) {
             $response['status'] = 'error';
             $response['message'] = "Connection failed: " . $conn->connect_error;
         } else {
-            
             $query = "INSERT INTO posts (username, content, image_url, created_at) VALUES (?, ?, ?, NOW())";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("sss", $username, $postContent, $imageURL);
             $stmt->execute();
+
+            // Insert mentions into the database
+            $postId = $conn->insert_id;
+            foreach ($mentions as $mentionedUser) {
+                $mentionContent = "Has mentioned you in a post";
+                $mentionSender = $username;
+                $insertMentionQuery = "INSERT INTO notifications (recipient, content, created_at, read_status, sender, post_id) VALUES (?, ?, NOW(), 0, ?, ?)";
+                $stmt = $conn->prepare($insertMentionQuery);
+                $stmt->bind_param("sssi", $mentionedUser, $mentionContent, $mentionSender, $postId);
+                $stmt->execute();
+            }
 
             $stmt->close();
             $conn->close();

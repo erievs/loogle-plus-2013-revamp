@@ -17,17 +17,37 @@ function isRateLimited($rateLimitFile, $rateLimit) {
 }
 
 $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit_comments.txt';
-if (isRateLimited($rateLimitFile, $rateLimit)) {
-    $response['status'] = 'error';
-    $response['message'] = "Error: You can only comment once every $rateLimit second(s).";
-    echo json_encode($response);
-    exit;
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commentContent = $_POST['commentContent'];
     $postID = $_POST['postID'];
     $username = $_POST['username'];
+
+    include("../important/db.php");
+
+    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+
+    if ($conn->connect_error) {
+        $response['status'] = 'error';
+        $response['message'] = "Connection failed: " . $conn->connect_error;
+        echo json_encode($response);
+        exit();
+    }
+
+    // Retrieve the username of the post owner
+    $getPostOwnerQuery = "SELECT username FROM posts WHERE id = ?";
+    $stmt = $conn->prepare($getPostOwnerQuery);
+    $stmt->bind_param("i", $postID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $postOwnerData = $result->fetch_assoc();
+    $postOwnerUsername = $postOwnerData['username'];
+
+    if (!$postOwnerUsername) {
+        $response['status'] = 'error';
+        $response['message'] = 'Failed to retrieve post owner\'s username';
+        echo json_encode($response);
+        exit();
+    }
 
     if (empty($commentContent)) {
         $response['status'] = 'error';
@@ -43,32 +63,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    include("../important/db.php");
+    $query = "INSERT INTO comments (post_id, username, comment_content) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("iss", $postID, $username, $commentContent);
 
-    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    if ($stmt->execute()) {
+        $postId = $conn->insert_id;
 
-    if ($conn->connect_error) {
-        $response['status'] = 'error';
-        $response['message'] = "Connection failed: " . $conn->connect_error;
-    } else {
-        $query = "INSERT INTO comments (post_id, username, comment_content) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("iss", $postID, $username, $commentContent);
+        function extractMentions($content) {
+            preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
+            return $matches[1];
+        }    
 
-        if ($stmt->execute()) {
-            $response['status'] = 'success';
-            $response['message'] = 'Comment successfully added';
-            $response['commentContent'] = $commentContent;
-            $response['postID'] = $postID;
-            $response['username'] = $username;
-        } else {
-            $response['status'] = 'error';
-            $response['message'] = "Error: " . $conn->error;
+        $mentions = extractMentions($commentContent);
+
+        foreach ($mentions as $mentionedUser) {
+            $mentionContent = "Someone commented on your post!";
+            $insertMentionQuery = "INSERT INTO notifications (recipient, content, created_at, read_status, sender, post_id) VALUES (?, ?, NOW(), 0, ?, ?)";
+            $stmt = $conn->prepare($insertMentionQuery);
+            $stmt->bind_param("sssi", $mentionedUser, $mentionContent, $username,  $_POST['postID']);
+            $stmt->execute();
         }
 
-        $stmt->close();
-        $conn->close();
+        $ownerNotificationContent = "$username commented on your post!";
+        $insertOwnerNotificationQuery = "INSERT INTO notifications (recipient, content, created_at, read_status, sender, post_id) VALUES (?, ?, NOW(), 0, ?, ?)";
+        $stmt = $conn->prepare($insertOwnerNotificationQuery);
+        $stmt->bind_param("sssi", $postOwnerUsername, $ownerNotificationContent, $username, $postID);
+        $stmt->execute();
+
+        $response['status'] = 'success';
+        $response['message'] = 'Comment successfully added';
+        $response['commentContent'] = $commentContent;
+        $response['postID'] = $postId;
+        $response['username'] = $username;
+    } else {
+        $response['status'] = 'error';
+        $response['message'] = "Error: " . $conn->error;
     }
+
+    $stmt->close();
+    $conn->close();
 } else {
     $response['status'] = 'error';
     $response['message'] = 'Invalid request method';

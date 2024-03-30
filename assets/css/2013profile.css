@@ -1,7 +1,10 @@
 .banner {
     width: 100%;
-    height: 10%;    
+    height: 10%;
     overflow: hidden;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end; 
 }
 
 .banner img {
@@ -10,11 +13,12 @@
 }
 
 .scrolled .banner {
-    height: 5%; 
+    height: 5%;
 }
 
 .sticky-header .menu {
     display: flex;
     align-items: center;
     margin: 0 auto;
-  }
+}
+
