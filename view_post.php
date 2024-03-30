@@ -1,5 +1,14 @@
 <?php
 $id = $_GET['id'];
+session_start();
+if (!isset($_SESSION["username"])) {
+    echo '<script>window.location.href = "../user/login.php";</script>';
+    exit();
+}
+
+include("important/db.php");
+
+$icon = "home";
 ?>
 
     
@@ -22,6 +31,9 @@ $id = $_GET['id'];
                     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
                     <link rel="stylesheet" href="assets/css/post1.css">
                     <link rel="stylesheet" href="assets/css/2013isamess.css">
+					<link rel="stylesheet" href="assets/css/test.css">
+                    <link rel="stylesheet" href="assets/css/post2.css">
+                    <link rel="stylesheet" href="assets/css/2013notes.css">
                     <link rel="icon" 
       type="image/png" 
       href="../assets/important-images/fav.png" />
@@ -45,6 +57,10 @@ $id = $_GET['id'];
 }
 }
 
+.comment-input-container {
+    background: #fff;
+}
+
       </style>
 
 
@@ -55,100 +71,42 @@ $id = $_GET['id'];
       href="/assets/icons/fav.png" />
 
                     <body>
-                        <div class="sticky-header" style="display: none;">
-                            <div class="menu">
-                                <span id="open-sidebar-1" class="home-h-icon home-icon"></span>
-                                <span class="divider"></span>
-                                <ul class="nav nav-tabs">
-                                    <li role="presentation" class="active"><a href="#">All</a></li>
-                                    <li role="presentation"><a href="#">Family</a></li>
-                                <li role="presentation"><a href="#">Friends</a></li>
-                                <li role="presentation" class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> More <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Option 1</a></li>
-                                        <li><a href="#">Option 2</a></li>
-                                        <li><a href="#">Option 3</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="main-header">
-                    
-        <a href="index.php">
-          <img class="logo" src="https://i.imgur.com/hhai2zl.png" alt="Logo">
-        </a>
-
-    <div class="search-container">
-        <input class="search-bar" type="text">
-        <div class="search-text"></div>
-    </div>
-
-<div class="username-header"><?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : "Error"; ?></div>
-
-</div>
-
-
-<div class="sidebar">
-    <ul>
-        <li><span class="icon" id="sel"><div class="home-icon-side"></div> <p>Home</p></span></li>
-        <li><span class="icon" id="non-sel"><div class="profile-icon-side"></div> <p>Profile</p></span></li>
-        <li><span class="icon" id="non-sel"><div class="people-icon-side"></div> <p>People </p></span></li>
-
-        <hr>
-
-        <li><span class="icon" id="non-sel"><div class="wh-icon-side"></div> <p>What's Hot<p></span></li>
-        <li><span class="icon" id="non-sel"><div class="com-icon-side"></div> <p>Communties<p></span></li>
-        <li><span class="icon" id="non-sel"><div class="events-icon-side"></div> <p>Events<p></li>
-        <li><span class="icon" id="non-sel"><div class="settings-icon-side"></div> <p>Settings<p></li>
-    </ul>
-</div>
-
-<div class="sub-header">
-<span id="open-sidebar" class="home-h-icon home-icon"></span>
-
-    <span class="home-icon">Home </span>
-    <span class="arrow-icon"> ></span>
-
-    <div class="menu">
-        <span class="divider"></span>
-        <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#">All</a></li>
-            <li role="presentation"><a href="#">Family</a></li>
-            <li role="presentation"><a href="#">Friends</a></li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    More <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
+					
+<?php require_once("inc/topstuffs.php")?>
 
                 <div class="container">
                     <div class="user-card">
                         <div class="card-info">
-                        <div class="user-pfp"></div>
+                        <div class="user-pfp">
+						
+						</div>
                         <br>
-                        <div class="username"></div>
+                        <div class="username-big"></div>
                         </div>
                     </div>
                     <div class="post">
+
+
+                    <div class="posto-pfp-con">
                         <div class="post-pfp"></div>
                         <div class="post-info">
                             <div class="post-username"></div>
                             <div class="post-metadata">N/A</div>
                         </div>
+                     </div>
+
                         <div class="post-content"><p></p></div>
                         <img class="post-image" src="">
+
+
+                    <div class="comment-main">
+                    
+                    </div>
+
+                    
+                    </div>
+
+        
                     </div>
                 </div>
             </div>
@@ -165,19 +123,15 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
+                        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (userData) {
 
-                            const usernameElement = $(".username");
+                            const usernameElement = $(".username-big");
                             usernameElement.text(userData.username);
 
-                            const userPfpElement = $(".user-pfp");
-                            userPfpElement.css('background-image', `url(${assets / icons / pfp.png})`);
-
-                            const postPfpElement = $(".post-pfp");
-                            postPfpElement.css('background-image', `url(${userData.image_url})`);
+                            
 
                             const postMetadataElement = $(".post-metadata");
                             postMetadataElement.text("Placeholder - " + getRelativeTime(userData.created_at));
@@ -188,6 +142,9 @@ $id = $_GET['id'];
                     });
         });
 
+
+        
+
                 $(document).ready(function() {
  
 
@@ -195,7 +152,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
+                        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
 
                         type: 'GET',
                         dataType: 'json',
@@ -257,7 +214,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
+                        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (postData) {
@@ -286,7 +243,7 @@ $id = $_GET['id'];
                     var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
-                        url: 'http://kspc.serv00.net/apiv1/fetch_single_post.php?id=' + id,
+                        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (postData) {
@@ -304,8 +261,8 @@ $id = $_GET['id'];
 
                             if (postData.content) {
             const postContentDiv = $(".post-content");
-            const pElement = postContentDiv.find('p'); // Find the <p> element inside the <div>
-            pElement.text(postData.content); // Set the text content of the <p> element
+            const pElement = postContentDiv.find('p'); 
+            pElement.text(postData.content); 
             postContentDiv.show();
         }
 
@@ -395,9 +352,265 @@ $id = $_GET['id'];
             });
         });
                     </script>
-                    <script>
+  </body>
 
-                    </script>
-                </body>
+
+
+<script>
+
+$(document).ready(function() {
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    $('.comment-main').each(function() {
+        const postID = $(this).data('post-id');
+
+        if ($(this).next('.comment-input-container').length === 0) {
+            const commentArea = $(this);
+
+            const commentInputContainer = $('<div>').addClass('comment-input-container');
+            commentInputContainer.css({
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                height: '50px'
+            });
+
+            const commentInput = $('<textarea>').attr({
+                type: 'text',
+                id: 'comment-input-' + postID,
+                placeholder: 'Add a comment...'
+            }).addClass('comment-input');
+            commentInputContainer.append(commentInput);
+
+            commentInput.css({
+                height: '30px',
+                width: '400px',
+                background: '#fff',
+                border: '1px solid #ccc',
+                resize: 'none'
+            });
+
+            const buttonContainer = $('<div>');
+
+            const submitButton = $('<button>').text('Submit').addClass('submit-button').css('display', 'none');
+            const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
+
+            buttonContainer.append(submitButton, cancelButton);
+            commentInputContainer.append(buttonContainer);
+
+            commentInputContainer.insertAfter(commentArea);
+
+            commentInput.on('click', function() {
+                submitButton.css('display', 'inline-block');
+                cancelButton.css('display', 'inline-block');
+
+                commentInput.css({
+                    height: '60px',
+                    width: '425px',
+                    textIndent: '2ch',
+                    background: '#fff',
+                    border: '1px solid #ccc',
+                    padding: '0px',
+                    resize: 'none',
+                    overflowY: 'auto'
+                });
+
+                commentInputContainer.css('background', '#f6f6f6');
+                commentInputContainer.css('height', '125px');
+            });
+
+            submitButton.on('click', function() {
+                const commentContent = $(this).closest('.comment-input-container').find('.comment-input').val();
+                const postID = getParameterByName('id');
+                const username = '<?php echo $_SESSION["username"]; ?>';
+
+                console.log("Data sent in AJAX request:", {
+                    commentContent: commentContent,
+                    postID: postID,
+                    username: username
+                });
+
+
+                
+                $.ajax({
+                    url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        commentContent: commentContent,
+                        postID: postID,
+                        username: '<?php echo $_SESSION["username"]; ?>',
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            cancelButton.on('click', function() {
+                submitButton.css('display', 'none');
+                cancelButton.css('display', 'none');
+
+                commentInput.css({
+                    height: '30px',
+                    width: '400px',
+                    background: '#fff',
+                    border: '1px solid #ccc'
+                });
+
+                commentInputContainer.css('background-color', '#fff');
+
+                commentInputContainer.css('height', '50px');
+
+                commentInput.trigger('blur');
+            });
+
+            // Display comments fetched from API
+            $.ajax({
+                url: '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=' +  getParameterByName('id'),
+                dataType: 'json',
+                success: function(commentsData) {
+                    if (commentsData.status === 'success') {
+                        const comments = commentsData.comments;
+                        const commentsContainer = $('<div>').addClass('comments');
+                        comments.forEach(function(comment) {
+                            const commentElement = $('<div>').addClass('comment');
+                            commentElement.html(`
+                                <div class="hacky-fix">
+                     <img src="/assets/profilepics/${comment.username}.png" class="comment-picture">
+					 <div class="agony">
+					  <div class="hacky-fix">
+                       <p class="username">${comment.username}</p>
+					   <p class="time">${comment.comment_time}</p>
+					  </div>
+					  <p class="comment-content">${comment.comment_content}</p>
+					 </div>
+					</div>
+                            `);
+                            commentsContainer.append(commentElement);
+                        });
+                        commentArea.append(commentsContainer);
+                        hideShowCommentsLink.text('Hide Comments');
+                    } else {
+                        console.log('No comments found for the post with ID ' + postID);
+                    }
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+    });
+});
+
+ 
+</script>
+
+<script>
+
+$(document).ready(function() {
+  let isHeaderVisible = false;
+
+  $('.settings-icon-side').click(function() {
+    console.log("Settings icon clicked");
+    if (isHeaderVisible) {
+      $('#notificationContainer, .sb-card-body-arrow').css('display', 'none');
+    } else {
+      $('#notificationContainer, .sb-card-body-arrow').css('display', 'block');
+    }
+    isHeaderVisible = !isHeaderVisible;
+  });
+});
+
+
+$(document).ready(function () {
+
+    $("#showNotification").click(function () {
+        $("#notificationContainer, #notificationTriangle").toggle();
+    });
+
+    fetchMentions();
+    setInterval(fetchMentions, 5000000);
+});
+
+function fetchMentions() {
+    $("#mentionsContainer").empty();
+    $.ajax({
+        url: "<?php echo $siteurl; ?>/apiv1/fetch_mentions.php",
+        type: "GET",
+        data: {
+            username: "d" 
+        },
+        success: function (data) {
+            const mentions = JSON.parse(data);
+
+            if (mentions.length > 0) {
+                $.each(mentions, function (index, mention) {
+                    const mentionDiv = $("<div>").addClass("mention");
+                    const pfpImage = $("<img>").attr({
+                        src: "./assets/icons/regan.png",
+                        alt: "PFP",
+                    }).addClass("not-pfp-image");
+
+                    const textContainer = $("<div>").addClass("not-text-container");
+                    const usernameDiv = $("<div>").text(mention.sender).addClass("not-username");
+                    const contentDiv = $("<div>").text(mention.content).addClass("not-content");
+
+                    textContainer.append(usernameDiv, contentDiv);
+                    mentionDiv.append(pfpImage, textContainer);
+
+                    $("#mentionsContainer").append(mentionDiv);
+
+                    mentionDiv.click(function () {
+                        dismissMention($(this), mention.post_id);
+                    });
+                });
+            } else {
+                $("#mentionsContainer").html("No new mentions.");
+            }
+        },
+    });
+}
+
+ function dismissMention(mentionElement, postId) {
+
+    mentionElement.fadeOut(300, function () {
+        $(this).remove();
+        console.log(postId);
+        window.location.href = 'http://localhost:8090/view_post.php?id=' + postId;
+    });
+
+
+    $.ajax({
+        url: "http://localhost:8090/apiv1/toggle_notification_status.php",
+        type: "POST",
+        data: {
+            username: "d",
+            post_id: postId
+        },
+        success: function (response) {
+        },
+        error: function (xhr, status, error) {
+        }
+    });
+}
+
+</script>
+
+
+</body>
 
 </html>

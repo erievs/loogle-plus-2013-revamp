@@ -7,6 +7,8 @@ if (!isset($_SESSION["username"])) {
 
 include("important/db.php");
 
+$profileget = htmlspecialchars($_GET['profile']);
+$icon = "profile";
 ?>
 
 
@@ -21,53 +23,21 @@ include("important/db.php");
     <link rel="stylesheet" href="assets/css/2013isamess.css">
     <link rel="stylesheet" href="assets/css/2013indexres.css">
     <link rel="stylesheet" href="assets/css/2013profile.css">
+	<link rel="stylesheet" href="assets/css/test.css">
 </head>
 <body>
 
-
-<div class="sidebar">
-    <ul>
-        <li><span class="icon">Home</span></li>
-        <li><span class="icon">Profile</span></li>
-        <li><span class="icon">People</span></li>
-        <li><span class="icon">Photos</span></li>
-        <li><span class="icon">What's Hot</span></li>
-        <li><span class="icon">Communities</span></li>
-        <li><span class="icon">Events</span></li>
-        <li><span class="icon">Settings</span></li>
-    </ul>
-</div>
-
-<div class="sub-header">
-<span id="open-sidebar" class="home-h-icon home-icon"></span>
-
-    <span class="home-icon">Home </span>
-    <span class="arrow-icon"> ></span>
-    <div class="menu">
-        <span class="divider"></span>
-        <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#">All</a></li>
-            <li role="presentation"><a href="#">Family</a></li>
-            <li role="presentation"><a href="#">Friends</a></li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    More <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Option 1</a></li>
-                    <li><a href="#">Option 2</a></li>
-                    <li><a href="#">Option 3</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
-
-
+<?php require_once("inc/topstuffs.php")?>
 
 <div class="banner">
-    <!-- Banner content will be loaded dynamically -->
+    <div class="bg-grad">
+	</div>
+     <div style="background: url(&quot;https://127.0.0.1/apiv1/fetch_banner_api.php?name=<?php echo $profileget ?>&quot;);height: 20em;background-size: cover;">
+	  <div class="profilestuff">
+	   <img alt="<?php echo $profileget ?>" src="/assets/profilepics/<?php echo $profileget ?>.png" class="pfp-picture">
+	   <h2 class="profile-username"><?php echo $profileget ?></h2>
+	  </div>
+	 </div>
 </div>
 
 
@@ -129,7 +99,7 @@ function formatTime(timestamp) {
 var urlParams = new URLSearchParams(window.location.search);
         var profileValue = urlParams.get('profile');
 
-var apiUrl = 'http://localhost:8090/apiv1/fetch_posts_api.php?username=' + encodeURIComponent(profileValue);
+var apiUrl = '<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?username=' + encodeURIComponent(profileValue);
 
 
     function fetchPosts() {
@@ -434,7 +404,7 @@ $('.share-button').click(function () {
 
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:8090/apiv1-internal/submit_post_api.php', 
+        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php', 
         data: formData,
         processData: false, 
         contentType: false, 
@@ -460,7 +430,7 @@ $('.share-button').click(function () {
 
 });
 
-const apiEndpoint = 'http://localhost:8090/apiv1/fetch_comments.php?id=';
+const apiEndpoint = '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=';
 
 let currentColumnIndex = 0;
 
@@ -626,7 +596,7 @@ for (let i = 0; i < data.length; i++) {
 });
 
     $.ajax({
-        url: 'http://localhost:8090/apiv1-internal/submit_comment.php',
+        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -745,42 +715,7 @@ $(document).ready(function() {
 });
 
 </script>
-<script>
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        };
 
-        var profileValue = getUrlParameter('profile');
-        var apiUrl = "http://localhost:8090/apiv1/fetch_banner_api.php?name=" + profileValue;
-        var img = $('<img>');
-        img.attr('src', apiUrl);
-        $(".banner").append(img);
-
-        $(".sub-header").addClass("fixed");
-
-        var scrollThreshold = 50;
-
-        $(".sticky-header").css("display", "none");
-                $(".sub-header").css("position", "");
-                $(".banner img").css({"height": "150px", "position": "", "z-index": "999"});
-        $(window).scroll(function() {
-            if ($(this).scrollTop() > scrollThreshold) {
-                $(".sticky-header").css("display", "block");
-                $(".sub-header").css("position", "fixed");
-                $(".banner img").css({"height": "100px", "position": "fixed"});
-                $(".sticky-header .nav-tabs > li.active > a").css("margin-top", "-3px");
-                $(".nav-tabs").css("border-bottom", "none");
-            } else {
-                $(".sticky-header").css("display", "none");
-                $(".sub-header").css("position", "");
-                $(".banner img").css({"height": "150px", "position": "", "z-index": "999"});
-            }
-        });
-
-</script>
 
 
 

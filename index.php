@@ -7,134 +7,34 @@ if (!isset($_SESSION["username"])) {
 
 include("important/db.php");
 
+$icon = "home";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<title>Loogle+</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <title>Loogle+</title>
-    <link rel="stylesheet" href="assets/css/2013isamess.css">
-    <link rel="stylesheet" href="assets/css/2013indexres.css">
-    <link rel="stylesheet" href="assets/css/2013notes.css">
+	<link rel="stylesheet" href="assets/css/2013isamess.css">
+	<link rel="stylesheet" href="assets/css/2013indexres.css">
+	<link rel="stylesheet" href="assets/css/2013notes.css">
+    <link rel="stylesheet" href="assets/css/test.css">
     <link rel="icon" 
       type="image/png" 
-      href="/assets/icons/fav.png" />
+      href="../assets/important-images/fav.png" />
 
 </head>
-
-
-<link rel="icon" href="/assets/icons/fav.png">
-
 <body>
 
-<div class="sticky-header" style="display: none;">
-    <div class="menu">
-
-    <span id="loogle-logo" class="loogle-logo"></span>
-    <span id="open-sidebar-1" class="home-h-icon home-icon"></span>
-
-    
-    <p style="font-size: 16px;
-top: 2px;
-position: relative;"> > </p>
+<?php require_once("inc/topstuffs.php")?>
 
 
 
-
-        <span class="divider"></span>
-        <ul class="nav nav-tabs" style="  margin: 0 auto;">
-            <li role="presentation" class="active"><a href="#">All</a></li>
-            <li role="presentation"><a href="#">Family</a></li>
-            <li role="presentation"><a href="#">Friends</a></li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    More <span class="caret"></span>
-                </a>
-                
-                <ul class="dropdown-menu">
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div class="main-header">
-                  
-<a href="index.php">
-          <img class="logo" src="https://i.imgur.com/hhai2zl.png" alt="Logo">
- </a>
-
-    <div class="search-container">
-        <input class="search-bar" type="text">
-        <div class="search-text"></div>
-    </div>  
-
-
-<div class="settings-icon-side">
-    <span id="notfication-header">
-    <div class="sb-card-body-arrow"></div>
-    <div id="notificationContainer" style="color: #aaa; max-height: 500px; overflow-y: auto;">
-            <span class="title" style="color: #6f6f6f; text-align: center; font-size: 15px;">Loogle notification</span>
-            <br />
-            <br />
-            <div id="mentionsContainer"></div>
-    </div>
-    </span>
-</div>
-
-<div class="username-header"><?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : "Your Username"; ?></div>
-
-</div>
-
-<div class="sidebar">
-    <ul>
-        <li><span class="icon" id="sel"><div class="home-icon-side"></div> <p>Home</p></span></li>
-        <li><span class="icon" id="non-sel"><div class="profile-icon-side"></div> <p>Profile</p></span></li>
-        <li><span class="icon" id="non-sel"><div class="people-icon-side"></div> <p>People </p></span></li>
-
-        <hr>
-
-        <li><span class="icon" id="non-sel"><div class="wh-icon-side"></div> <p>What's Hot<p></span></li>
-        <li><span class="icon" id="non-sel"><div class="com-icon-side"></div> <p>Communties<p></span></li>
-        <li><span class="icon" id="non-sel"><div class="events-icon-side"></div> <p>Events<p></li>
-        <li><span class="icon" id="non-sel"><div class="settings-icon-side"></div> <p>Settings<p></li>
-    </ul>
-</div>
-<div class="sub-header">
-<span id="open-sidebar" class="home-h-icon home-icon"></span>
-
-    <span class="home-icon">Home </span>
-    <span class="arrow-icon"> ></span>
-
-    <div class="menu">
-        <span class="divider"></span>
-        <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#">All</a></li>
-            <li role="presentation"><a href="#">Family</a></li>
-            <li role="presentation"><a href="#">Friends</a></li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    More <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+<div class="banner">
+    <!-- LOADED IN A SUCH   -->
 </div>
 
 <div class="write-post-expanded">
@@ -186,7 +86,7 @@ function formatTime(timestamp) {
 }
 
     function fetchPosts() {
-    fetch('http://kspc.serv00.net/apiv1/fetch_posts_api.php')
+    fetch('<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php')
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
@@ -218,11 +118,11 @@ postCreate.innerHTML = `
     <div class="level-1">
 
     <div class="pfp-write-post" style="display: none;">
-    <img src="assets/icons/default.jpg" alt="" class="round-image">
+    <img src="<?php echo 'assets/profilepics/' . $_SESSION["username"] . '.png';?>" alt="" class="round-image">
     </div>
 
     <textarea id="postTextArea" placeholder="Share what's new..."></textarea>
-        <div class="triangle"></div>
+        <div id="triangle" class="triangle"></div>
     </div>
 
     </div>
@@ -260,14 +160,14 @@ left: 15px;">Photos</p>
 
     </div>
     <div class="post-create-icons">
-        <div>
+        <div class="iconstuff">
             <div class="image-write"></div>
             <br>
             <br>
             <span style="color: black; font-weight: bold;">Text</span>
         </div>
-        |
-        <div>
+        
+        <div class="iconstuff">
             <div class="image-photo"></div>
             <br>
             <br>
@@ -329,6 +229,7 @@ left: 15px;">Photos</p>
                 });
 
                 $('.post-create-icons').hide();
+				$('.triangle').hide();
 
                 $writePostDiv.show();
                 $level4.show();
@@ -487,7 +388,7 @@ $('.share-button').click(function () {
 
     $.ajax({
         type: 'POST',
-        url: 'http://kspc.serv00.net/apiv1-internal/submit_post_api.php', 
+        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php', 
         data: formData,
         processData: false, 
         contentType: false, 
@@ -513,7 +414,7 @@ $('.share-button').click(function () {
 
 });
 
-const apiEndpoint = 'http://kspc.serv00.net/apiv1/fetch_comments.php?id=';
+const apiEndpoint = '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=';
 
 let currentColumnIndex = 0;
 
@@ -525,15 +426,20 @@ for (let i = 0; i < data.length; i++) {
 
     postElement.innerHTML = `
         <div class="post-main">  
-            <div class="post-top">
-                <p class="username">${post.username}</p>
-            </div>
-            <div class="post-meta">
-                <span>Sharing Publicly &nbsp;</span>
-                <a style="color: inherit; text-decoration: none;" href="view_post.php?id=${post.id}">
-                    <span class="upload-time">- ${formattedTime}</span>
-                </a>
-            </div>
+		 <div class="hacky-fix">
+		 <img src="/assets/profilepics/${post.username}.png" class="post-file-picture">
+		  <div class="aaaaaa">
+           <div class="post-top">
+            <p class="username">${post.username}</p>
+           </div>
+           <div class="post-meta">
+            <span>Sharing Publicly &nbsp;</span>
+            <a style="color: inherit; text-decoration: none;" href="view_post.php?id=${post.id}">
+             <span class="upload-time">- ${formattedTime}</span>
+            </a>
+          </div>
+		  </div>
+		 </div>
             <div class="post-content-container">
                 <p class="post-content">${post.content}</p>
                 <img class="post-image" src="${post.image_url}" alt="">
@@ -578,11 +484,22 @@ for (let i = 0; i < data.length; i++) {
 
                 $.each(commentsData.comments, function (index, comment) {
                     const commentElement = document.createElement('div');
+
                     commentElement.className = 'comment';
+					
                     commentElement.innerHTML = `
-                    <div class="pfp"></div> 
-                    <p class="username">${comment.username}</p>
-                    <p class="comment-content">${comment.comment_content}</p>
+					<div class="hacky-fix">
+                     <img src="/assets/profilepics/${comment.username}.png" class="comment-picture">
+					 <div class="agony">
+					  <div class="hacky-fix">
+                       <p class="username">${comment.username}</p>
+					   <p class="time">${comment.comment_time}</p>
+					  </div>
+					  <p class="comment-content">${comment.comment_content}</p>
+					 </div>
+					</div>
+
+					
                     `;
 
                     commentArea.appendChild(commentElement);
@@ -679,7 +596,7 @@ for (let i = 0; i < data.length; i++) {
 });
 
     $.ajax({
-        url: 'http://kspc.serv00.net/apiv1-internal/submit_comment.php',
+        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -870,87 +787,6 @@ $(document).ready(function() {
             }
         });
     });
-</script>
-
-<script>
-$(document).ready(function () {
-    // Toggle notification container visibility
-    $("#showNotification").click(function () {
-        $("#notificationContainer, #notificationTriangle").toggle();
-    });
-
-    // Fetch mentions initially and every 2500000 milliseconds (approx. 41.6 minutes)
-    fetchMentions();
-    setInterval(fetchMentions, 5000);
-});
-
-function fetchMentions() {
-    $("#mentionsContainer").empty();
-
-    // Fetch mentions from the API
-    $.ajax({
-        url: "http://localhost:8090/apiv1/fetch_mentions.php",
-        type: "GET",
-        data: {
-            username: "d" // Replace "d" with actual username
-        },
-        success: function (data) {
-            const mentions = JSON.parse(data);
-
-            if (mentions.length > 0) {
-                // Append each mention to the mentions container
-                $.each(mentions, function (index, mention) {
-                    const mentionDiv = $("<div>").addClass("mention");
-                    const pfpImage = $("<img>").attr({
-                        src: "https://yt3.ggpht.com/ytc/APkrFKaEi25zAXv7eUtMEtWm99TSnR49Qn29zBQVYr16FA=s96-c-k-c0x00000000-no-cc-rj-rp",
-                        alt: "PFP",
-                    }).addClass("not-pfp-image");
-
-                    const textContainer = $("<div>").addClass("not-text-container");
-                    const usernameDiv = $("<div>").text(mention.sender).addClass("not-username");
-                    const contentDiv = $("<div>").text(mention.content).addClass("not-content");
-
-                    textContainer.append(usernameDiv, contentDiv);
-                    mentionDiv.append(pfpImage, textContainer);
-
-                    $("#mentionsContainer").append(mentionDiv);
-
-                    // Attach click event to dismiss mention
-                    mentionDiv.click(function () {
-                        dismissMention($(this), mention.post_id);
-                    });
-                });
-            } else {
-                $("#mentionsContainer").html("No new mentions.");
-            }
-        },
-    });
-}
-
-function dismissMention(mentionElement, postId) {
-    // Fade out the mention element and remove it from the DOM
-    mentionElement.fadeOut(300, function () {
-        $(this).remove();
-    });
-
-    // Send AJAX request to mark the notification as read
-    $.ajax({
-        url: "http://localhost:8090/apiv1/toggle_notification_status.php",
-        type: "POST",
-        data: {
-            username: "d", // Replace "d" with actual username
-            post_id: postId
-        },
-        success: function (response) {
-            // Handle success if needed
-        },
-        error: function (xhr, status, error) {
-            // Handle error if needed
-        }
-    });
-}
-
-
 </script>
 
 </body>

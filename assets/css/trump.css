@@ -1,0 +1,13 @@
+@media (prefers-color-scheme: dark) {
+* {
+	background: #000!important;
+	color: #000!important;
+	border: none!important;
+	outline: 0!important;
+	box-shadow: none!important;
+}
+
+img {
+	display: none!important;
+}
+}

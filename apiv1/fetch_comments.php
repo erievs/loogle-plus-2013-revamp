@@ -27,7 +27,8 @@ function getCommentsForPost() {
                     while ($comment = mysqli_fetch_assoc($result)) {
                         $comments[] = array(
                             'username' => htmlspecialchars($comment['username']),
-                            'comment_content' => htmlspecialchars($comment['comment_content'])
+                            'comment_content' => htmlspecialchars($comment['comment_content']),
+							'comment_time' => htmlspecialchars($comment['created_at'])
                         );
                     }
 

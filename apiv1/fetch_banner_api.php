@@ -2,7 +2,7 @@
 if(isset($_GET['name'])) {
     $bannerName = $_GET['name'];
     $bannersDirectory = '../assets/banners/';
-    $bannerFilePath = $bannersDirectory . $bannerName;
+    $bannerFilePath = $bannersDirectory . $bannerName . ".png";
     if(file_exists($bannerFilePath)) {
         header('Content-Type: image/png'); 
         readfile($bannerFilePath);
