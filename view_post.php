@@ -31,38 +31,14 @@ $icon = "home";
                     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
                     <link rel="stylesheet" href="assets/css/post1.css">
                     <link rel="stylesheet" href="assets/css/2013isamess.css">
-					<link rel="stylesheet" href="assets/css/test.css">
-                    <link rel="stylesheet" href="assets/css/post2.css">
+                    
                     <link rel="stylesheet" href="assets/css/2013notes.css">
+					<link rel="stylesheet" href="assets/css/test.css">
+
+                    <link rel="stylesheet" href="assets/css/post2.css">
                     <link rel="icon" 
       type="image/png" 
       href="../assets/important-images/fav.png" />
-      <style>
-        @media (max-width: 1280px) {
-    .container {
-       
-        scale: 0.85; 
-        margin-left: 6%; 
-    }
-}
-
-@media (min-width: 721px){
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 10px;
-  margin-left: 20%;
-}
-}
-
-.comment-input-container {
-    background: #fff;
-}
-
-      </style>
-
 
 </head>
 
@@ -162,9 +138,9 @@ $icon = "home";
                             usernameElement.text(postData.username);
 
                             const userPfpElement = $(".user-pfp");
-                            userPfpElement.css('background-image', `url(${assets / icons / pfp.png})`);
+                            userPfpElement.css('background-image', `url(<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${postData.username})`);
                             const postPfpElement = $(".post-pfp");
-                            postPfpElement.css('background-image', `url(${assets / icons / pfp.png})`);
+                            postPfpElement.css('background-image', `url(<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${postData.username})`);
 
                             const postMetadataElement = $(".post-metadata");
                             postMetadataElement.text("Placeholder - " + getRelativeTime(postData.created_at));
@@ -478,7 +454,6 @@ $(document).ready(function() {
                 commentInput.trigger('blur');
             });
 
-            // Display comments fetched from API
             $.ajax({
                 url: '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=' +  getParameterByName('id'),
                 dataType: 'json',
@@ -490,7 +465,7 @@ $(document).ready(function() {
                             const commentElement = $('<div>').addClass('comment');
                             commentElement.html(`
                                 <div class="hacky-fix">
-                     <img src="/assets/profilepics/${comment.username}.png" class="comment-picture">
+                     <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${comment.username}" class="comment-picture">
 					 <div class="agony">
 					  <div class="hacky-fix">
                        <p class="username">${comment.username}</p>
@@ -517,97 +492,6 @@ $(document).ready(function() {
 });
 
  
-</script>
-
-<script>
-
-$(document).ready(function() {
-  let isHeaderVisible = false;
-
-  $('.settings-icon-side').click(function() {
-    console.log("Settings icon clicked");
-    if (isHeaderVisible) {
-      $('#notificationContainer, .sb-card-body-arrow').css('display', 'none');
-    } else {
-      $('#notificationContainer, .sb-card-body-arrow').css('display', 'block');
-    }
-    isHeaderVisible = !isHeaderVisible;
-  });
-});
-
-
-$(document).ready(function () {
-
-    $("#showNotification").click(function () {
-        $("#notificationContainer, #notificationTriangle").toggle();
-    });
-
-    fetchMentions();
-    setInterval(fetchMentions, 5000000);
-});
-
-function fetchMentions() {
-    $("#mentionsContainer").empty();
-    $.ajax({
-        url: "<?php echo $siteurl; ?>/apiv1/fetch_mentions.php",
-        type: "GET",
-        data: {
-            username: "d" 
-        },
-        success: function (data) {
-            const mentions = JSON.parse(data);
-
-            if (mentions.length > 0) {
-                $.each(mentions, function (index, mention) {
-                    const mentionDiv = $("<div>").addClass("mention");
-                    const pfpImage = $("<img>").attr({
-                        src: "./assets/icons/regan.png",
-                        alt: "PFP",
-                    }).addClass("not-pfp-image");
-
-                    const textContainer = $("<div>").addClass("not-text-container");
-                    const usernameDiv = $("<div>").text(mention.sender).addClass("not-username");
-                    const contentDiv = $("<div>").text(mention.content).addClass("not-content");
-
-                    textContainer.append(usernameDiv, contentDiv);
-                    mentionDiv.append(pfpImage, textContainer);
-
-                    $("#mentionsContainer").append(mentionDiv);
-
-                    mentionDiv.click(function () {
-                        dismissMention($(this), mention.post_id);
-                    });
-                });
-            } else {
-                $("#mentionsContainer").html("No new mentions.");
-            }
-        },
-    });
-}
-
- function dismissMention(mentionElement, postId) {
-
-    mentionElement.fadeOut(300, function () {
-        $(this).remove();
-        console.log(postId);
-        window.location.href = 'http://localhost:8090/view_post.php?id=' + postId;
-    });
-
-
-    $.ajax({
-        url: "http://localhost:8090/apiv1/toggle_notification_status.php",
-        type: "POST",
-        data: {
-            username: "d",
-            post_id: postId
-        },
-        success: function (response) {
-        },
-        error: function (xhr, status, error) {
-        }
-    });
-}
-
 </script>
 
 

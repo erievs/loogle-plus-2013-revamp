@@ -23,48 +23,27 @@ $icon = "profile";
     <link rel="stylesheet" href="assets/css/2013isamess.css">
     <link rel="stylesheet" href="assets/css/2013indexres.css">
     <link rel="stylesheet" href="assets/css/2013profile.css">
+    <link rel="stylesheet" href="assets/css/2013notes.css">
 	<link rel="stylesheet" href="assets/css/test.css">
+
 </head>
 <body>
 
 <?php require_once("inc/topstuffs.php")?>
 
 <div class="banner">
-    <div class="bg-grad">
-	</div>
-     <div style="background: url(&quot;https://127.0.0.1/apiv1/fetch_banner_api.php?name=<?php echo $profileget ?>&quot;);height: 20em;background-size: cover;">
-	  <div class="profilestuff">
-	   <img alt="<?php echo $profileget ?>" src="/assets/profilepics/<?php echo $profileget ?>.png" class="pfp-picture">
-	   <h2 class="profile-username"><?php echo $profileget ?></h2>
-	  </div>
-	 </div>
-</div>
-
-
-<div class="sticky-header" style="display: none;">
-    <div class="menu">
-    <span id="open-sidebar-1" class="home-h-icon home-icon"></span>
-    <span class="home-icon">Home </span>
-    <span class="arrow-icon"> ></span>
-        <span class="divider"></span>
-        <ul class="nav nav-tabs" style="margin:0 auto;">
-            <li role="presentation" class="active"><a href="#">All</a></li>
-            <li role="presentation"><a href="#">Family</a></li>
-            <li role="presentation"><a href="#">Friends</a></li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    More <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                    <li><a href="#">Placeholer</a></li>
-                </ul>
-            </li>
-        </ul>
+    <div class="bg-grad" style="background: url(&quot;<?php echo $siteurl; ?>/apiv1/fetch_banner_api.php?name=<?php echo $profileget ?>&quot;); height: 20em; background-size: cover;">
+    </div>
+    <div style="background: url(&quot;<?php echo $siteurl; ?>/apiv1/fetch_banner_api.php?name=<?php echo $profileget ?>&quot;); height: 20em; background-size: cover;">
+        <div class="profilestuff">
+            <img alt="<?php echo $profileget ?>" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $profileget ?>" class="pfp-picture">
+            <h2 class="profile-username"><?php echo $profileget ?></h2>
+        </div>
     </div>
 </div>
+
+
+
 
 
 <div class="write-post-expanded">
@@ -81,7 +60,7 @@ $icon = "profile";
 
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
 
 
@@ -714,9 +693,50 @@ $(document).ready(function() {
     });
 });
 
+$(document).ready(function() {
+    $(document).keydown(function(e) {
+        if (e.key === "Escape") {
+            $(".sidebar").css("transform", "translateX(-100%)");
+        }
+    });
+
+
+    $(document).on("click dblclick", function(e) {
+        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
+            $(".sidebar").css("transform", "translateX(-100%)");
+        }
+    });
+});
 </script>
 
 
+<script>
+$(document).ready(function () {
+    var mainHeader = $(".main-header");
+    var subHeader = $(".sub-header");
+    var stickyHeader = $(".sticky-header");
+    var sidebar = $(".sidebar");
+    var offset = mainHeader.offset().top;
+    var sidebarTopPosition = 60; 
+
+    $(window).scroll(function () {
+        var scrollTop = $(window).scrollTop();
+        var mainHeaderHeight = mainHeader.height();
+        var subHeaderHeight = subHeader.height();
+        var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
+
+        if (scrollTop >= offset + totalHeaderHeight) {
+            stickyHeader.css('display', 'block');
+            sidebarTopPosition = 40; 
+        } else {
+            stickyHeader.css('display', 'none');
+            sidebarTopPosition = 60; 
+        }
+
+        sidebar.css('top', sidebarTopPosition + 'px');
+    });
+});
+</script>
 
 
 </body>

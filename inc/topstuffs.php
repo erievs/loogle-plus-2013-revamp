@@ -1,6 +1,10 @@
 <?php if (!isset($icon)) {
 	$icon = "home";
 }?>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+
 <script>
 
 $(document).ready(function() {
@@ -155,7 +159,7 @@ position: relative;"> > </p>
 <div class="hacky-fix">
 <div class="username-header">+<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : "Your Username";?>
 </div>
-<img class="pf-picture" src="<?php echo 'assets/profilepics/' . $_SESSION["username"] . '.png';?>">
+<img class="pf-picture" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $_SESSION['username']?>">
 </div>
 </div>
 
@@ -167,7 +171,7 @@ position: relative;"> > </p>
 		   <div class="home-icon-side"></div>
 		   <p><?php 
 	if ($icon == "profile") {
-		echo 'Profile';
+		echo 'Home';
 	}
 	
 	if ($icon == "home") {
@@ -182,7 +186,7 @@ position: relative;"> > </p>
 		
         <li>
 		 <span class="icon" id="non-sel">
-		  <a class="sidebar-list" href="/profile.php?profile=<?php echo $_SESSION['username']?>">
+		  <a class="sidebar-list" href="<?php echo $siteurl; ?>/profile.php?profile=<?php echo $_SESSION['username']?>">
 		   <div class="profile-icon-side"></div> 
 		   <p>Profile</p>
 		  </a>

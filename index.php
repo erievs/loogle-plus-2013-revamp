@@ -24,7 +24,7 @@ $icon = "home";
     <link rel="stylesheet" href="assets/css/test.css">
     <link rel="icon" 
       type="image/png" 
-      href="../assets/important-images/fav.png" />
+      href="assets/important-images/fav.png" />
 
 </head>
 <body>
@@ -47,7 +47,7 @@ $icon = "home";
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
 
 <script>
@@ -76,8 +76,8 @@ $(document).ready(function () {
         sidebar.css('top', sidebarTopPosition + 'px');
     });
 });
-
 </script>
+
 <script>
 function formatTime(timestamp) {
     const date = new Date(timestamp);
@@ -118,7 +118,7 @@ postCreate.innerHTML = `
     <div class="level-1">
 
     <div class="pfp-write-post" style="display: none;">
-    <img src="<?php echo 'assets/profilepics/' . $_SESSION["username"] . '.png';?>" alt="" class="round-image">
+    <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $_SESSION["username"];?>" alt="" class="round-image">
     </div>
 
     <textarea id="postTextArea" placeholder="Share what's new..."></textarea>
@@ -427,11 +427,13 @@ for (let i = 0; i < data.length; i++) {
     postElement.innerHTML = `
         <div class="post-main">  
 		 <div class="hacky-fix">
-		 <img src="/assets/profilepics/${post.username}.png" class="post-file-picture">
+		 <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${post.username}" class="post-file-picture">
 		  <div class="aaaaaa">
            <div class="post-top">
+           <a href="<?php echo $siteurl; ?>/profile.php?profile=${post.username}">
             <p class="username">${post.username}</p>
-           </div>
+           </a>
+            </div>
            <div class="post-meta">
             <span>Sharing Publicly &nbsp;</span>
             <a style="color: inherit; text-decoration: none;" href="view_post.php?id=${post.id}">
@@ -489,7 +491,7 @@ for (let i = 0; i < data.length; i++) {
 					
                     commentElement.innerHTML = `
 					<div class="hacky-fix">
-                     <img src="/assets/profilepics/${comment.username}.png" class="comment-picture">
+                     <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${comment.username}" class="comment-picture">
 					 <div class="agony">
 					  <div class="hacky-fix">
                        <p class="username">${comment.username}</p>
