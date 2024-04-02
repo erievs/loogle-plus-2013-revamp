@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Retrieve the username of the post owner
     $getPostOwnerQuery = "SELECT username FROM posts WHERE id = ?";
     $stmt = $conn->prepare($getPostOwnerQuery);
     $stmt->bind_param("i", $postID);
@@ -85,11 +84,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
 
-        $ownerNotificationContent = "$username commented on your post!";
-        $insertOwnerNotificationQuery = "INSERT INTO notifications (recipient, content, created_at, read_status, sender, post_id) VALUES (?, ?, NOW(), 0, ?, ?)";
-        $stmt = $conn->prepare($insertOwnerNotificationQuery);
-        $stmt->bind_param("sssi", $postOwnerUsername, $ownerNotificationContent, $username, $postID);
-        $stmt->execute();
+
+        if ($username !== $postOwnerUsername) {
+            $ownerNotificationContent = "$username commented on your post!";
+            $insertOwnerNotificationQuery = "INSERT INTO notifications (recipient, content, created_at, read_status, sender, post_id) VALUES (?, ?, NOW(), 0, ?, ?)";
+            $stmt = $conn->prepare($insertOwnerNotificationQuery);
+            $stmt->bind_param("sssi", $postOwnerUsername, $ownerNotificationContent, $username, $postID);
+            $stmt->execute();
+        }
 
         $response['status'] = 'success';
         $response['message'] = 'Comment successfully added';

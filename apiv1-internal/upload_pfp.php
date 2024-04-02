@@ -6,7 +6,7 @@ if(isset($_POST['username']) && isset($_FILES['banner'])) {
     $username = $_POST['username'];
     $bannerFile = $_FILES['banner'];
 
-    $uploadDirectory = '../assets/banners/';
+    $uploadDirectory = '../assets/profilepictures/';
 
     $allowedExtensions = array('png');
     $maxFileSize = 1024 * 1024;
@@ -19,15 +19,15 @@ if(isset($_POST['username']) && isset($_FILES['banner'])) {
         $bannerFilePath = $uploadDirectory . $bannerFileName;
         
         if(move_uploaded_file($bannerFile['tmp_name'], $bannerFilePath)) {
-            echo "Banner uploaded successfully.";
+            echo "Pfp uploaded successfully.";
         } else {
-            echo "Failed to upload banner.";
+            echo "Failed to upload pfp.";
         }
     } else {
         echo "Invalid file format or size. Please upload a PNG file less than 1MB.";
     }
 } else {
-    echo "Username or banner file not provided.";
+    echo "Username or pfp file not provided.";
 }
 
 ?>

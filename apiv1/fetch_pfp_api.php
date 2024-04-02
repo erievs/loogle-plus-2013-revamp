@@ -1,6 +1,6 @@
 <?php
 $profilePicturesDirectory = '../assets/profilepictures/';
-
+    
 $availableProfilePictures = array(
     'default1.jpg',
     'default2.jpg',
@@ -8,35 +8,41 @@ $availableProfilePictures = array(
     'default4.jpg'
 );
 
+$allowedExtensions = array('jpg', 'jpeg', 'png', 'webp');
+
 if(isset($_GET['name'])) {
     $requestedProfilePicture = $_GET['name'];
-    $requestedProfilePicturePath = $profilePicturesDirectory . $requestedProfilePicture . ".jpg";
+    foreach ($allowedExtensions as $extension) {
+        $requestedProfilePicturePath = $profilePicturesDirectory . $requestedProfilePicture . ".$extension";
+        if(file_exists($requestedProfilePicturePath)) {
+            $mimeType = mime_content_type($requestedProfilePicturePath);
+            header("Content-Type: $mimeType"); 
+            readfile($requestedProfilePicturePath);
+            exit;
+        }
+    }
 
-    if(file_exists($requestedProfilePicturePath)) {
-        header('Content-Type: image/jpeg'); 
-        readfile($requestedProfilePicturePath);
-        exit;
-    } else {
-        $randomProfilePicture = $availableProfilePictures[array_rand($availableProfilePictures)];
+    $randomProfilePicture = $availableProfilePictures[array_rand($availableProfilePictures)];
+    foreach ($allowedExtensions as $extension) {
         $randomProfilePicturePath = $profilePicturesDirectory . $randomProfilePicture;
-        
         if(file_exists($randomProfilePicturePath)) {
-            header('Content-Type: image/jpeg');
+            $mimeType = mime_content_type($randomProfilePicturePath);
+            header("Content-Type: $mimeType");
             readfile($randomProfilePicturePath);
             exit;
-        } else {
-            $defaultProfilePicturePath = $profilePicturesDirectory . 'default.jpg';
-            if(file_exists($defaultProfilePicturePath)) {
-                header('Content-Type: image/jpeg');
-                readfile($defaultProfilePicturePath);
-                exit;
-            } else {
-                echo "Default profile picture not found.";
-            }
         }
+    }
+
+    $defaultProfilePicturePath = $profilePicturesDirectory . 'default.jpg';
+    if(file_exists($defaultProfilePicturePath)) {
+        $mimeType = mime_content_type($defaultProfilePicturePath);
+        header("Content-Type: $mimeType");
+        readfile($defaultProfilePicturePath);
+        exit;
+    } else {
+        echo "Default profile picture not found.";
     }
 } else {
     echo "No profile picture name provided.";
 }
 ?>
-

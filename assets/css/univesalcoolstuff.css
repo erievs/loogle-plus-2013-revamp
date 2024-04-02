@@ -1,0 +1,305 @@
+body {
+  background-color: #e4e4e4;
+}
+
+#postTextArea {
+  border: 1px solid #d8d8d8;
+}
+
+
+
+.triangle{
+  transform: rotate(45deg);
+display: block;
+position: absolute;
+top: 111.2px;
+right: 88%;
+border-bottom: 1px solid #d8d8d8;
+border-right: 1px solid #d8d8d8;
+background-color: #fff;
+width: 14px;
+height: 14px;
+content: "";
+}
+
+.post, .post-create {
+  border-radius: 2px;
+box-shadow: 0 1px 3px 1px #00000017;
+}
+
+.comment-content {
+display: initial;
+}
+
+ul.nav.nav-tabs {
+  height: 40px;
+  border: none;
+}
+
+.dropdown-menu.show {
+  box-shadow: 0 1px 40px 4px #00000091;
+}
+
+.main-header .search-container {
+margin-right: 30%;
+}
+
+div.post-create-icons div.iconstuff {
+  border-right: 2px solid #00000017;
+padding: 0 29px 0 0px;
+}
+
+.post-create {
+height: 16em;
+}
+
+.sub-header .nav-tabs > li.active > a {
+color: #000;
+font-weight: bold;
+}
+
+div.hacky-fix {
+display: flex;
+}
+
+div.comment {
+display: block;
+}
+
+div.agony {
+margin-top: -4px;
+}
+
+p.username {
+margin: 0;
+font-size: inherit;
+color: #000;
+}
+
+p.comment-content {
+margin: 0;
+left: 0;
+width: 90%;
+display: block;
+}
+
+p.time {
+color: #b3b3b3;
+margin: 0 10px;
+}
+
+.pfp {
+padding: 14px;
+}
+
+.loogle-logo {
+margin-top: -3px;
+}
+
+.home-h-icon {
+background-position: 0.4px 383px;
+}
+
+.pf-picture {
+width: 40px;
+height: 40px;
+}
+
+.username-header {
+margin: 8% 30% 0 -32%;
+}
+
+.comment-picture {
+margin-right: 10px;
+width: 36px;
+height: 36px;
+border-radius: 3px;
+}
+
+.post-file-picture {
+height: 50px;
+width: 50px;
+border-radius: 100px;
+margin-right: 15px;
+}
+
+.post-top {
+margin: 4% 0 0 0;
+}
+
+.notif-icon {
+
+width: 25px;
+height: 25px;
+position: absolute;
+top: 1.75%;
+margin: 0 -6%;
+opacity: 1;
+}
+
+
+#notfication-header {
+position: absolute;
+margin-left: -5%;
+margin-top: 1%;
+/* hacky fix but oh well gets the job done ig */
+width: 11px;
+z-index: 1000000;
+}
+
+
+.sb-card-body-arrow {
+position: initial;;
+}
+
+#notificationContainer {
+margin-top: 0;
+}
+
+.sidebar-list {
+display: contents;
+}
+
+.sidebar li {
+margin-bottom: 2%;
+}
+
+.sidebar .icon {
+height: 3.5em;
+}
+
+.not-pfp-image {
+border-radius: 0;
+}
+
+.not-content {
+height: 16px;
+overflow: hidden;
+width: 105%;
+text-align: left;
+}
+
+.not-text-container {
+width: 77%;
+margin: 0;
+}
+
+.not-username, .not-content {
+left: initial;
+float: left;
+margin: 0;
+}
+
+.gplus {
+background: no-repeat url(https://ssl.gstatic.com/s2/oz/images/sprites/notsg-eb27f5870940f5aacf4b28805c7d5ad3.png) -36px -598px;
+height: 16px;
+width: 16px;
+}
+
+.exit {
+background: no-repeat url(https://ssl.gstatic.com/s2/oz/images/sprites/notsg-eb27f5870940f5aacf4b28805c7d5ad3.png) -17px -598px;
+height: 16px;
+width: 16px;
+opacity: .3;
+}
+
+.topper {
+margin: -13% 7px 0 0;
+}
+
+.mention:hover .exit {
+opacity: .5;
+}
+
+.exit:hover {
+opacity: .7!important;
+}
+
+#mentionsContainer p {
+width: fit-content;
+padding: 4% 6%;
+background: #fff;
+border-radius: 7px;
+display: inline-block;
+box-shadow: 0px 2px 2px 1px #00000021;
+}
+
+/* crane wives lyrics if you couldn't tell */
+.ifyouwalkandiwasgone {
+background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+padding: 6px 32px;
+border: 1px solid #3079ed;
+border-radius: 2px;
+background-color: #4d90fe;
+}
+
+/* what the fuck is a  wives lyrics */
+
+.fuckjohnhinckleyjunior {
+  background-image: -webkit-linear-gradient(top,#1d1e19,#1d1e19);
+  padding: 6px 32px;
+  border: 1px solid #1d1e19;
+  border-radius: 2px;
+  background-color: #1d1e19;
+  /*! height: 30%; */
+  /*! width: 20%; */
+  margin-left: 50%;
+  font-size: 13px;
+  font-weight: bold;
+  height: 35px;
+  width: 207px;
+  }
+  
+
+.fromthehousewemadeourhome {
+background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -111px;
+height: 14px;
+width: 13px;
+display: block;
+}
+
+
+.username-big { 
+margin: 0;
+width: 95%;
+text-align: center;
+}
+
+img.pfp-picture {
+width: 7%;
+border-radius: 1000px;
+height: 100px;
+}
+
+.profilestuff {
+display: flex;
+margin: 7% 6% 6% 19%;
+position: absolute;
+width: -moz-available;
+height: 22%;
+}
+
+.profile-username {
+padding: 3% 1%;
+color: #fff;
+margin-top: -1%;
+}
+
+.bg-grad {
+background: -webkit-linear-gradient(top,#0000,#00000045);
+height: 35.5%;
+position: absolute;
+width: inherit;
+color: #00000045;
+}
+
+.profile-p-icon {
+background-position: -18.6px 364px;
+background-image: url('assets/icons/astlas2.png');
+width: 22px;
+height: 19px;
+display: inline-block;
+vertical-align: middle;
+scale: 0.85;
+margin-right: 5px;
+}

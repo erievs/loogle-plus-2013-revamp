@@ -22,3 +22,68 @@
     margin: 0 auto;
 }
 
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #E6E6E6;
+    margin: 15% auto;
+    padding: 20px;
+    border: none; /* Remove border */
+    width: 40%;
+    border-radius: 0; /* Remove border radius */
+    height: 10%;
+}
+
+.modal-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #FFFFFF;
+    border-top: 1px solid #ddd;
+    padding: 3px;
+}
+
+.ifyouwalkandiwasgone, .close-banner {
+    padding: 6px 20px;
+    margin-left: 10px;
+    border-radius: 2px;
+    border: 1px solid #3079ed;
+    cursor: pointer;
+}
+
+.ifyouwalkandiwasgone {
+    background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+    background-color: #4d90fe;
+    color: #fff;
+}
+
+.close-banner {
+    background-color: #FFFF;
+    color: #000;
+    border: black;
+    border-block-color: black;
+    border: 0.15px solid gray;
+    margin-left: 39%;
+}
+
+#pfp-upload {
+    background-image: -webkit-linear-gradient(top,#256d3d,#1a6129);
+}
+
+#comment-span {
+    display: flex;
+margin-bottom: 2px;
+
+}
