@@ -144,7 +144,11 @@ position: relative;"> > </p>
 
 
 <div class="notif-icon-side">
-    <div class="notif-icon"></div>
+
+<div class="unread-squares" style="">
+<p></p>
+</div>
+    <div class="notif-icon"><p id="numsfornot"></p></div>
     <span id="notfication-header">
     <div class="sb-card-body-arrow" style="display: none;" ></div>
     <div id="notificationContainer" style=" display: none; color: #aaa; max-height: 500px; overflow-y: auto;">
@@ -242,3 +246,33 @@ position: relative;"> > </p>
         <?php include("navtabs.php"); ?>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    // Fetch data from the API
+    $.ajax({
+        url: 'http://localhost:8090/apiv1/fetch_unreads.php?username=d',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Log the data
+            console.log('Data received:', data);
+
+            // Get the total_unread value
+            var unreadCount = data.total_unread;
+
+            // Set the text inside .notif-icon to the value of total_unread
+            $('#numsfornot').text(unreadCount);
+
+            // Check if total_unread is greater than 0
+            if (unreadCount > 0) {
+                // Change the background color of .notif-icon
+                $('.notif-icon').css('background-color', '#c44430');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching data from API:', error);
+        }
+    });
+});
+</script>

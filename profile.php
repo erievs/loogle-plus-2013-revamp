@@ -24,7 +24,7 @@ $icon = "profile";
     <link rel="stylesheet" href="assets/css/2013indexres.css">
     <link rel="stylesheet" href="assets/css/2013profile.css">
     <link rel="stylesheet" href="assets/css/2013notes.css">
-	<link rel="stylesheet" href="assets/css/test.css">
+	<link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
 
 </head>
 <body>
@@ -38,13 +38,30 @@ $icon = "profile";
         <div class="profilestuff">
             <img alt="<?php echo $profileget ?>" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $profileget ?>" class="pfp-picture">
             <h2 class="profile-username"><?php echo $profileget ?></h2>
+            <?php
+            session_start(); 
+            if (isset($_SESSION["username"]) && $_SESSION["username"] === $profileget) {
+                echo '<button class="fuckjohnhinckleyjunior" type="submit">
+                    <!-- sorry winter -->
+                <p style="color: #cfd1d3;">Change PFP & Banner</p>
+                </button>';
+                }
+                ?>
+
         </div>
     </div>
 </div>
 
-
-
-
+<div id="uploadbanner-pfp-banner" class="modal">
+  <div class="modal-content">
+    <p>Upload your profile and banners here (sorry it isn't) super accurate.</p>
+    <div class="modal-bottom">
+        <button class="ifyouwalkandiwasgone" id="banner-upload">Select Banner</button>
+        <button class="ifyouwalkandiwasgone" id="pfp-upload">Upload Profile Picture</button>
+        <button class="close-banner">Close</button>
+    </div>
+  </div>
+</div>
 
 <div class="write-post-expanded">
 
@@ -476,8 +493,8 @@ for (let i = 0; i < data.length; i++) {
                     const commentElement = document.createElement('div');
                     commentElement.className = 'comment';
                     commentElement.innerHTML = `
-                    <div class="pfp"></div> 
-                    <p class="username">${comment.username}</p>
+                   <span id="comment-span"> <div class="pfp"></div> 
+                    <p class="username" style="margin-top: -3px;">${comment.username}</p> </span>
                     <p class="comment-content">${comment.comment_content}</p>
                     `;
 
@@ -711,29 +728,76 @@ $(document).ready(function() {
 
 
 <script>
-$(document).ready(function () {
-    var mainHeader = $(".main-header");
-    var subHeader = $(".sub-header");
-    var stickyHeader = $(".sticky-header");
-    var sidebar = $(".sidebar");
-    var offset = mainHeader.offset().top;
-    var sidebarTopPosition = 60; 
+var modal = document.getElementById("uploadbanner-pfp-banner");
 
-    $(window).scroll(function () {
-        var scrollTop = $(window).scrollTop();
-        var mainHeaderHeight = mainHeader.height();
-        var subHeaderHeight = subHeader.height();
-        var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
+var btn = document.querySelector(".fuckjohnhinckleyjunior");
 
-        if (scrollTop >= offset + totalHeaderHeight) {
-            stickyHeader.css('display', 'block');
-            sidebarTopPosition = 40; 
-        } else {
-            stickyHeader.css('display', 'none');
-            sidebarTopPosition = 60; 
-        }
+var span = document.querySelector(".close-banner");
 
-        sidebar.css('top', sidebarTopPosition + 'px');
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#banner-upload').click(function() {
+        $('<input type="file" accept="image/png">').change(function() {
+            var file = this.files[0];
+            var formData = new FormData();
+            formData.append('username', 'd');
+            formData.append('banner', file);
+            $.ajax({
+                url: '<?php echo $siteurl ?>/apiv1-internal/upload_banner.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(xhr, status, error) {
+                    alert("Failed to upload banner. Error: " + error);
+                }
+            });
+        }).click();
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#pfp-upload').click(function() {
+        $('<input type="file" accept="image/png">').change(function() {
+            var file = this.files[0];
+            var formData = new FormData();
+            formData.append('username', 'd');
+            formData.append('banner', file);
+            $.ajax({
+                url: '<?php echo $siteurl ?>/apiv1-internal/upload_pfp.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(xhr, status, error) {
+                    alert("Failed to upload banner. Error: " + error);
+                }
+                
+            });
+        }).click();
     });
 });
 </script>

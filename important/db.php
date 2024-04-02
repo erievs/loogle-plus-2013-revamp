@@ -4,6 +4,6 @@ $db_user = "root";
 $db_pass = "password";
 $db_name = "loogle_main";
 
-$siteurl = "http://localhost:8070";
+$siteurl = "http://localhost:8090";
 ?>
 
