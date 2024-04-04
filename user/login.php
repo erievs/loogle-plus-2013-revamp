@@ -1419,13 +1419,12 @@
   <img src="../assets/accounts/ui/alt_hp_icons.png" alt="">
 <h1>One password. All of Loogle.</h1>
 
-<b>This is a recreation of Loogle plus from 2013, all rights reserved to Loogle and Alphabet inc!, 
-FOR THE LOVE OF GOD DO NOT USE REAL PASSWORDS OR REUSE PASSWORDS AT ALL. THIS ISN'T SPONSERED OR
-IN ANYWAY INVLOVED WITH Loogle</b>
+<b>This is a recreation of Google+ from 2013, all rights reserved to Google and Alphabet!, 
+DO NOT USE REUSE PASSWORDS AT ALL. SECURITY IS UNVERIFIED. Loogle is in no way sponsored, endorsed, or created by Google and/or Alphabet!</b>
 
 
 
-<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is more if Loogle wants me to shut it down, or basic support)</p></address>
+<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is for legal inquiried (including Copyright), or basic support)</p></address>
 
 <address>ksportalcraft@gmail.com</adress>
 
