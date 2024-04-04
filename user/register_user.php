@@ -86,7 +86,7 @@
   padding-top: .5em;
   padding-bottom: .5em;
   }
-  .google-header-bar {
+  .Loogle-header-bar {
   height: 71px;
   background: #f1f1f1;
   border-bottom: 1px solid #e5e5e5;
@@ -125,7 +125,7 @@
   .main h1:first-child {
   margin: 0 0 .92em;
   }
-  .google-footer-bar {
+  .Loogle-footer-bar {
   position: absolute;
   bottom: 0;
   height: 35px;
@@ -2155,9 +2155,9 @@ installPlugin(FLASH_PLUGIN);
 
 <div class="wrapper">
 
-<div class="google-header-bar">
+<div class="Loogle-header-bar">
   <div class="header content clearfix">
-  <img class="logo" src="../assets/accounts/ui/loogle_logo.png" alt="Google">
+  <img class="logo" src="../assets/accounts/ui/loogle_logo.png" alt="Loogle">
   <span class="signin-button">
   <a id="link-signin" class="g-button" href="login.php">Sign in</a>
   </span>
@@ -2168,7 +2168,7 @@ installPlugin(FLASH_PLUGIN);
   <noscript>
   <div class="jfk-butterBar jfk-butterBar-warning jfk-butterBar-shown">
   <p>
-  In order to sign up for a Google Account, you need to have <a target="_blank" href="#">JavaScript enabled</a> in your browser.
+  In order to sign up for a Loogle Account, you need to have <a target="_blank" href="#">JavaScript enabled</a> in your browser.
   <a class="cta" href="">
   <img src="//web.archive.org/web/20130606023031im_/https://ssl.gstatic.com/accounts/ui/refresh_white.png">
   Refresh this page after you have enabled JavaScript.
@@ -2176,13 +2176,28 @@ installPlugin(FLASH_PLUGIN);
   </p>
   </div>
   </noscript>
-  <h1 class="redtext">Create a new Google Account</h1>
+  <h1 class="redtext">Create a new Loogle Account</h1>
   <div class="clearfix">
   <div class="sign-up">
     <div class="signup-box">
+
+		<b>DO NOT USE REAL PASSWORDS, THIS IS NOT AN OFFICAL Loogle OR ALPHABET PROJECT</b>		
+
+
+
+<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is more if Loogle wants me to shut it down, or basic support)</p></address>
+
+<address>ksportalcraft@gmail.com</adress>
+
+<br>
+
+<a href="https://github.com/erievs/loogle-plus-2013-revamp"><p>Github</p></a>
+
+	
+
       <form class="createaccount-form" id="createaccount" name="createaccount" action="../auth/reg.php" method="post">
         <input type="hidden" name="service" id="service" value="oz">
-        <input type="hidden" name="continue" id="continue" value="https://plus.google.com/?gpsrc=gplp0&amp;partnerid=gplp0">
+        <input type="hidden" name="continue" id="continue" value="https://plus.Loogle.com/?gpsrc=gplp0&amp;partnerid=gplp0">
         <input type="hidden" name="timeStmp" id="timeStmp" value="1370485831534">
         <input type="hidden" name="secTok" id="secTok" value=".AG5fkS9LK3eK7ZV1cnghWUgylEoT2KKk6g==">
         <input type="hidden" name="dsh" id="dsh" value="-5565402309479882318">
@@ -2260,13 +2275,13 @@ installPlugin(FLASH_PLUGIN);
 
 
   </div>
-  <div class="google-footer-bar">
+  <div class="Loogle-footer-bar">
   <div class="footer content clearfix">
   <ul id="footer-list">
-  <li><span dir="ltr">© 2013 Google</span></li>
-  <li><a href="https://web.archive.org/web/20130606023031/https://accounts.google.com/TOS?hl=en">Terms of Service</a></li>
-  <li><a href="https://web.archive.org/web/20130606023031/http://www.google.com/intl/en/privacy/">Privacy Policy</a></li>
-  <li><a href="https://web.archive.org/web/20130606023031/http://www.google.com/support/accounts?hl=en">Help</a></li>
+  <li><span dir="ltr">© 2013 Loogle</span></li>
+  <li><a href="https://web.archive.org/web/20130606023031/https://accounts.Loogle.com/TOS?hl=en">Terms of Service</a></li>
+  <li><a href="https://web.archive.org/web/20130606023031/http://www.Loogle.com/intl/en/privacy/">Privacy Policy</a></li>
+  <li><a href="https://web.archive.org/web/20130606023031/http://www.Loogle.com/support/accounts?hl=en">Help</a></li>
   </ul>
   <span id="lang-chooser-wrap" class="lang-chooser-wrap" style="">
   <img src="//web.archive.org/web/20130606023031im_/https://ssl.gstatic.com/images/icons/ui/common/universal_language_settings-21.png">

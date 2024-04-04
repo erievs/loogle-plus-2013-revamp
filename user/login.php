@@ -86,7 +86,7 @@
   padding-top: .5em;
   padding-bottom: .5em;
   }
-  .google-header-bar {
+  .Loogle-header-bar {
   height: 71px;
   background: #f1f1f1;
   border-bottom: 1px solid #e5e5e5;
@@ -125,7 +125,7 @@
   .main h1:first-child {
   margin: 0 0 .92em;
   }
-  .google-footer-bar {
+  .Loogle-footer-bar {
   position: absolute;
   bottom: 0;
   height: 35px;
@@ -1273,11 +1273,9 @@
   top: 1px;
   height: 19px;
   width: 52px;
-  background: transparent url(//web.archive.org/web/20130608011516im_/https://ssl.gstatic.com/accounts/ui/google-signin-flat.png) no-repeat;
   }
   @media only screen and (-webkit-device-pixel-ratio: 2){
   .signin-box h2 strong {
-  background: transparent url(//web.archive.org/web/20130608011516im_/https://ssl.gstatic.com/accounts/ui/google-signin-flat_2x.png) no-repeat;
   background-size: 52px 19px;
   }
   }
@@ -1366,9 +1364,9 @@
       href="../assets/icons/fav.png" />
 
   <div class="wrapper">
-  <div class="google-header-bar">
+  <div class="Loogle-header-bar">
   <div class="header content clearfix">
-  <img class="logo" src="../assets/accounts/ui/loogle_logo.png" alt="Google">
+  <img class="logo" src="../assets/accounts/ui/loogle_logo.png" alt="Loogle">
   <span class="signup-button">
   <a id="link-signup" class="g-button g-button-red" href="register_user.php">
   Sign up
@@ -1420,12 +1418,29 @@
 </div>
   <img src="../assets/accounts/ui/alt_hp_icons.png" alt="">
 <h1>One password. All of Loogle.</h1>
+
+<b>This is a recreation of Loogle plus from 2013, all rights reserved to Loogle and Alphabet inc!, 
+FOR THE LOVE OF GOD DO NOT USE REAL PASSWORDS OR REUSE PASSWORDS AT ALL. THIS ISN'T SPONSERED OR
+IN ANYWAY INVLOVED WITH Loogle</b>
+
+
+
+<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is more if Loogle wants me to shut it down, or basic support)</p></address>
+
+<address>ksportalcraft@gmail.com</adress>
+
+<br>
+
+<a href="https://github.com/erievs/loogle-plus-2013-revamp"><p>Github</p></a>
+
+
+
 <p>Want to enjoy the best of Loogle? Just stay signed in. One username 
 and password is all you need to unlock more features from services you 
 use every day, like Gmail, Maps, Loogle+, and YouTube.</p>
   </div>
   </div>
-<div class="google-footer-bar">
+<div class="Loogle-footer-bar">
   <div class="footer content clearfix">
   <ul>
   <li>© 2024 Loogle</li>
@@ -1770,7 +1785,7 @@ use every day, like Gmail, Maps, Loogle+, and YouTube.</p>
   var langChooserWrap = document.getElementById('lang-chooser-wrap');
   if (langChooser && langChooserWrap) {
   var langChooserParam = 'hl';
-  var langChooserUrl = '\x2FServiceLogin?passive=1209600\x26continue=https%3A%2F%2Faccounts.google.com%2FManageAccount\x26followup=https%3A%2F%2Faccounts.google.com%2FManageAccount\x26lp=1';
+  var langChooserUrl = '\x2FServiceLogin?passive=1209600\x26continue=https%3A%2F%2Faccounts.Loogle.com%2FManageAccount\x26followup=https%3A%2F%2Faccounts.Loogle.com%2FManageAccount\x26lp=1';
   langChooserWrap.style.display = '';
   langChooser.onchange = function() {
   window.location.href =
@@ -1786,7 +1801,7 @@ use every day, like Gmail, Maps, Loogle+, and YouTube.</p>
   var logos = gaia_getElementsByClass('logo');
   for (var i = 0; i < logos.length; i++) {
         if (logos[i].nodeName == 'IMG' &&
-            logos[i].src.search('google_logo_41.png') > 0) {
+            logos[i].src.search('Loogle_logo_41.png') > 0) {
   logos[i].width = 116;
   logos[i].height = 41;
   logos[i].src = '//web.archive.org/web/20130608011516/https://ssl.gstatic.com/images/logo_ret.png';
