@@ -20,3 +20,5 @@ https://ubuntu.com/server/docs/databases-mysql (I tested it on Ubuntu 23.10 and 
 4. Make sure you properly update all the URLs for the url, for the index.php and others. It will be added to a config file soon.
 
 5. The mobile app will also need to be patched.
+
+<-- TAKE OUT POSTS ARE ONLY SUPPORTED WITH HTML WE NEED TO SEE HOW JSON WAS-->
