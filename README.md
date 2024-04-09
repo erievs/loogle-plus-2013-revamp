@@ -17,17 +17,7 @@ with Bootstrap 3 as the CSS framework.
 
 Thanks to https://github.com/gaffling/PHP-Grab-Favicon for the base for our metadata grabber.
 
-(Out fork https://github.com/erievs/loogle-plus-site-metadata-grabber)
-
-<hr>
-
-<hr>
-
-Users:
-
-virus - Jr
-
-blue tails - person we probbaly banned
+(Our fork https://github.com/erievs/loogle-plus-site-metadata-grabber)
 
 <hr>
 
