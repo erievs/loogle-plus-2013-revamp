@@ -1,6 +1,17 @@
-<?php if (!isset($icon)) {
-	$icon = "home";
-}?>
+<?php 
+
+$current_url = $_SERVER['REQUEST_URI'];
+
+$icon = "home";
+
+
+if (strpos($current_url, 'whats_hot.php') !== false) {
+    $icon = "whats_hot";
+} elseif (strpos($current_url, 'profile.php') !== false) {
+    $icon = "profile";
+}
+
+?>
 
 
 
@@ -138,6 +149,11 @@ function fetchMentions() {
     <div class="menu">
     <span id="loogle-logo" class="loogle-logo"></span>
     <span class="<?php 
+    
+	if ($icon == "whats_hot") {
+		echo 'home-h-icon';
+	}
+
 	if ($icon == "profile") {
 		echo 'profile-p-icon';
 	}
@@ -145,8 +161,11 @@ function fetchMentions() {
 	if ($icon == "home") {
 		echo 'home-h-icon';
 	}
+
+    	
+
 	
-	?> home-icon" id="open-sidebar-1"></span>
+	?>" id="open-sidebar-1"></span>
     <p style="font-size: 16px;
 top: 2px;
 position: relative;"> > </p>
@@ -211,9 +230,14 @@ position: relative;"> > </p>
 		echo 'Home';
 	}
 	
-	if ($icon == "home") {
+	if ($icon == "whats_hot") {
 		echo 'Home';
 	}
+
+    if ($icon == "home") {
+		echo 'Home';
+	}
+
 	
 	
 	?></p>
@@ -241,7 +265,7 @@ position: relative;"> > </p>
 
         <hr>
 
-        <li><span class="icon" id="non-sel"><div class="wh-icon-side"></div> <p>What's Hot<p></span></li>
+        <a href="whats_hot.php"><li><span class="icon" id="non-sel"><div class="wh-icon-side"></div> <p>What's Hot<p></span></li></a>
         <li><span class="icon" id="non-sel"><div class="com-icon-side"></div> <p>Communties<p></span></li>
         <li><span class="icon" id="non-sel"><div class="events-icon-side"></div> <p>Events<p></li>
         <li><span class="icon" id="non-sel"><div class="settings-icon-side"></div> <p>Settings<p></li>

@@ -1264,6 +1264,70 @@ $(document).ready(function() {
 }
 </script>
 
+<script>
+
+$(document).ready(function() {
+    var selectedFileOther;
+
+    function handleFileUpload(file) {
+        var formData = new FormData();
+        formData.append('username', '<?php echo $_SESSION["username"]?>');
+        formData.append('banner', file);
+        $.ajax({
+            url: '<?php echo $siteurl ?>/apiv1-internal/upload_banner.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert(response);
+                smoothReload(500);
+            },
+            error: function(xhr, status, error) {
+                alert("Failed to upload banner. Error: " + error);
+            }
+        });
+    }
+    
+    $('#banner-upload-inside-cool').click(function() {
+        $('<input type="file" accept="image/png,image/webp,image/jpeg,image/jpg">').change(function() {
+            selectedFileOther = this.files[0];
+        }).click();
+    });
+    
+    $('.upload-area-banner').on('drop', function(e) {
+        e.preventDefault();
+        selectedFileOther = e.originalEvent.dataTransfer.files[0];
+        handleFileUpload(selectedFileOther);
+    }).on('dragover', function(e) {
+        e.preventDefault();
+    });
+    
+    $('#banner-upload').click(function(e) {
+        e.preventDefault();
+        if (selectedFileOther) {
+            handleFileUpload(selectedFileOther);
+        } else {
+            alert("Please select a photo first.");
+        }
+    });
+});
+
+ $(".fuckjohnhinckleyjunior").click(function() {
+        $("#uploadbanner-banner-banner").css("display", "block");
+    });
+
+    $("#donotaskwhatwedidtojapaninthe40s, #boi1, #uploadbanner-banner-banner .close, .close-banner").click(function() {
+        $("#uploadbanner-banner-banner").css("display", "none");
+ });
+
+ function smoothReload(delay) {
+    setTimeout(function() {
+        location.reload();
+    }, delay);
+}
+</script>
+
 
 
 <!-- END SCRIPTS -->
