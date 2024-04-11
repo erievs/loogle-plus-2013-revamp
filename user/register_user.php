@@ -2185,7 +2185,7 @@ installPlugin(FLASH_PLUGIN);
 
 
 
-<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is more if Google wants me to shut it down, or basic support)</p></address>
+<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is more if Loogle wants me to shut it down, or basic support)</p></address>
 
 <address>ksportalcraft@gmail.com</adress>
 
@@ -2241,7 +2241,7 @@ installPlugin(FLASH_PLUGIN);
   <h2>
   Your Loogle Account is more than just Search.
 </h2>
-  <p class="greytext">Talk, chat, share, schedule, store, organize, collaborate, discover, and create. Use Loogle products from Gmail to Loogle+ to YouTube, view your search history, all with one username and password, all backed up all the time and easy to find at (you guessed it) kspc.serv00.net.</p>
+  <p class="greytext">Talk, chat, share, schedule, store, organize, collaborate, discover, and create. Use Loogle products from Gmail to Loogle+ to YouTube, view your search history, all with one username and password, all backed up all the time and easy to find at (you guessed it) Loogle.com.</p>
   </div>
 </div>
 <div class="benefit">

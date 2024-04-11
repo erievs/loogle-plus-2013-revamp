@@ -36,6 +36,10 @@ $icon = "home";
 					<link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
 
                     <link rel="stylesheet" href="assets/css/post2.css">
+
+                    <link rel="stylesheet" href="assets/css/writespost.css">
+
+                    <link rel="stylesheet" href="assets/css/headerfix.css">
                     <link rel="icon" 
       type="image/png" 
       href="../assets/important-images/fav.png" />
@@ -70,9 +74,15 @@ $icon = "home";
                             <div class="post-metadata">N/A</div>
                         </div>
                      </div>
-
                         <div class="post-content"><p></p></div>
                         <img class="post-image" src="">
+                   
+
+                        <div class="link-preview">
+                </div>
+             
+                        <div class="youtube-emded">
+                        </div>
 
 
                     <div class="comment-main">
@@ -148,6 +158,7 @@ $icon = "home";
                             const postContentElement = $(".post-content");
                             postContentElement.text(postData.content);
 
+
                         },
                         error: function () {
                             console.log('Error fetching user and post data.');
@@ -157,7 +168,7 @@ $icon = "home";
 
                 function getFormattedTime(createdAt) {
 
-    const postDate = new Date(createdAt);
+                 const postDate = new Date(createdAt);
                 const currentDate = new Date();
 
                 const timeDifference = currentDate - postDate;
@@ -184,73 +195,105 @@ $icon = "home";
     }
 }
 
-                $(document).ready(function() {
+$(document).ready(function () {
+    var id = <?php echo json_encode($id); ?>;
 
+    $.ajax({
+        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
+        type: 'GET',
+        dataType: 'json',
+        success: function (postData) {
+            console.log(postData);
+            const usernameElement = $(".username, .post-username");
+            usernameElement.text(postData.username);
 
-                    var id = <?php echo json_encode($id); ?>;
+            if (postData.image_url) {
+                const postImageElement = $(".post-image");
+                postImageElement.attr('src', postData.image_url);
+                postImageElement.show();
+            }
 
-                    $.ajax({
-                        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (postData) {
+            if (postData.content) {
+                const postContentDiv = $(".post-content");
+                const pElement = postContentDiv.find('p');
+                pElement.text(postData.content);
+                postContentDiv.show();
+            }
 
-                            console.log(postData);
+            const $postElement = $('.post');
 
-                            const usernameElement = $(".username, .post-username");
-                            usernameElement.text(postData.username);
+            if (postData.post_link_url) {
+                $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(postData.post_link_url) + '&format=json', function (metadata) {
+                    const linkPreviewContainer = $('<div>', { class: 'link-preview' });
 
-                            if (postData.image_url) {
-                                const postImageElement = $(".post-image");
-                                postImageElement.attr('src', postData.image_url);
-                                postImageElement.show();
-                            }
-                        },
-                        error: function () {
-                            console.log('Error fetching user and post data.');
-                        }
+                    const faviconContainer = $('<div>', { class: 'favicon-container' });
+                    const faviconImg = $('<img>', {
+                        src: metadata.image,
+                        alt: 'Favicon',
+                        class: 'favicon-img'
                     });
-        });
+                    faviconContainer.append(faviconImg);
 
-                $(document).ready(function () {
+                    const contentContainer = $('<div>', { class: 'content-container' });
+                    const title = $('<h2>');
+                    const titleLink = $('<a>', {
+                        href: postData.post_link_url,
+                        text: metadata.title,
+                        target: '_blank'
+                    });
+                    title.append(titleLink);
 
+                    const linkText = $('<p>', {
+                        text: postData.post_link_url,
+                        class: 'link-text'
+                    });
+                    contentContainer.append(title, linkText);
 
+                    linkPreviewContainer.append(faviconContainer, contentContainer);
+                    $('.post .link-preview').append(linkPreviewContainer);
 
-                    var id = <?php echo json_encode($id); ?>;
+                    const containerWidth = linkPreviewContainer.width();
+                    const faviconWidth = containerWidth * 0.3;
+                    const contentWidth = containerWidth * 0.8;
+                    faviconContainer.width(faviconWidth);
+                    contentContainer.width(contentWidth);
 
-                    $.ajax({
-                        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (postData) {
+                    const maxFaviconHeight = 50;
+                    const maxFaviconWidth = containerWidth * 0.3;
+                    faviconImg.css({
+                        'max-width': maxFaviconWidth + 'px',
+                    });
 
-                            console.log(postData);
+                    if (contentContainer.height() > 200) {
+                        contentContainer.css('height', '200px');
+                        contentContainer.css('overflow', 'hidden');
+                    }
+                });
+            }
 
-                            const usernameElement = $(".username, .post-username");
-                            usernameElement.text(postData.username);
+            if (postData.post_link && postData.post_link.includes("youtube.com/embed")) {
+                const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
+                $postElement.find('.youtube-emded').html(iframeHTML);
 
-                            if (postData.image_url) {
-                                const postImageElement = $(".post-image");
-                                postImageElement.attr('src', postData.image_url);
-                                postImageElement.show();
-                            }
+                const protocol = window.location.protocol;
+                if (protocol === 'https:' && !postData.post_link.startsWith('https:')) {
+                    postData.post_link = postData.post_link.replace(/^http:/, 'https:');
+                }
 
-                            if (postData.content) {
-            const postContentDiv = $(".post-content");
-            const pElement = postContentDiv.find('p'); 
-            pElement.text(postData.content); 
-            postContentDiv.show();
+                $postElement.find('.youtube-emded iframe').attr('src', postData.post_link);
+            }
+
+            const postMetadataElement = $(".post-metadata");
+            postMetadataElement.text("Placeholder - " + getFormattedTime(postData.created_at));
+        },
+        error: function () {
+            console.log('Error fetching user and post data.');
         }
-
-                            const postMetadataElement = $(".post-metadata");
-                            postMetadataElement.text("Placeholder - " + getFormattedTime(postData.created_at));
-                        },
-                        error: function () {
-                            console.log('Error fetching user and post data.');
-                        }
-                    });
+    });
 });
 
+
+  
             </script>
             <script>
 
@@ -333,7 +376,6 @@ $icon = "home";
 
 
 <script>
-
 $(document).ready(function() {
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
@@ -488,10 +530,9 @@ $(document).ready(function() {
                 }
             });
         }
+        
     });
 });
-
- 
 </script>
 
 

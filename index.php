@@ -16,12 +16,15 @@ $icon = "home";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+ 
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
     <title>Loogle+</title>
 	<link rel="stylesheet" href="assets/css/2013isamess.css">
 	<link rel="stylesheet" href="assets/css/2013indexres.css">
 	<link rel="stylesheet" href="assets/css/2013notes.css">
     <link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
+    <link rel="stylesheet" href="assets/css/headerfix.css">
     <link rel="icon" 
       type="image/png" 
       href="assets/important-images/fav.png" />
@@ -46,9 +49,6 @@ $icon = "home";
 
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-
 
 <script>
 $(document).ready(function () {
@@ -137,12 +137,21 @@ postCreate.innerHTML = `
             <div class="attach">
                 Attach:
             </div>
-            <div class="photo-icon">
-            <p style="position: relative;
-top: -7px;
-left: 15px;">Photos</p>
+
+            <div id="mymotherquestionmark" class="photo-icon" >
+            <p style="position: relative; top: -7px; left: 15px;">
+            Photos</p>
             </div>
 
+            <div class="photo-icon" id="bobisbackbutfuckhim">
+            <p style="position: relative; top: -7px; left: 15px;">
+            Link</p>
+            </div>
+
+            <div class="photo-icon" id="videosarebackbaby">
+            <p style="position: relative; top: -8px; left: 15px;">
+            Video</p>
+            </div>
     </div>
 
     <div class="level-3" style="display: none;">
@@ -154,7 +163,32 @@ left: 15px;">Photos</p>
         <input type="file" id="fileUploadInput" accept="image/*" style="display: none;">
 
         <input type="file" id="fileUploadInput" accept="image/*" style="display: none">
-<button class="upload-button" id="openFileDialog">Upload from computer</button>
+        <button class="upload-button" id="openFileDialog">Upload from computer</button>
+        
+
+    </div>
+    
+
+    <div class="add-link" style="display: none;">
+    
+    <p id="pthingy1">
+    Add Link:
+    </p>
+
+    <textarea class="add-link1" id="al1" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold;
+    font-size: 14px;" placeholder="Insert your link here, it must start with http/https or it wont send."></textarea>
+
+    </div>
+
+
+    <div class="add-video" style="display: none;">
+    
+    <p id="pthingy1">
+    Add Video:
+    </p>
+
+     <textarea class="add-link1" id="al2" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold;
+    font-size: 14px;" placeholder="Insert your youtube video here, it must be a standerd youtube url or it wont send."></textarea>
 
     </div>
 
@@ -187,6 +221,218 @@ left: 15px;">Photos</p>
     $(document).ready(function () {
     let postCreateMoved = false; 
 
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.has(name);
+    }
+
+
+    function getQueryParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has(name);
+    }
+
+    function getQueryParameterValue(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+    }
+
+     if (getQueryParameter('linkopen') || getQueryParameter('write_post_link_open')) {
+            console.log('Link open query parameter is present');
+       
+            const urlParam = getQueryParameterValue('url');
+        if (urlParam) {
+            $('#al1').val(urlParam);
+        }
+
+
+            if (!postCreateMoved) {
+            const $postCreate = $('.post-create'); 
+            const $writePostDiv = $('.write-post-expanded'); 
+            const $writePostImage = $('.pfp-write-post');
+            const $writePostLevel2 = $('.level-2');
+            const $writePostLevel2p5 = $('.level-2.5');
+            const $writePostLeve3 = $('.level-3');
+            const $writePostPhotoIcon = $('.photo-icon');
+            const $writePostLinkIcon = $('#bobisbackbutfuckhim');
+            const $writePostPhotoRealIcon = $('#mymotherquestionmark ');
+            const $addPhotostext = $('.add-photos');
+            const $addLinktext = $('.add-link'); 
+            const $addVideotext = $('.add-video');
+            const $uploadButton = $('.upload-button');
+            const $attach = $('.attach');
+            const $photo = $('.photo-icon');
+            const $level4 = $('.level-4');
+            const $box = $('.fileDrop');
+
+            const destination = $writePostDiv.position();
+
+
+            $postCreate.animate({
+                left: destination.left,
+                top: destination.top,
+                opacity: 0
+            }, 300, function () {
+
+                $writePostDiv.append($postCreate);
+
+                $addLinktext.show();
+
+
+                $postCreate.css({
+                    background: '#f6f6f6',
+                    padding: '10px',
+                    width: '650px',
+                    height: '350px',
+                    border: '1px solid rgba(10, 10, 10, 0.1)',
+                    position: 'relative',
+                    margin: '0 auto',
+                    marginTop: '40px',
+                    left: '0',
+                    top: '0',
+                    opacity: '1',
+                    'box-shadow': '3px 0 33px 0px #000',
+                });
+
+                $('.post-create-icons').hide();
+				$('.triangle').hide();
+
+                $writePostDiv.show();
+                $level4.show();
+            });
+
+            $('#postTextArea').css({
+                width: '75%',
+                left: '22%',
+                position: 'relative',
+                border: '1px solid rgba(10, 10, 10, 0.1)',
+            });
+
+            $level4.css({
+                top: '90px'
+            });
+
+            $writePostImage.show();
+            $writePostLevel2.show();
+            $level4.show();
+            $box.hide();
+
+            postCreateMoved = true;
+
+             $writePostLinkIcon.click(function () {
+             $postCreate.css({
+               height: '350px'
+             });
+
+             
+
+            $level4.css({
+            top: '80px'
+             });
+           });
+
+           
+        }
+     }
+
+
+     if (getQueryParameter('videoopen') || getQueryParameter('write_post_video_open')) {
+            console.log('Link open query parameter is present');
+       
+            const urlParam = getQueryParameterValue('url');
+        if (urlParam) {
+            $('#al2').val(urlParam);
+        }
+
+            if (!postCreateMoved) {
+            const $postCreate = $('.post-create'); 
+            const $writePostDiv = $('.write-post-expanded'); 
+            const $writePostImage = $('.pfp-write-post');
+            const $writePostLevel2 = $('.level-2');
+            const $writePostLevel2p5 = $('.level-2.5');
+            const $writePostLeve3 = $('.level-3');
+            const $writePostPhotoIcon = $('.photo-icon');
+            const $writePostLinkIcon = $('#bobisbackbutfuckhim');
+            const $writePostPhotoRealIcon = $('#mymotherquestionmark ');
+            const $addPhotostext = $('.add-photos');
+            const $addLinktext = $('.add-link'); 
+            const $addVideotext = $('.add-video');
+            const $uploadButton = $('.upload-button');
+            const $attach = $('.attach');
+            const $photo = $('.photo-icon');
+            const $level4 = $('.level-4');
+            const $box = $('.fileDrop');
+
+            const destination = $writePostDiv.position();
+
+
+            $postCreate.animate({
+                left: destination.left,
+                top: destination.top,
+                opacity: 0
+            }, 300, function () {
+
+                $writePostDiv.append($postCreate);
+
+                $addVideotext.show();
+
+
+                $postCreate.css({
+                    background: '#f6f6f6',
+                    padding: '10px',
+                    width: '650px',
+                    height: '350px',
+                    border: '1px solid rgba(10, 10, 10, 0.1)',
+                    position: 'relative',
+                    margin: '0 auto',
+                    marginTop: '40px',
+                    left: '0',
+                    top: '0',
+                    opacity: '1',
+                    'box-shadow': '3px 0 33px 0px #000',
+                });
+
+                $('.post-create-icons').hide();
+				$('.triangle').hide();
+
+                $writePostDiv.show();
+                $level4.show();
+            });
+
+            $('#postTextArea').css({
+                width: '75%',
+                left: '22%',
+                position: 'relative',
+                border: '1px solid rgba(10, 10, 10, 0.1)',
+            });
+
+            $level4.css({
+                top: '90px'
+            });
+
+            $writePostImage.show();
+            $writePostLevel2.show();
+            $level4.show();
+            $box.hide();
+
+            postCreateMoved = true;
+
+             $writePostLinkIcon.click(function () {
+             $postCreate.css({
+               height: '350px'
+             });
+
+             
+
+            $level4.css({
+            top: '80px'
+             });
+           });
+
+           
+        }
+     }
+
     $('#postTextArea').click(function () {
 
         if (!postCreateMoved) {
@@ -194,9 +440,15 @@ left: 15px;">Photos</p>
             const $writePostDiv = $('.write-post-expanded'); 
             const $writePostImage = $('.pfp-write-post');
             const $writePostLevel2 = $('.level-2');
+            const $writePostLevel2p5 = $('.level-2.5');
             const $writePostLeve3 = $('.level-3');
             const $writePostPhotoIcon = $('.photo-icon');
+            const $writePostLinkIcon = $('#bobisbackbutfuckhim');
+            const $writePostPhotoRealIcon = $('#mymotherquestionmark');
+            const $writePostVideoIcon = $('#videosarebackbaby');
             const $addPhotostext = $('.add-photos');
+            const $addLinktext = $('.add-link');
+            const $addVideotext = $('.add-video');
             const $uploadButton = $('.upload-button');
             const $attach = $('.attach');
             const $photo = $('.photo-icon');
@@ -253,15 +505,47 @@ left: 15px;">Photos</p>
 
             postCreateMoved = true;
 
-            $writePostPhotoIcon.click(function () {
+            // THIS IS THE WRITE POST LINK NOT PHOTO, NCP - THE DUMB NUTS
+
+            $writePostLinkIcon.click(function () {
+
+            $addLinktext.show();
+
+
+                $postCreate.css({
+                            height: '350px'
+                        });
+
+
+                $level4.css({
+                            top: '80px'
+                });
+                
+            })
+
+            $writePostVideoIcon.click(function () {
+
+            $addVideotext.show();
+
+            $postCreate.css({
+                height: '350px'
+            });
+            $level4.css({
+                top: '80px'
+             });
+    
+            })
+
+            $writePostPhotoRealIcon.click(function () {
 
                 $("#fileDrop").toggle(function () {
                     if ($(this).is(":visible")) {
                         $postCreate.css({
-                            height: '300px'
+                            height: '350px'
                         });
 
                         $addPhotostext.show();
+
                         $writePostLeve3.show();
                         $uploadButton.show();
                         $level4.show();
@@ -273,11 +557,15 @@ left: 15px;">Photos</p>
                             display: 'none'
                         });
                         $level4.css({
-                            top: '0px'
+                            top: '80px'
                         });
+
                     } else {
                         $addPhotostext.css({
                             display: 'none'
+                        });
+                        $writePostLevel2p5.css({
+                            display: 'block'
                         });
                         $writePostLevel2.css({
                             height: '300px',
@@ -292,27 +580,7 @@ left: 15px;">Photos</p>
                     }
                 });
             });
-
-            $(document).on('click', function (event) {
-                if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoIcon) && !$(event.target).is($uploadButton) ) {
-                    $("#fileDrop").hide();
-                    $postCreate.css({
-                        height: '300px' 
-                    });
-                    $writePostLevel2.css({
-                        height: 'auto',
-                        display: 'block'
-                    });
-                    $photo.show();
-                    $attach.show();
-                    $addPhotostext.hide();
-                    $uploadButton.hide();
-                    $box.hide();
-                    $level4.css({
-                        top: '90px'
-                    });
-                }
-            });
+            
         }
     });
 
@@ -366,21 +634,31 @@ $('#fileUploadInput').change(function () {
 });
 
 $('.share-button').click(function () {
-
     const postContent = $('#postTextArea').val();
-    const username = '<?php echo isset($_SESSION["username"])
-        ? $_SESSION["username"]
-        : ""; ?>';
+    const postLink = $('#al1').val(); 
+    const postVideo = $('#al2').val(); 
 
-    if (!postContent && $('#fileUploadInput')[0].files.length === 0) {
 
-        console.log('Please enter text or select an image before sharing.');
-        return; 
+    const username = '<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : ""; ?>';
+
+    if (!postContent && $('#fileUploadInput')[0].files.length === 0 && !postLink && !postVideo) {
+    console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
+    return;
     }
 
+
     const formData = new FormData();
-    formData.append('username', username); 
+    formData.append('username', username);
     formData.append('postContent', postContent);
+
+    if (postLink) { 
+        formData.append('post_link_url', postLink);
+    }
+
+
+    if (postVideo) { 
+        formData.append('post_link', postVideo);
+    }
 
     if ($('#fileUploadInput')[0].files.length > 0) {
         formData.append('postImage', $('#fileUploadInput')[0].files[0]);
@@ -388,17 +666,17 @@ $('.share-button').click(function () {
 
     $.ajax({
         type: 'POST',
-        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php', 
+        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
         data: formData,
-        processData: false, 
-        contentType: false, 
+        processData: false,
+        contentType: false,
         dataType: 'json',
         success: function (response) {
             smoothReload(500);
 
             if (response.status === 'success') {
                 smoothReload(500);
-                location.reload
+                location.reload();
                 console.log(response.message);
             } else {
                 smoothReload(500);
@@ -424,6 +702,8 @@ for (let i = 0; i < data.length; i++) {
     postElement.className = 'post';
     const formattedTime = formatTime(post.created_at);
 
+    
+
     postElement.innerHTML = `
         <div class="post-main">  
 		 <div class="hacky-fix">
@@ -445,15 +725,81 @@ for (let i = 0; i < data.length; i++) {
             <div class="post-content-container">
                 <p class="post-content">${post.content}</p>
                 <img class="post-image" src="${post.image_url}" alt="">
+
+                <div class="link-preview">
+                </div>
+             
+                <div class="youtube-emded">
+                </div>
+
             </div>
         </div>
         
-    `;
+    `
+    ;
+    
+    if (post.post_link && post.post_link.includes("youtube.com/embed")) {
+    const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
+    $(postElement).find('.youtube-emded').html(iframeHTML);
+    
+    const protocol = window.location.protocol;
+    if (protocol === 'https:' && !post.post_link.startsWith('https:')) {
+        post.post_link = post.post_link.replace(/^http:/, 'https:');
+    }
+    
+    $(postElement).find('.youtube-emded iframe').attr('src', post.post_link);
+    }
+
+    // Fetch metadata for link previews
+    if (post.post_link_url) {
+    $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(post.post_link_url) + '&format=json', function(metadata) {
+        const linkPreviewContainer = $('<div>', { class: 'link-preview' });
+        const faviconContainer = $('<div>', { class: 'favicon-container' });
+        const faviconImg = $('<img>', { 
+            src: metadata.image, 
+            alt: 'Favicon', 
+            class: 'favicon-img'
+        });
+        faviconContainer.append(faviconImg);
+        const contentContainer = $('<div>', { class: 'content-container' });
+        const title = $('<h2>');
+        const titleLink = $('<a>', { 
+            href: post.post_link_url, 
+            text: metadata.title, 
+            target: '_blank' 
+        });
+        title.append(titleLink);
+        const linkText = $('<p>', { 
+            text: post.post_link_url,
+            class: 'link-text' 
+        });
+        contentContainer.append(title, linkText);
+        linkPreviewContainer.append(faviconContainer, contentContainer);
+        $(postElement).find('.link-preview').append(linkPreviewContainer);
+        const containerWidth = linkPreviewContainer.width();
+        const faviconWidth = containerWidth * 0.3;
+        const contentWidth = containerWidth * 0.8; 
+        faviconContainer.width(faviconWidth);
+        contentContainer.width(contentWidth);
+        const maxFaviconHeight = 50;
+        const maxFaviconWidth = containerWidth * 0.3; 
+        faviconImg.css({
+            'max-width': maxFaviconWidth + 'px',
+        });
+        if (contentContainer.height() > 200) {
+            contentContainer.css('height', '200px');
+            contentContainer.css('overflow', 'hidden');
+        }
+    })
+    .fail(function(jqxhr, textStatus, error) {
+        const err = textStatus + ", " + error;
+        console.log("Request Failed: " + err);
+    });
+}
+
+
 
     postElement.dataset.postId = post.id;
-
-
-
 
     columns[currentColumnIndex].appendChild(postElement);
 
@@ -494,14 +840,12 @@ for (let i = 0; i < data.length; i++) {
                      <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${comment.username}" class="comment-picture">
 					 <div class="agony">
 					  <div class="hacky-fix">
-                       <p class="username">${comment.username}</p>
+                      <a href="<?php echo $siteurl; ?>/profile.php?profile=${comment.username}"  <p class="username">${comment.username}</p></a>
 					   <p class="time">${comment.comment_time}</p>
 					  </div>
 					  <p class="comment-content">${comment.comment_content}</p>
 					 </div>
 					</div>
-
-					
                     `;
 
                     commentArea.appendChild(commentElement);
@@ -534,7 +878,7 @@ for (let i = 0; i < data.length; i++) {
 
             const commentInput = $('<textarea>').attr({
                 type: 'text',
-                id: 'comment-input-' + postID, // Set ID with post ID
+                id: 'comment-input-' + postID, 
                 placeholder: 'Add a comment...'
             }).addClass('comment-input');
             commentInputContainer.append(commentInput);
@@ -652,7 +996,7 @@ cancelButton.on('click', function() {
         });
 
         $(document).on('click', function (event) {
-                if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoIcon) && !$(event.target).is($uploadButton) ) {
+                if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoRealIcon) && !$(event.target).is($uploadButton) ) {
                     $("#fileDrop").hide();
                     $postCreate.css({
                         height: '300px' 
@@ -675,7 +1019,8 @@ cancelButton.on('click', function() {
 
     $('#cancelButton').click(function () {
 
-                    location.reload();
+        smoothReload(1000);
+
 });
 
 const commentMain = $('.comment-main');
@@ -684,12 +1029,11 @@ fetchPosts();
 setInterval(fetchPosts, 600000);
 
 function smoothReload(delay) {
-    setTimeout(function() {
+    $("body").fadeOut(delay, function() {
+        history.replaceState({}, document.title, window.location.pathname);
         location.reload();
-    }, delay);
+    });
 }
-
-
 </script>
 
 <script>
@@ -771,8 +1115,6 @@ $(document).ready(function() {
     });
 });
 
-
-
 </script>
 
 <script>
@@ -789,6 +1131,18 @@ $(document).ready(function() {
             }
         });
     });
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#al1').on('input', function() {
+        var linkInput = $(this).val().trim();
+        if (!linkInput.startsWith('http://')) {
+            linkInput = 'http://' + linkInput;
+            $(this).val(linkInput);
+        }
+    });
+});
 </script>
 
 </body>
