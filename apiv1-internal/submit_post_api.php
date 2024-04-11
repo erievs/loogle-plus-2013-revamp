@@ -14,18 +14,46 @@ include("../important/db.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
     if ($isCommandLine) {
-        $postContent = $argv[1];
+        $username = $argv[1];
     } else {
-        $username = $_POST['username']; 
-        $postContent = $_POST['postContent'];
+        $username = isset($_POST['username']) ? $_POST['username'] : '';
+        $postContent = isset($_POST['postContent']) ? $_POST['postContent'] : '';
+        $post_link_url = isset($_POST['post_link_url']) ? $_POST['post_link_url'] : '';
+        $post_link = isset($_POST['post_link']) ? $_POST['post_link'] : '';
     }
 
-    $expectedReferer = "$siteurl"; 
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-
-    if (parse_url($referer, PHP_URL_HOST) !== parse_url($expectedReferer, PHP_URL_HOST)) {
+    if (empty($username)) {
         $response['status'] = 'error';
-        $response['message'] = 'Invalid Referer. Requests must come from the same URL.';
+        $response['message'] = 'Invalid request. Missing parameters: username.';
+        echo json_encode($response);
+        exit;
+    }
+
+    if (!empty($post_link)) {
+        // Convert YouTube URL to embed URL
+        if (preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $post_link, $matches)) {
+            $video_id = $matches[4];
+            $post_link = "http://www.youtube.com/embed/$video_id";
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'Invalid YouTube URL format.';
+            echo json_encode($response);
+            exit;
+        }
+    }
+
+    // Validate URL format for post_link_url
+    if (!empty($post_link_url) && !filter_var($post_link_url, FILTER_VALIDATE_URL)) {
+        $response['status'] = 'error';
+        $response['message'] = 'Invalid URL format for post_link_url.';
+        echo json_encode($response);
+        exit;
+    }
+
+    // Check if at least one content field is provided
+    if (empty($postContent) && empty($post_link) && empty($post_link_url)) {
+        $response['status'] = 'error';
+        $response['message'] = 'Invalid request. At least one content field (postContent, post_link, or post_link_url) must be provided.';
         echo json_encode($response);
         exit;
     }
@@ -37,18 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
 
     $mentions = extractMentions($postContent);
 
-    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt'; 
+    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt';
     if (!isRateLimited($rateLimitFile, $rateLimit)) {
-        $imageURL = '';
-
-        if ($_FILES["postImage"]["error"] === 0) {
-            $targetDir = "../assets/images/";
-            $randomFilename = uniqid() . "_" . basename($_FILES["postImage"]["name"]);
-            $targetFile = $targetDir . $randomFilename;
-            if (move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile)) {
-                $imageURL = $targetFile;
-            }
-        }
 
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -56,9 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
             $response['status'] = 'error';
             $response['message'] = "Connection failed: " . $conn->connect_error;
         } else {
-            $query = "INSERT INTO posts (username, content, image_url, created_at) VALUES (?, ?, ?, NOW())";
+            $query = "INSERT INTO posts (username, content, post_link_url, post_link, created_at) VALUES (?, ?, ?, ?, NOW())";
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("sss", $username, $postContent, $imageURL);
+            $stmt->bind_param("ssss", $username, $postContent, $post_link_url, $post_link);
             $stmt->execute();
 
             $postId = $conn->insert_id;

@@ -1,0 +1,60 @@
+/* Welcome to hacky fix land */
+
+#ronnieisnum1{
+  position: relative;
+  top: 3.25px;
+  height: 30px;
+  right: 14px;
+}
+
+.fromthehousewemadeourhome {
+  background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -110px;
+}
+
+/* Higher Res -> Higher Up, The lower the style, the lower it is loaded! */
+
+
+/* 900p 16:9 */
+@media (max-width: 1600px) {
+  .main-header .search-bar {
+      margin-left: -15px;
+  }
+}
+
+/* 720p 16:9 */
+@media (max-width: 1280px) {
+  .main-header .search-bar {
+      margin-left: 95px;
+  }
+}
+
+/* 540p 16:9 */
+@media (max-width: 960px) {
+  .main-header .search-bar {
+    margin-left: -40px;
+    position: relative;
+    left: 160px;
+  }
+  #ronnieisnum1 {
+    position: relative;
+    top: 3.25px;
+    height: 30px;
+    right: -146px;
+  }
+  #notfication-header {
+    margin-left: -12%;
+  }
+  .sb-card-body-arrow {
+    margin-left: 60px;
+  }
+}
+
+/* Speicaltily Fixes for weird res */
+
+@media (width:1440px) {
+  .search-container {
+    margin-left: 3.5%;
+}
+}
+
+

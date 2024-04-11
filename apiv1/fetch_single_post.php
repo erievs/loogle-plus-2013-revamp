@@ -23,16 +23,32 @@ function getPostById($postId) {
         $post = $result->fetch_assoc();
 
         if (!empty($post['image_url'])) {
-            $image_url = 'http://kspc.serv00.net/' . ltrim(str_replace('..', '', $post['image_url']), '/');
+            $image_url = str_replace('..', '', $siteurl) . str_replace('..', '', $post['image_url']);
         } else {
             $image_url = null;
         }
+
+
+        if (!empty($post['post_link_url'])) {
+            $post_url = $post['post_link_url'];
+        } else {
+            $post_url = null;
+        }
+
+        if (!empty($post['post_url'])) {
+            $video_url = $post['post_url'];
+        } else {
+            $video_url = null;
+        }
+
+
 
         $postData = array(
             'id' => $post['id'],
             'username' => $post['username'],
             'content' => htmlspecialchars($post['content']),
             'image_url' => $image_url,
+            'post_link_url' => $post_url, 
             'post_link' => $post['post_link'],
             'created_at' => $post['created_at']
         );
@@ -42,11 +58,10 @@ function getPostById($postId) {
         return $postData;
     } else {
         $conn->close();
-        return null; // Post not found
+        return null; 
     }
 }
 
-// Check if a postId is provided in the request
 if (isset($_GET['id'])) {
     $postId = $_GET['id'];
     $postData = getPostById($postId);
@@ -54,11 +69,11 @@ if (isset($_GET['id'])) {
     if ($postData) {
         echo json_encode($postData);
     } else {
-        http_response_code(404); // Post not found
+        http_response_code(404);
         echo json_encode(array('message' => 'Post not found'));
     }
 } else {
-    http_response_code(400); // Bad request
+    http_response_code(400); 
     echo json_encode(array('message' => 'Post ID is required'));
 }
 ?>

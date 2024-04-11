@@ -1,0 +1,59 @@
+/* Welcome to hacky fix land */
+
+  .fromthehousewemadeourhome {
+    background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -110px;
+  }
+
+  #ronnieisnum1 {
+    height: 38px;
+    position: relative;
+    left: -18px;
+    width: 84px;
+  }
+
+  /* Default */
+
+  .main-header .search-container {
+    margin-right: 43%;
+  }
+
+  
+  /* Higher Res -> Higher Up, The lower the style, the lower it is loaded! */
+  
+  
+  /* 900p 16:9 */
+  @media (max-width: 1600px) {
+    .main-header .search-container {
+      margin-right: 30%;
+    }
+  }
+  
+  /* 720p 16:9 */
+  @media (max-width: 1280px) {
+    .main-header .search-bar {
+        margin-left: 95px;
+    }
+  }
+  
+  /* 540p 16:9 */
+  @media (max-width: 960px) {
+    .main-header .search-bar {
+      margin-left: -40px;
+      position: relative;
+      left: 160px;
+    }
+    #ronnieisnum1 {
+      position: relative;
+      top: 3.25px;
+      height: 30px;
+      left: 141px;
+      height: 38px;
+    }
+    #notfication-header {
+      margin-left: -12%;
+    }
+    .sb-card-body-arrow {
+      margin-left: 60px;
+    }
+  }
+  

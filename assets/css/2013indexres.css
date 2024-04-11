@@ -772,14 +772,6 @@ margin-left: 6.5%;
     font-weight: bold;
 }
 
-.photo-icon {
-    
-}
-
-.photo-text {
-  
-}
-
 .level-2 {
     display: none;
 }
@@ -787,30 +779,13 @@ margin-left: 6.5%;
 .write-post {
     height: 118px;
 }
-.photo-icon {
 
-  padding: 10px;
-  border-radius: 50%;
-  background-image: url('assets/icons/astlas.png');
-  background-position: -99px 166px;
-  width: 20px;
-  height: 20px;
-}
 .attach, .photo-icon, .photo-text {
   margin-right: 30px;
   font-size: 13px;
   margin-top: 9px;
 }
-.photo-icon {
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 50%;
-  background-image: url('assets/icons/astlas.png');
-  background-position: -99px 166px;
-  width: 20px;
-  height: 20px;
-  scale: 1.075;
-}
+
 .photo-icon, .photo-text{
     font-size: 11px;
     margin-left: 10px;
@@ -1487,3 +1462,8 @@ overflow: auto;
   .logo {
     margin-right: -157px;
   }  
+
+  div#video-icon {
+    left: 26px;
+    position: relative;
+}   

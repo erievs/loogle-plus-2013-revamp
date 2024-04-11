@@ -8,26 +8,31 @@ if(isset($_POST['username']) && isset($_FILES['banner'])) {
 
     $uploadDirectory = '../assets/profilepictures/';
 
-    $allowedExtensions = array('png');
+    $allowedExtensions = array('png', 'jpg', 'webp', 'jpeg'); 
     $maxFileSize = 1024 * 1024;
 
-    $fileExtension = pathinfo($bannerFile['name'], PATHINFO_EXTENSION);
+    $fileExtension = strtolower(pathinfo($bannerFile['name'], PATHINFO_EXTENSION));
     $fileSize = $bannerFile['size'];
 
-    if(in_array(strtolower($fileExtension), $allowedExtensions) && $fileSize < $maxFileSize) {
-        $bannerFileName = $username . '.png';
+    if(in_array($fileExtension, $allowedExtensions) && $fileSize < $maxFileSize) {
+        // Delete existing profile picture with the same username if exists
+        $existingImagePath = $uploadDirectory . $username . '.*';
+        array_map('unlink', glob($existingImagePath));
+
+        $bannerFileName = $username . '.' . $fileExtension;
         $bannerFilePath = $uploadDirectory . $bannerFileName;
         
         if(move_uploaded_file($bannerFile['tmp_name'], $bannerFilePath)) {
-            echo "Pfp uploaded successfully.";
+            echo "Profile picture uploaded successfully.";
         } else {
-            echo "Failed to upload pfp.";
+            echo "Failed to upload profile picture.";
         }
     } else {
-        echo "Invalid file format or size. Please upload a PNG file less than 1MB.";
+        echo "Invalid file format or size. Please upload a PNG or JPG file less than 1MB.";
     }
 } else {
-    echo "Username or pfp file not provided.";
+    echo "Username or profile picture file not provided.";
 }
 
 ?>
+

@@ -14,23 +14,21 @@ include("../important/db.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
     if ($isCommandLine) {
-        $postContent = $argv[1];
+        $username = $argv[1];
     } else {
-        $username = $_POST['username']; 
-        $postContent = $_POST['postContent'];
+        $username = isset($_POST['username']) ? $_POST['username'] : '';
+        $postContent = isset($_POST['postContent']) ? $_POST['postContent'] : '';
+        $post_link_url = isset($_POST['post_link_url']) ? $_POST['post_link_url'] : '';
+        $post_link = isset($_POST['post_link']) ? $_POST['post_link'] : '';
     }
 
-    $expectedReferer = "http://localhost:8080/"; 
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-
-    if (parse_url($referer, PHP_URL_HOST) !== parse_url($expectedReferer, PHP_URL_HOST)) {
+    if (empty($username) || empty($postContent)) {
         $response['status'] = 'error';
-        $response['message'] = 'Invalid Referer. Requests must come from the same URL.';
+        $response['message'] = 'Invalid request. Missing parameters: username, postContent.';
         echo json_encode($response);
         exit;
     }
 
-    // Function to extract mentioned usernames from post content
     function extractMentions($content) {
         preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
         return $matches[1];
@@ -38,18 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
 
     $mentions = extractMentions($postContent);
 
-    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt'; 
+    $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt';
     if (!isRateLimited($rateLimitFile, $rateLimit)) {
-        $imageURL = '';
-
-        if ($_FILES["postImage"]["error"] === 0) {
-            $targetDir = "../assets/images/";
-            $randomFilename = uniqid() . "_" . basename($_FILES["postImage"]["name"]);
-            $targetFile = $targetDir . $randomFilename;
-            if (move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile)) {
-                $imageURL = $targetFile;
-            }
-        }
 
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -57,12 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
             $response['status'] = 'error';
             $response['message'] = "Connection failed: " . $conn->connect_error;
         } else {
-            $query = "INSERT INTO posts (username, content, image_url, created_at) VALUES (?, ?, ?, NOW())";
+            $query = "INSERT INTO posts (username, content, post_link_url, post_link, created_at) VALUES (?, ?, ?, ?, NOW())";
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("sss", $username, $postContent, $imageURL);
+            $stmt->bind_param("ssss", $username, $postContent, $post_link_url, $post_link);
             $stmt->execute();
 
-            // Insert mentions into the database
             $postId = $conn->insert_id;
             foreach ($mentions as $mentionedUser) {
                 $mentionContent = "Has mentioned you in a post";

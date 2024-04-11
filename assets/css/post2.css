@@ -42,3 +42,30 @@
     }
 }
     
+@media (max-width: 1600px) {
+    .user-card {
+      background: #ffffff;
+      padding: 10px;
+      margin: 10px;
+        margin-left: 10px;
+      margin-left: 10px;
+      margin-left: 10px;
+      margin-left: 10px;
+      width: 450px;
+      border-radius: -1px;
+      height: 400px;
+      margin-left: 141px;
+      width: 350px;
+border-radius: -1px;
+height: 350px;
+    }
+
+    .post {
+        width: 530px;
+        padding: 0;
+      }
+    }
+
+    .link-preview {
+        margin-bottom: 15px;
+    }

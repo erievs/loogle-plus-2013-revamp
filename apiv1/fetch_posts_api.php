@@ -24,18 +24,36 @@ function getPostsFromDatabase($username = null) {
 
     if ($result->num_rows > 0) {
         while ($post = $result->fetch_assoc()) {
+            
             if (!empty($post['image_url'])) {
                 $image_url = str_replace('..', '', $siteurl) . str_replace('..', '', $post['image_url']);
             } else {
                 $image_url = null;
             }
+
+            if (!empty($post['post_link_url'])) {
+                $post_url = $post['post_link_url'];
+            } else {
+                $post_url = null;
+            }
+
+            if (!empty($post['post_url'])) {
+                $video_url = $post['post_url'];
+            } else {
+                $video_url = null;
+            }
+
+
             $posts[] = array(
                 'id' => $post['id'],
                 'username' => $post['username'],
                 'content' => htmlspecialchars($post['content']),
                 'image_url' => $image_url,
                 'post_link' => $post['post_link'],
+                'post_link_url' => $post_url, 
+                'post_url' => $video_url, 
                 'created_at' => $post['created_at']
+                
             );
         }
     }
