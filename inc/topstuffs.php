@@ -2,35 +2,52 @@
 	$icon = "home";
 }?>
 
-<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<link rel="stylesheet" href="assets/css/headerfix.css">
+<link rel="stylesheet" href="assets/css/writepost.css">
 
 <script>
 
+    
 $(document).ready(function() {
   let isHeaderVisible = false;
 
-  $('.notif-icon-side').click(function() {
+  $('.notif-icon-side').click(function(event) {
+    event.stopPropagation(); 
     console.log("Notification icon clicked");
+    if (!isHeaderVisible) {
+      $('#notificationContainer, .sb-card-body-arrow').css('display', 'block');
+      isHeaderVisible = true;
+    }
+  });
+
+  $(document).click(function() {
     if (isHeaderVisible) {
       $('#notificationContainer, .sb-card-body-arrow').css('display', 'none');
-    } else {
-      $('#notificationContainer, .sb-card-body-arrow').css('display', 'block');
+      isHeaderVisible = false;
     }
-    isHeaderVisible = !isHeaderVisible;
+  });
+
+  $(document).keyup(function(e) {
+    if (e.key === "Escape" && isHeaderVisible) {
+      $('#notificationContainer, .sb-card-body-arrow').css('display', 'none');
+      isHeaderVisible = false;
+    }
   });
 });
 
-
 $(document).ready(function () {
 
-    $("#showNotification").click(function () {
-        $("#notificationContainer, #notificationTriangle").toggle();
+    $(".notif-icon").click(function () {
+        $("#notificationContainer, #notificationTriangle, .sb-card-body-arrow").toggle();
     });
 
     fetchMentions();
     setInterval(fetchMentions, 5000000);
 });
+
 
 function fetchMentions() {
     $("#mentionsContainer").empty();
@@ -72,11 +89,25 @@ function fetchMentions() {
                     });
                 });
             } else {
-                $("#mentionsContainer").html("<p>All caught up!</p>");
+                var gifImage = $('<img src="https://i.imgur.com/EfkPqbX.png" style="scale: 0.6;" alt="Jingle GIF" />');
+                    $("#mentionsContainer").after(gifImage);
+                    $("#mentionsContainer").html("<p style='position: relative; top: 40px;'>All caught up!</p>");
+
+                gifImage.click(function() {
+                 var originalSrc = $(this).attr('src');
+                 $(this).attr('src', 'http://googlerock.free.fr/images/mr._jingles/Jingle_2_2013.gif');
+                 $(this).toggleClass("play-animation");
+    
+                      setTimeout(function() {
+                        gifImage.attr('src', originalSrc);
+                        $(this).attr('src', 'https://i.imgur.com/EfkPqbX.png');
+                  }, 1750);
+             });
             }
         },
     });
 }
+
 
  function dismissMention(mentionElement, postId) {
 
@@ -135,7 +166,7 @@ position: relative;"> > </p>
     <div class="search-container">
 		<form>
         <input class="search-bar" type="text">
-        <button class="ifyouwalkandiwasgone" type="submit">
+        <button class="ifyouwalkandiwasgone" id="ronnieisnum1" type="submit">
 		 <span class="fromthehousewemadeourhome"></span>
 		</button>
 		</form>
@@ -163,7 +194,9 @@ position: relative;"> > </p>
 <div class="hacky-fix">
 <div class="username-header">+<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : "Your Username";?>
 </div>
+<a href="<?php echo $siteurl; ?>/profile.php?profile=<?php echo $_SESSION['username']?>">
 <img class="pf-picture" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $_SESSION['username']?>">
+</a>
 </div>
 </div>
 
@@ -249,24 +282,15 @@ position: relative;"> > </p>
 
 <script>
 $(document).ready(function() {
-    // Fetch data from the API
     $.ajax({
-        url: 'http://localhost:8090/apiv1/fetch_unreads.php?username=d',
+        url: '<?php echo $siteurl; ?>/apiv1/fetch_unreads.php?username=<?php echo $_SESSION['username']?>',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            // Log the data
             console.log('Data received:', data);
-
-            // Get the total_unread value
             var unreadCount = data.total_unread;
-
-            // Set the text inside .notif-icon to the value of total_unread
             $('#numsfornot').text(unreadCount);
-
-            // Check if total_unread is greater than 0
             if (unreadCount > 0) {
-                // Change the background color of .notif-icon
                 $('.notif-icon').css('background-color', '#c44430');
             }
         },
