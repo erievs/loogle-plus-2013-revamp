@@ -315,7 +315,7 @@ margin-right: 5px;
   font-size: 13px;
   font-weight: bold;
   height: 35px;
-  width: 152px;
+  width: 500px;
   margin-top: 8.3%;
 }
 
@@ -357,4 +357,54 @@ margin-right: 5px;
 
 .dropdown:hover .dropdown-bob {
   display: block;
+}
+
+.comment-input {
+  position: relative;
+  left: 17%;
+}
+
+.plus-one-icon {
+  position: relative;
+  border: 1px solid rgb(204, 204, 204);
+  font-size: 14px;
+  cursor: grab;
+  width: 35px;
+  height: 25px;
+  text-align: center;
+  top: 7px;
+  right: 445px;
+}
+
+#liked-icon {
+  background-color: #da4835;
+  color: #ffffff;
+}
+
+#georgewallace {
+  position: relative;
+  top: 0.75px;
+}
+
+.hot-h-icon {
+  background-image: url('assets/icons/astlas2.png');
+  background-position: 67.4px 255px;
+  width: 22px;
+  height: 19px;
+  display: inline-block;
+  vertical-align: middle;
+  scale: 0.85;
+  margin-right: 5px;
+  margin-bottom: 6px;
+}
+
+.sub-header .home-icon {
+  margin-right: 5px;
+  position: relative;
+  top: 2px;
+}
+
+#bob-post-create {
+  height: 16em;
+  height: 115px;
 }

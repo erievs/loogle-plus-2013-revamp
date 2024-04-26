@@ -1,0 +1,217 @@
+.content {
+  display: flex;
+}
+
+.side-panel-com {
+  width: 300px; 
+  background-color: #e5e5e5; 
+}
+
+#posts-container {
+  flex-grow: 1;
+}
+
+#community-side-panel-stuff {
+  margin: 0 auto;
+  min-height: 600px;
+  background-color: #fefefe;
+  box-shadow: #ccc 2px 2px 3px 2px;
+  width: 200px;
+  margin-top: 4%; 
+}
+
+#first-text-area:focus {
+  margin-top: 5%;
+  resize: none;
+  overflow-y: none;
+  overflow-x: none;
+  margin-left: 7.25%;
+  border: 2px solid #c2d2e9;
+  outline: none;  
+  width: 175px;
+  height: 24px;
+  scroll-behavior: none;
+  font-size: 11px;
+}
+
+
+#first-text-area {
+  margin-top: 5%;
+  resize: none;
+  overflow-y: none;
+  overflow-x: none;
+  margin-left: 7.25%;
+  border: 1px solid #d8d8d8;
+  width: 175px;
+  height: 24px;
+  font-size: 11px;
+  
+}
+
+
+#second-text-area:focus {
+resize: none;
+overflow-y: none;
+overflow-x: none;
+margin-left: 7.25%;
+border: 1px solid #c2d2e9;
+width: 150px;
+border: 2px solid #c2d2e9;
+outline: none;  
+height: 24px;
+scroll-behavior: none;
+font-size: 11px;
+}
+
+
+#second-text-area {
+resize: none;
+overflow-y: none;
+overflow-x: none;
+margin-left: 7.25%;
+border: 1px solid #d8d8d8;
+width: 175px;
+height: 24px;
+font-size: 11px;
+}
+
+#image-com {
+width: 200px;
+height: 250px; 
+}
+
+.ihavestrongfeelingsagaistaman {
+background-image: -webkit-linear-gradient(top, #3d7fec, #4479d6);
+padding-left: 1.5px;
+padding-right: 1.5px;
+border: 1px solid #b3d8ff;
+border-radius: 0px;
+background-color: #4479d6;
+font-weight: bold;
+height: 30px;
+padding-top: 1.5px;
+padding-bottom: 1.5px;
+width: 70px;
+margin: 20px;
+}
+
+.ihavestrongfeelingsagaistaman p {
+  position: relative;
+  top: 4px;
+  margin-top: 0px;
+  font-size: 12px;
+}   
+
+#joinusordie {
+  background-image: -webkit-linear-gradient(top, #3d7fec, #4479d6);
+  margin-left: 15px;
+  margin-top: 15px;
+  color: black;
+  font-weight: bold;
+  width: 90px;
+}
+
+
+#pick-photo {
+border: 1px solid rgb(204, 204, 204);
+background-color: #fafafa;
+background-image: none;
+color: black;
+font-weight: bold;
+width: 90px;
+margin-left: 15px;
+margin-top: 15px;
+}
+
+#pick-photo p {
+  color: #000;
+}
+
+#text-area-bob {
+  width: 175px;
+  margin-left: 7.5%;
+  height: 150px;
+  resize: vertical;
+}
+
+.first-text-p-textarea {
+  margin-top: 5%;
+  width: 175px;
+  margin-left: 7.5%;
+  height: 45px;
+  outline: none;
+  resize: vertical;
+}
+
+#bob-about-text {
+  color: #ababab;
+  font-size: 12px;
+  margin-top: 5.5%;
+  margin-left: 8.5%;
+  font-weight: bold;
+}
+
+#text-area-bob:focus {
+  border: 1px solid #80a1ce;
+  outline: none;
+}
+
+.ihavestrongfeelingsagaistaman p {
+  position: relative;
+  top: 6px;
+  margin-top: 0px;
+  font-size: 12px;
+  color: #ccc;
+
+}
+
+#h-space {
+  height: 0.75px;
+  width: 200px;
+}
+
+#first-text-p {
+  margin-left: 5%;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#second-text-p {
+  margin-left: 5%;
+}
+
+#third-text-p {
+  margin-left: 5%;
+  color: #ccc;
+}
+
+#link-con {
+  margin-left: 5%;
+}
+
+#first-href-p {
+  text-decoration: none;
+  margin-left: 5%;
+}
+
+#first-href-p:hover {
+  text-decoration: none;
+  margin-left: 5%;
+  cursor: grab;
+}
+
+.link-input {
+  border: 1px black;
+  width: 100px;
+}
+
+.link-input:focus {
+  border: 1px #ccc;
+  outline: none;
+  width: 100px;
+}
+
+#spacer {
+  width: 200px;
+  height: 5px;
+}

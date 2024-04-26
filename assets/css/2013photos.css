@@ -1,0 +1,72 @@
+
+.container {
+    max-width: 2000px;
+    margin: 0 auto;
+  }
+  .gallery-section {
+    margin-top: 20px;
+  }
+  .gallery-header {
+    margin-bottom: 10px;
+    margin-left: 18px;
+  }
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .thumbnail {
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    border-radius: 0px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    margin-right: -40px;
+    width: 200px;
+  }
+  .thumbnail img {
+    max-height: 200px;
+    width: 100%;
+    display: block;
+    border-radius: 0px;
+    transition: transform 0.2s ease-in-out;
+    transform: scale(1.05);
+    min-height: 175px;
+  }
+  .thumbnail img:hover {
+    transform: scale(1.1);
+  }
+  .error-message {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    text-align: center;
+  }
+  .col-md-3 {
+    width: calc(25% - 20px); 
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  .gallery-section {
+    margin-top: 20px;
+    margin-left: 7.5%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sub-header .photo-p-icon {
+    margin-right: 5px;
+    position: relative;
+    top: 1px;
+    background-image: url(assets/icons/astlas2.png);
+    background-position: 0px 216px;
+    width: 22px;
+    height: 21px;
+    display: inline-block;
+    vertical-align: middle;
+    scale: 0.85;
+    margin: 0%;
+    margin-right: 5px;
+  }

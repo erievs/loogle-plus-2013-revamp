@@ -1388,6 +1388,17 @@ overflow: auto;
     margin-left: 5px;
   }
 
+  .photo-icon-side {
+    background-image: url('assets/icons/astlas2.png');
+    background-position: -335px -40px;
+    width: 22px;
+    height: 20px;
+    margin-right: 8px;
+    transform: scale(1.25,1.25);
+    margin-left: 5px;
+  }
+
+
 
   .events-icon-side {
     background-image: url('assets/icons/astlas2.png');
@@ -1413,12 +1424,14 @@ overflow: auto;
 
 .wh-icon-side {
     background-image: url('assets/icons/astlas2.png');
-    background-position: -270px 0px;
+    background-position: -269px 0px;
     width: 22px;
     height: 20px;
-    margin-right: 8px;
+    margin-right: 7px;
     transform: scale(1.25,1.25);
     margin-left: 5px;
+    left: -2px;
+    position: relative;
   }
 
   .settings-icon-side {

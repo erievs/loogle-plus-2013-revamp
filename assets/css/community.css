@@ -1,0 +1,298 @@
+.sub-header .com-c-icon {
+  margin-right: 5px;
+  position: relative;
+  top: 1px;
+  background-image: url(assets/icons/astlas2.png);
+  background-position: 20px 365px;
+  width: 22px;
+  height: 21px;
+  display: inline-block;
+  vertical-align: middle;
+  scale: 0.85;
+  margin: 0%;
+  margin-right: 5px;
+}
+
+#info-top-stuff-1 {
+height: 100px;
+color: #4d5256;
+}
+
+.ihavestrongfeelingsagaistaman {
+background-image: -webkit-linear-gradient(top, #3d7fec, #4479d6);
+padding-left: 1.5px;
+padding-right: 1.5px;
+border: 1px solid #b3d8ff;
+border-radius: 0px;
+background-color: #4479d6;
+font-weight: bold;
+height: 30px;
+padding-top: 1.5px;
+padding-bottom: 1.5px;
+width: 128px;
+cursor: grab;
+}
+
+.ihavestrongfeelingsagaistaman p {
+  position: relative;
+  top: 4px;
+  color: rgba(192, 214, 253, 255);
+  margin-top: 0px;
+  font-size: 12px;
+}
+
+#info-top-stuff-1 h3 {
+  display: inline-block;
+}
+
+#info-top-stuff-1 button {
+  float: right;
+  margin-top: 3.25%;
+  left: 45%;
+  position: relative;
+}
+
+
+.coumminity-con {
+  width: 75%; 
+  padding: 0 12%; 
+}
+
+h3 {
+  font-size: 22px;
+}
+
+.create-community {
+  z-index: 999;
+  position: fixed; 
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+  background-color: #ffff;
+  margin: 15% auto;
+  padding: 0px;
+  border: none; 
+  width: 700px;
+  border-radius: 0; 
+  height: 425px;
+  bottom: 17%;
+  margin-top: 22%;
+}
+
+#top-stuff-2 {
+  margin-top: 25px;
+  color: #4d5256;
+  font-size: 18px;
+  margin-left: 63px;
+}
+
+#make-thing {
+  text-align: center;
+  width: 325px;
+  height: 250px;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 3px 1px #00000017;
+  margin: auto;
+}
+
+.cube {
+  width: 50px;
+  height: 50px;
+  background-color: #ccc;
+  display: inline-block;
+}
+
+#bottom-stuff {
+  height: 50px;
+  margin-left: 20px;
+  margin-top: 20px;
+  justify-content: flex-end;
+  display: flex;
+  margin-right: 50px;
+}
+
+#st1 {
+  color: #3d3d3d;
+  margin: 0 auto;
+  font-size: 19px;
+  margin-top: 10%;
+  color: #838383;
+}
+
+#st2 {
+  font-weight: bold;
+  color: hsl(0, 0%, 35%);
+  margin-left: -14px;
+}
+
+#st3 {
+  color: #3d3d3d;
+}
+
+.ta-mt {
+  height: 46px; 
+  width: 79%;
+  margin-left: 120px;
+  margin-top: 8px;
+  position: relative;
+  top: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1); 
+  font-weight: bold;
+  font-size: 14px;
+  resize: none;
+}
+
+
+.ta-mt {
+  height: 30px;
+  width: 79%;
+  margin-left: 120px;
+  margin-top: 8px;
+  position: relative;
+  top: 0px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  margin: auto;
+  font-weight: bold;
+  font-size: 13px;
+  resize: none;
+  margin: auto;
+}
+
+.ta-mt:focus {
+  height: 30px;
+  width: 79%;
+  margin-left: 120px;
+  margin-top: 8px;
+  position: relative;
+  top: -8px;
+  overflow: hidden;
+  border: 1px solid #c2d2e9;
+  margin: auto;
+  font-weight: bold;
+  font-size: 11px;
+  resize: none;
+  outline: none;
+  margin: auto;
+}
+
+#buttons-bottom {
+  margin-top: 25%;
+}
+
+#menshallonlycryonthe5thofjune {
+  border: 1px solid rgb(204, 204, 204);
+  background-color: #ffff;
+  background-image: none;
+  color: #606060;
+  width: 70px;
+  margin-right: 15px;
+}
+
+#bottom-stuff p {
+  position: relative;
+  top: 6px;
+}
+
+.card {
+  color: #646766;
+  width: 250px;
+  height: 80px;
+  margin: 10px;
+  display: inline-block;
+  box-shadow: 0 1px 3px 1px #00000017;
+  background:   #fff;
+}
+
+
+.card-img {
+  float: left;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-name {
+  float: left;
+  width: 50%;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.card-members {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+#whatwein {
+  width: 150%;
+}
+
+#emerwhatthesigma {
+  width: 150%;
+}
+
+#top {
+  margin-bottom: 20px;
+}
+
+.card-other {
+  width: 250px;
+  height: 340px; 
+  margin: 10px;
+  display: inline-block;
+  box-shadow: 0 1px 3px 1px #00000017;
+  background: #fff;
+  text-align: center; 
+}
+
+.card-img-other {
+  width: 250px;
+  height: 250px; 
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 10px; 
+}
+
+.card-name-other {
+  margin: 0;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 10px;
+  font-weight: bold;
+  min-height: 25px;
+  height: auto;
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.card-img-two {
+  margin-right: 204px; 
+  width: 24px; 
+  height: 24px; 
+  border-radius: 3px; 
+  margin-top: 5px;
+
+}
+
+.card-members-other {
+  margin: 0;
+  color: #646766;
+  text-align: left;
+  margin-left: 10px;
+  font-size: 11.5px;
+}

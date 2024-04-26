@@ -1,7 +1,18 @@
-.post {
-    width: 850px;
-    padding: 0;
-}
+/* default */
+
+    .comment-input-undefined {
+        width: 400px;
+    }
+
+    .post {
+        width: 850px;
+        padding: 0;
+    }
+
+    .plus-one-icon {
+      top: -12px;
+      right: 392px;
+    }
 
 @media (max-width: 1280px) {
     .container {
@@ -10,6 +21,15 @@
 
     .post {
         width: 750px;
+    }
+
+    .comment-input {
+        width: 300px;
+    }
+
+    .plus-one-icon {
+        top: -12px;
+        right: 234px;
     }
 
     .user-card {
@@ -47,7 +67,7 @@
       background: #ffffff;
       padding: 10px;
       margin: 10px;
-        margin-left: 10px;
+      margin-left: 10px;
       margin-left: 10px;
       margin-left: 10px;
       margin-left: 10px;
@@ -56,8 +76,17 @@
       height: 400px;
       margin-left: 141px;
       width: 350px;
-border-radius: -1px;
-height: 350px;
+      border-radius: -1px;
+      height: 350px;
+    }
+
+    .plus-one-icon {
+        top: -12px;
+        right: 234px;
+    }
+    
+    .comment-input {
+        width: 300px;
     }
 
     .post {
@@ -68,4 +97,9 @@ height: 350px;
 
     .link-preview {
         margin-bottom: 15px;
+    }
+
+    .comment-input {
+        position: relative;
+        top: 27%;
     }

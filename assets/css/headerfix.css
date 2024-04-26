@@ -2,7 +2,7 @@
 
 #ronnieisnum1{
   position: relative;
-  top: 3.25px;
+  top: 1.65px;
   height: 30px;
   right: 14px;
 }
@@ -58,3 +58,21 @@
 }
 
 
+@media (max-width: 700px) {
+  .main-header .search-bar {
+      margin-left: -40px;
+      position: relative;
+      left: 128px;
+      width: 75%;
+  }
+}
+
+@media (max-width: 500px) {
+  .main-header .search-bar {
+    margin-left: -40px;
+    position: relative;
+    left: 163px;
+    width: 50%;
+    top: 1px;
+}
+}

@@ -11,6 +11,13 @@
     width: 84px;
   }
 
+  #ronnieisnum1 {
+    position: relative;
+    top: 1.25px;
+    height: 38px;
+    right: 14px;
+  }
+
   /* Default */
 
   .main-header .search-container {
