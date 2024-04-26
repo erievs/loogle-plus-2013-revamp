@@ -4,12 +4,18 @@ $current_url = $_SERVER['REQUEST_URI'];
 
 $icon = "home";
 
-
 if (strpos($current_url, 'whats_hot.php') !== false) {
     $icon = "whats_hot";
 } elseif (strpos($current_url, 'profile.php') !== false) {
     $icon = "profile";
+} elseif (strpos($current_url, 'communties.php') !== false) {
+    $icon = "communties";
+}  elseif (strpos($current_url, 'photos.php') !== false) {
+    $icon = "photos";
 }
+
+$profileget = htmlspecialchars($_GET['profile']);
+$photoget = htmlspecialchars($_GET['username']);
 
 ?>
 
@@ -149,29 +155,18 @@ function fetchMentions() {
     <div class="menu">
     <span id="loogle-logo" class="loogle-logo"></span>
     <span class="<?php 
-    
-	if ($icon == "whats_hot") {
-		echo 'home-h-icon';
-	}
-
-	if ($icon == "profile") {
-		echo 'profile-p-icon';
-	}
-	
-	if ($icon == "home") {
-		echo 'home-h-icon';
-	}
-
-    	
-
-	
-	?>" id="open-sidebar-1"></span>
-    <p style="font-size: 16px;
-top: 2px;
-position: relative;"> > </p>
-	
-	
-
+            if ($icon == "whats_hot") {
+                echo 'home-h-icon';
+            } elseif ($icon == "profile") {
+                echo 'profile-p-icon';
+            } elseif ($icon == "home") {
+                echo 'home-h-icon';
+            }  elseif ($icon == "communties") {
+                echo 'com-c-icon';
+            } elseif ($icon == "photos") {
+                echo 'photo-p-icon';
+            }
+	?>" id="open-sidebar-1"></span>  <p style="font-size: 16px;top: 2px;position: relative;"> > </p>
 
         <span class="divider"></span>
         <?php include("navtabs.php"); ?>
@@ -227,7 +222,7 @@ position: relative;"> > </p>
 		   <div class="home-icon-side"></div>
 		   <p><?php 
 	if ($icon == "profile") {
-		echo 'Home';
+		echo 'Profile';
 	}
 	
 	if ($icon == "whats_hot") {
@@ -238,8 +233,14 @@ position: relative;"> > </p>
 		echo 'Home';
 	}
 
-	
-	
+    if ($icon == "communties") {
+		echo 'Communties';
+	}
+
+    if ($icon == "photos") {
+		echo 'Photos';
+	}
+
 	?></p>
 		  </a>
 		 </span>
@@ -262,41 +263,55 @@ position: relative;"> > </p>
 		  </a>
 		 </span>
 		</li>
+        
+        <span class="icon" id="non-sel">
+		  <a class="sidebar-list" href="photos.php?username=<?php echo $_SESSION["username"];?>">
+		   <div class="photo-icon-side"></div> 
+		   <p>Photos </p>
+		  </a>
+		 </span>
+		</li>
 
         <hr>
 
         <a href="whats_hot.php"><li><span class="icon" id="non-sel"><div class="wh-icon-side"></div> <p>What's Hot<p></span></li></a>
-        <li><span class="icon" id="non-sel"><div class="com-icon-side"></div> <p>Communties<p></span></li>
+        <a href="communties.php"><li><span class="icon" id="non-sel"><div class="com-icon-side"></div> <p>Communties<p></span></li></a>
         <li><span class="icon" id="non-sel"><div class="events-icon-side"></div> <p>Events<p></li>
         <li><span class="icon" id="non-sel"><div class="settings-icon-side"></div> <p>Settings<p></li>
     </ul>
 </div>
+
 <div class="sub-header">
-	<div id="open-sidebar">
-     <span class="<?php 
-	if ($icon == "profile") {
-		echo 'profile-p-icon';
-	}
-	
-	if ($icon == "home") {
-		echo 'home-h-icon';
-	}
-	
-	
-	?>  home-icon"></span>
-     <span class="home-icon"><?php 
-	if ($icon == "profile") {
-		echo 'Profile';
-	}
-	
-	if ($icon == "home") {
-		echo 'Home';
-	}
-	
-	
-	?> </span>
-     <span class="arrow-icon"> > </span>
-	</div>
+
+<div id="open-sidebar">
+    <span class="<?php 
+        if ($icon == "profile") {
+            echo 'profile-p-icon';
+        } elseif ($icon == "home") {
+            echo 'home-h-icon';
+        } elseif ($icon == "whats_hot") {
+            echo 'hot-h-icon';
+        } elseif ($icon == "communties") {
+            echo 'com-c-icon';
+        } elseif ($icon == "photos") {
+            echo 'photo-p-icon';
+        }
+    ?> home-icon"></span>
+    <span class="home-icon"><?php 
+        if ($icon == "profile") {
+            echo 'Profile';
+        } elseif ($icon == "home") {
+            echo 'Home';
+        }  elseif ($icon == "whats_hot") {
+            echo 'Whats Hot';
+        } elseif ($icon == "communties") {
+            echo 'Communties';
+        } elseif ($icon == "photos") {
+            echo 'Photos';
+        }
+    ?> </span>
+    <span class="arrow-icon"> > </span>
+</div>
 
     <div class="menu">
         <span class="divider"></span>
@@ -324,3 +339,4 @@ $(document).ready(function() {
     });
 });
 </script>
+
