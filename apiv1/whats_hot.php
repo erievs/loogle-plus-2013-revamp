@@ -17,7 +17,9 @@ function getPostsFromDatabase($username = null) {
     if ($username !== null) {
         $query .= " WHERE username = '$username'";
     }
-    $query .= " ORDER BY created_at DESC";
+    $query .= " ORDER BY (plus_one > 0 AND (content LIKE '%cfl%' OR content LIKE '%cfls%')) DESC, plus_one DESC, created_at DESC"; // Prioritize posts containing 'cfl' or 'cfls'
+
+    $query .= " LIMIT 25"; // Limit the result to 25 posts
 
     $result = $conn->query($query);
     $posts = array();
@@ -44,7 +46,6 @@ function getPostsFromDatabase($username = null) {
             }
 
             $plus_one = $post['plus_one'] + 1;
-
 
             $posts[] = array(
                 'id' => $post['id'],

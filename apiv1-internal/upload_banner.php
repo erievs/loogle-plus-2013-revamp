@@ -9,13 +9,12 @@ if(isset($_POST['username']) && isset($_FILES['banner'])) {
     $uploadDirectory = '../assets/banners/';
 
     $allowedExtensions = array('png', 'jpg', 'webp', 'jpeg'); 
-    $maxFileSize = 1024 * 1024;
+    $maxFileSize = 2048 * 2048;
 
     $fileExtension = strtolower(pathinfo($bannerFile['name'], PATHINFO_EXTENSION)); 
     $fileSize = $bannerFile['size'];
 
     if(in_array($fileExtension, $allowedExtensions) && $fileSize < $maxFileSize) {
-        // Delete existing banner with the same username if exists
         $existingImagePath = $uploadDirectory . $username . '.*';
         array_map('unlink', glob($existingImagePath));
 

@@ -20,73 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
         $postContent = isset($_POST['postContent']) ? $_POST['postContent'] : '';
         $post_link_url = isset($_POST['post_link_url']) ? $_POST['post_link_url'] : '';
         $post_link = isset($_POST['post_link']) ? $_POST['post_link'] : '';
+        $community_id = isset($_POST['community_id']) ? $_POST['community_id'] : '';
     }
 
-    if (empty($username)) {
+    if (empty($username) || empty($postContent) || empty($community_id)) {
         $response['status'] = 'error';
-        $response['message'] = 'Invalid request. Missing parameters: username.';
+        $response['message'] = 'Invalid request. Missing parameters: username, postContent, community_id.';
         echo json_encode($response);
         exit;
     }
-
-    if (!empty($post_link)) {
-
-        if (preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $post_link, $matches)) {
-            $video_id = $matches[4];
-            $post_link = "http://www.youtube.com/embed/$video_id";
-        } else {
-            $response['status'] = 'error';
-            $response['message'] = 'Invalid YouTube URL format.';
-            echo json_encode($response);
-            exit;
-        }
-    }
-
-    if (!empty($post_link_url) && !filter_var($post_link_url, FILTER_VALIDATE_URL)) {
-        $response['status'] = 'error';
-        $response['message'] = 'Invalid URL format for post_link_url.';
-        echo json_encode($response);
-        exit;
-    }
-
-if (isset($_FILES["postImage"]) && $_FILES["postImage"]["error"] === 0) {
-    $targetDir = "../assets/images/";
-    $targetFile = $targetDir . basename($_FILES["postImage"]["name"]);
-    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-    $check = getimagesize($_FILES["postImage"]["tmp_name"]);
-    if ($check !== false) {
-
-        $allowedFormats = array("jpg", "jpeg", "png", "gif");
-        if (in_array($imageFileType, $allowedFormats)) {
-            if (move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile)) {
-                $imageURL = $targetFile;
-            } else {
-                $response['status'] = 'error';
-                $response['message'] = "Failed to move uploaded file.";
-                echo json_encode($response);
-                exit;
-            }
-        } else {
-            $response['status'] = 'error';
-            $response['message'] = "Only JPG, JPEG, PNG, and GIF files are allowed.";
-            echo json_encode($response);
-            exit;
-        }
-    } else {
-        $response['status'] = 'error';
-        $response['message'] = "File is not an image.";
-        echo json_encode($response);
-        exit;
-    }
-}
-
-if (empty($postContent) && empty($imageURL) && empty($post_link) && empty($post_link_url)) {
-    $response['status'] = 'error';
-    $response['message'] = 'Invalid request. At least one content field (postContent, post_link, or post_link_url) must be provided.';
-    echo json_encode($response);
-    exit;
-}
 
     function extractMentions($content) {
         preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
@@ -104,9 +46,22 @@ if (empty($postContent) && empty($imageURL) && empty($post_link) && empty($post_
             $response['status'] = 'error';
             $response['message'] = "Connection failed: " . $conn->connect_error;
         } else {
-            $query = "INSERT INTO posts (username, content, image_url, post_link_url, post_link, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+
+            $checkCommunityQuery = "SELECT * FROM communities WHERE community_id = ?";
+            $checkStmt = $conn->prepare($checkCommunityQuery);
+            $checkStmt->bind_param("i", $community_id);
+            $checkStmt->execute();
+            $result = $checkStmt->get_result();
+            if ($result->num_rows === 0) {
+                $response['status'] = 'error';
+                $response['message'] = 'Invalid community_id. The provided community_id does not exist.';
+                echo json_encode($response);
+                exit;
+            }
+
+            $query = "INSERT INTO communities_posts (community_id, username, content, post_link_url, post_link, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("sssss", $username, $postContent, $imageURL, $post_link_url, $post_link);
+            $stmt->bind_param("issss", $community_id, $username, $postContent, $post_link_url, $post_link);
             $stmt->execute();
 
             $postId = $conn->insert_id;

@@ -1,6 +1,6 @@
 <?php
 
-ob_start(); // Start output buffering
+ob_start(); 
 
 header("Content-Type: application/xml");
 header("Access-Control-Allow-Origin: *");
@@ -41,29 +41,56 @@ function getPostsFromDatabase($username = null) {
 
 $postsData = getPostsFromDatabase();
 
-$imageUrl = isset($_GET['regan']) ? '../assets/images/regan.png' : '../assets/images/loogle.webp';
+$outputType = isset($_GET['output']) ? $_GET['output'] : '';
 
-$rssFeed = '<?xml version="1.0" encoding="UTF-8"?>';
-$rssFeed .= '<rss version="2.0">';
-$rssFeed .= '<channel>';
-$rssFeed .= '<title>Loogle+</title>';
-$rssFeed .= '<link>' . htmlspecialchars($siteurl) . '</link>'; 
-$rssFeed .= '<description>Loogle+ a 2013 Google+ recreation.</description>';
-$rssFeed .= '<language>en-us</language>';
-$rssFeed .= '<image>';
-$rssFeed .= '<url>' . htmlspecialchars($siteurl . $imageUrl) . '</url>'; 
-$rssFeed .= '<title>LoogleCon</title>'; 
-$rssFeed .= '<link>' . htmlspecialchars($siteurl) . '</link>';
-$rssFeed .= '</image>';
-
-foreach ($postsData as $post) {
-    $rssFeed .= $post;
+if ($outputType === 'json') {
+    header('Content-Type: application/json');
+} else {
+    header('Content-Type: application/rss+xml');
 }
 
-$rssFeed .= '</channel>';
-$rssFeed .= '</rss>';
+$output = '';
 
-ob_end_clean();
+if ($outputType === 'json') {
 
-echo $rssFeed;
+    $output = json_encode($postsData);
+} else {
+
+    $rssVersion = isset($_GET['rss']) && $_GET['rss'] === 'legacy' ? '1.0' : '2.0';
+
+    $output = '<?xml version="1.0" encoding="UTF-8"?>';
+    $output .= '<rss version="' . $rssVersion . '">';
+    $output .= '<channel>';
+    $output .= '<title>Loogle+</title>';
+    $output .= '<link>' . htmlspecialchars($siteurl) . '</link>'; 
+    $output .= '<description>Loogle+ a 2013 Google+ recreation.</description>';
+    $output .= '<language>en-us</language>';
+    $output .= '<image>';
+    $output .= '<url>' . htmlspecialchars($siteurl . $imageUrl) . '</url>'; 
+    $output .= '<title>LoogleCon</title>'; 
+    $output .= '<link>' . htmlspecialchars($siteurl) . '</link>';
+    $output .= '</image>';
+
+    foreach ($postsData as $post) {
+
+        $output .= '<item>';
+        $output .= '<title>' . htmlspecialchars($post['title']) . '</title>';
+        $output .= '<link>' . htmlspecialchars($post['link']) . '</link>';
+        $output .= '<description>' . htmlspecialchars($post['description']) . '</description>';
+
+        if ($rssVersion === '2.0') {
+            $output .= '<image>';
+            $output .= '<url>' . htmlspecialchars($siteurl . $post['image']) . '</url>';
+            $output .= '</image>';
+        }
+
+        $output .= '</item>';
+    }
+
+    $output .= '</channel>';
+    $output .= '</rss>';
+}
+
+echo $output;
 ?>
+

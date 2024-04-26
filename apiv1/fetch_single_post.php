@@ -41,7 +41,7 @@ function getPostById($postId) {
             $video_url = null;
         }
 
-
+        $plus_one = $post['plus_one'] + 1;
 
         $postData = array(
             'id' => $post['id'],
@@ -50,7 +50,9 @@ function getPostById($postId) {
             'image_url' => $image_url,
             'post_link_url' => $post_url, 
             'post_link' => $post['post_link'],
-            'created_at' => $post['created_at']
+            'created_at' => $post['created_at'],
+            'plus_one' =>  $plus_one,
+            'plus_one_usernames' =>  $post['plus_one_usernames']
         );
 
         $conn->close();
