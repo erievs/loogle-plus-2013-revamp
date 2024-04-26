@@ -7,77 +7,104 @@ if (!isset($_SESSION["username"])) {
 
 include("important/db.php");
 
-$profileget = htmlspecialchars($_GET['profile']);
-$icon = "profile";
+$comeget = htmlspecialchars($_GET['community_id']);
+$person = $_SESSION["username"];
+
+$icon = "home";
 ?>
 
 <?php
 if(isset($_GET['trump'])) {
     echo '<link rel="stylesheet" href="assets/css/trump.css">';
 }
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  
-    <link rel="stylesheet" href="assets/css/2013isamess.css">
-    <link rel="stylesheet" href="assets/css/2013indexres.css">
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+ 
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+    <title>Loogle+</title>
+	<link rel="stylesheet" href="assets/css/2013isamess.css">
+	<link rel="stylesheet" href="assets/css/2013indexres.css">
+	<link rel="stylesheet" href="assets/css/2013notes.css">
+    <link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
+    <link rel="stylesheet" href="assets/css/headerfix.css">
+    <link rel="stylesheet" href="assets/css/2013viewcom.css">
     <link rel="stylesheet" href="assets/css/2013profile.css">
-    <link rel="stylesheet" href="assets/css/2013notes.css">
-	<link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
-    <link rel="stylesheet" href="assets/css/writespost.css">
-   
+    <link rel="icon" 
+      type="image/png" 
+      href="assets/important-images/fav.png" />
+
 </head>
 <body>
 
 <?php require_once("inc/topstuffs.php")?>
 
-<!-- Must be linked bellow, since it loads the style sheet in topstuff. -->
+<div class="write-post-expanded">
 
-<link rel="stylesheet" href="assets/css/headerfix.css">
-<link rel="stylesheet" href="assets/css/2013profile_headerfix.css">
-
-
-<div class="banner">
-<div class="bg-grad" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?php echo $siteurl; ?>/apiv1/fetch_banner_api.php?name=<?php echo $profileget ?>'); height: 20em; background-size: cover;">
-    </div>
-    <div style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?php echo $siteurl; ?>/apiv1/fetch_banner_api.php?name=<?php echo $profileget ?>'); height: 20em; background-size: cover;">
-</div>
-        <div class="profilestuff">
-        <?php if (isset($_SESSION["username"]) && $_SESSION["username"] === $profileget): ?>
-    <div class="pfp-container">
-        <img alt="<?php echo $profileget ?>" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $profileget ?>" class="pfp-picture">
-        <div class="change-photo-button">
-            <span class="sb-card-body-arrow" id="custom-profile-arrow"></span>
-            <div id="cam" class="cricle"> </div>
-            <button id="whatsmyteacheryappingtoday" style="">Change profile photo</button>
-        </div>
-    </div>
-<?php else: ?>
-    <img alt="<?php echo $profileget ?>" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $profileget ?>" class="pfp-picture">
-<?php endif; ?>
-
-
-            <h2 class="profile-username"><?php echo $profileget ?></h2>
-            <?php
-            session_start(); 
-            if (isset($_SESSION["username"]) && $_SESSION["username"] === $profileget) {
-                echo '<button id="open-cool-cover" class="fuckjohnhinckleyjunior" type="submit">
-                    <!-- sorry winter -->
-                <p style="margin-top: 3px; color: #cfd1d3;">Change cover</p>
-                </button>';
-                }
-                ?>
-
-        </div>
-    </div>
 </div>
 
-<div id="uploadbanner-banner-banner" class="modal">
+<div class="content">
+
+<div class="side-panel-com">    
+<div id="community-side-panel-stuff">
+    <div id="top-section">
+        <div id="h-space"></div>
+        <h3 id="first-text-p"></h3>
+        <p id="second-text-p"></p>
+    </div>
+    <div id="image-section" style="height: 300px; width: 200px; background-image: url('<?php echo $siteurl; ?>/apiv1/fetch_cover_api.php?cover=<?php echo $comeget; ?>'); background-size: cover; background-position: center;">
+        <button id="pick-photo" class="ihavestrongfeelingsagaistaman" type="submit">
+            <p>Pick a photo</p>
+        </button>
+
+        <button id="joinusordie" class="ihavestrongfeelingsagaistaman" type="submit">
+                <p>Join</p>
+        </button>
+        
+    </div>
+    <div id="bob-about-text">
+            <p>About this community</p>
+    </div>
+    <p id="text-area-bob"></p>
+
+    <p id="third-text-p">Links</p>
+
+    <div id="link-con">
+
+    </div>
+
+    <div id="spacer"></div>
+
+    <a id="first-href-p">Add link</a>
+
+
+    <div id="spacer"></div>
+
+    <button id="doneiscool" class="ihavestrongfeelingsagaistaman" type="submit">
+            <p>Done</p>
+    </button>
+
+    
+    <br>
+
+</div>
+
+</div>  
+    <div class="container" id="posts-container">
+    
+    </div>
+</div>
+
+<div id="uploadbanner-com" class="modal">
   <div class="modal-content">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="boi1">&times;</span></button>
     <div class="row">
@@ -85,42 +112,7 @@ if(isset($_GET['trump'])) {
         <div class="modal-side">
           <span id="pleasefuckingcheckinwithmebefordoinganythingmorethancss"></span>
           <ul class="top-submenus">
-            <b id="select-text">Select cover banner</b>
-            <br><br> <!-- Hacky fix  -->
-            <li class="highlighted"><a href="#">Upload</a></li>
-            <li><a href="#">Your Photos</a></li>
-            <li><a href="#">Photos of you</a></li>
-            <li><a href="#">Web camera</a></li>
-          </ul>
-     
-        </div>
-      </div>
-      <div class="col-xs-9">
-        <div class="upload-area-banner" id="banner-cool">
-          <p class="inside-job" id="bwc">Drag a photo here</p> 
-          <p class="inside-job" id="lwc">Or if you prefer</p> 
-          <button class="ifyouwalkandiwasgone" id="banner-upload-inside-cool" id="banner-upload">Select a photo from your computer</button>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="modal-bottom">
-        <button class="ifyouwalkandiwasgone" id="banner-upload">Set as profile photo</button>
-        <button class="close-banner" id="donotaskwhatwedidtojapaninthe40s">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="uploadbanner-pfp" class="modal">
-  <div class="modal-content">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="boi1">&times;</span></button>
-    <div class="row">
-      <div class="col-xs-3">
-        <div class="modal-side">
-          <span id="pleasefuckingcheckinwithmebefordoinganythingmorethancss"></span>
-          <ul class="top-submenus">
-            <b id="select-text">Select profile picture</b>
+            <b id="select-text">Select cover</b>
             <br><br> <!-- Hacky fix  -->
             <li class="highlighted"><a href="#">Upload</a></li>
             <li><a href="#">Your Photos</a></li>
@@ -132,16 +124,16 @@ if(isset($_GET['trump'])) {
       </div>
       
       <div class="col-xs-9">
-        <div class="upload-area-pfp" id="pfp-cool">
-          <p class="inside-job" id="bwc">Drag a photo here</p> 
+        <div class="upload-area-com" id="com-cool">
+          <p class="inside-job" id="bwc">Drag a cover here</p> 
           <p class="inside-job" id="lwc">Or if you prefer</p> 
-          <button class="ifyouwalkandiwasgone" id="pfp-upload-inside" id="banner-upload">Select a photo from your computer</button>
+          <button class="ifyouwalkandiwasgone" id="com-upload-inside" id="banner-upload">Select a cover from your computer</button>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="modal-bottom">
-        <button class="ifyouwalkandiwasgone" id="pfp-upload">Set as profile photo</button>
+        <button class="ifyouwalkandiwasgone" id="com-upload">Set as cover photo</button>
         <button class="close-banner" id="donotaskwhatwedidtojapaninthe40s">Cancel</button>
       </div>
     </div>
@@ -149,18 +141,32 @@ if(isset($_GET['trump'])) {
 </div>
 
 
-<div class="write-post-expanded">
+<script>
+$(document).ready(function () {
+    var mainHeader = $(".main-header");
+    var subHeader = $(".sub-header");
+    var stickyHeader = $(".sticky-header");
+    var sidebar = $(".sidebar");
+    var offset = mainHeader.offset().top;
+    var sidebarTopPosition = 60; 
 
-</div>
+    $(window).scroll(function () {
+        var scrollTop = $(window).scrollTop();
+        var mainHeaderHeight = mainHeader.height();
+        var subHeaderHeight = subHeader.height();
+        var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
 
-<div class="content">
-    <div class="container" id="posts-container">
+        if (scrollTop >= offset + totalHeaderHeight) {
+            stickyHeader.css('display', 'block');
+            sidebarTopPosition = 40; 
+        } else {
+            stickyHeader.css('display', 'none');
+            sidebarTopPosition = 60; 
+        }
 
-    </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-
+        sidebar.css('top', sidebarTopPosition + 'px');
+    });
+});
 </script>
 
 <script>
@@ -170,29 +176,29 @@ function formatTime(timestamp) {
     return date.toLocaleString('en-US', options);
 }
 
-    function fetchPosts() {
-    fetch('<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?username=<?php echo $profileget; ?>')
+function fetchPosts() {
+    fetch('<?php echo $siteurl; ?>/apiv1/fetch_community_posts.php?community_id=<?php echo $comeget?>')
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
 
             postsContainer.innerHTML = '';
 
-        let numColumns = 3; 
-        const screenWidth = window.innerWidth;
+let numColumns = 2; 
+const screenWidth = window.innerWidth;
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const forceColParam = urlParams.get('forcecol');
+const urlParams = new URLSearchParams(window.location.search);
+const forceColParam = urlParams.get('forcecol');
 
-        if (forceColParam && !isNaN(forceColParam)) {
-            numColumns = parseInt(forceColParam);
-        } else {
-            if (screenWidth <= 1599) {
-                numColumns = 2; 
-            } else if (screenWidth <= 720) {
-                numColumns = 1; 
-            }
-        }
+if (forceColParam && !isNaN(forceColParam)) {
+    numColumns = parseInt(forceColParam);
+} else {
+    if (screenWidth <= 1599) {
+        numColumns = 2; 
+    } else if (screenWidth <= 720) {
+        numColumns = 1; 
+    }
+}
 
 const columns = [];
 for (let i = 0; i < numColumns; i++) {
@@ -310,32 +316,32 @@ postCreate.innerHTML = `
 
 columns[0].appendChild(postCreate);
 
-        $(document).ready(function () {
-        let postCreateMoved = false; 
+$(document).ready(function () {
+let postCreateMoved = false; 
 
-        function getQueryParameter(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.has(name);
-        }
+function getQueryParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has(name);
+}
 
 
-        function getQueryParameter(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.has(name);
-        }
+function getQueryParameter(name) {
+const urlParams = new URLSearchParams(window.location.search);
+return urlParams.has(name);
+}
 
-        function getQueryParameterValue(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-        }
+function getQueryParameterValue(name) {
+const urlParams = new URLSearchParams(window.location.search);
+return urlParams.get(name);
+}
 
-        if (getQueryParameter('linkopen') || getQueryParameter('write_post_link_open')) {
-                console.log('Link open query parameter is present');
-        
-                const urlParam = getQueryParameterValue('url');
-            if (urlParam) {
-                $('#al1').val(urlParam);
-            }
+ if (getQueryParameter('linkopen') || getQueryParameter('write_post_link_open')) {
+        console.log('Link open query parameter is present');
+   
+        const urlParam = getQueryParameterValue('url');
+    if (urlParam) {
+        $('#al1').val(urlParam);
+    }
 
 
         if (!postCreateMoved) {
@@ -741,7 +747,7 @@ $('.share-button').click(function () {
 const postContent = $('#postTextArea').val();
 const postLink = $('#al1').val(); 
 const postVideo = $('#al2').val(); 
-
+const communityId = '<?php echo $comeget; ?>'; 
 
 const username = '<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : ""; ?>';
 
@@ -754,6 +760,7 @@ return;
 const formData = new FormData();
 formData.append('username', username);
 formData.append('postContent', postContent);
+formData.append('community_id', communityId);
 
 if (postLink) { 
     formData.append('post_link_url', postLink);
@@ -770,7 +777,7 @@ if ($('#fileUploadInput')[0].files.length > 0) {
 
 $.ajax({
     type: 'POST',
-    url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
+    url: '<?php echo $siteurl; ?>/apiv1/submit_community_post.php',
     data: formData,
     processData: false,
     contentType: false,
@@ -779,16 +786,14 @@ $.ajax({
         smoothReload(500);
 
         if (response.status === 'success') {
-            smoothReload(500);
-            location.reload();
             console.log(response.message);
         } else {
-            smoothReload(500);
+          
             console.log(response.message);
         }
     },
     error: function (error) {
-        smoothReload(500);
+  
         console.log('Error:', error);
     }
 });
@@ -934,7 +939,7 @@ commentArea.appendChild(hideShowCommentsLink);
 postElement.appendChild(commentArea);
 
 $.ajax({
-    url: apiEndpoint + post.id,
+    url: apiEndpoint + post.id + '&community_id=' + <?php echo $comeget?>,
     dataType: 'json',
     success: function (commentsData) {
         if (commentsData.status === 'success') {
@@ -1014,9 +1019,14 @@ $(document).ready(function() {
            var username = '<?php echo $_SESSION["username"];?>';
 
            $.ajax({
-           url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
+           url: '<?php echo $siteurl; ?>/apiv1/community_add_plus_one.php',
            type: 'POST',
-           data: { add_plus_one: true, id: postID, username: username },
+           data: { 
+            add_plus_one: true, 
+            id: postID, 
+            community_id: <?php echo $comeget?>, 
+            username: username 
+            },
            success: function(response) {
             console.log(response);
             location.reload(); 
@@ -1061,9 +1071,7 @@ $(document).ready(function() {
             cancelButton.css('display', 'inline-block');
 
             $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
-
-
-
+            
             commentInput.css('height', '60px');
             commentInput.css('width', '425px');
 
@@ -1103,13 +1111,14 @@ $(document).ready(function() {
 
        $.ajax({
             
-        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
+        url: '<?php echo $siteurl; ?>/apiv1/submit_community_comments.php',
         type: 'POST',
         dataType: 'json',
           data: {
             commentContent: commentContent,
             postID: postID,
-            username: username
+            username: username,
+            communityID: '<?php echo $comeget; ?>' 
          },
 
          success: function(response) {
@@ -1194,269 +1203,210 @@ setInterval(fetchPosts, 600000);
 
 function smoothReload(delay) {
 $("body").fadeOut(delay, function() {
-    history.replaceState({}, document.title, window.location.pathname);
     location.reload();
 });
 }
 </script>
 
+<!-- View Communirt Scripts -->
+
 <script>
 $(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar-1');
-    let sidebarOpen = false;
 
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
+    var checkInterval;
 
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
+ $(document).on('click', '*', function() {
+  clearInterval(checkInterval); 
+
+  checkInterval = setInterval(function() {
+    if ($('.write-post-expanded').css('display') == 'block') {
+      $('.side-panel-com').css({
+        'top': '-435px',
+        'position': 'relative'
+      });
+      $('.write-post-expanded').css({
+        
+      })
+    } else {
+      clearInterval(checkInterval);
+    }
+  }, 500); 
+    }); 
 });
-
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-
-
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-
 </script>
 
-<!-- This is FYI for the PFP modal, the above one for the Banner/Cover one-->
-
 <script>
-
 $(document).ready(function() {
-    var selectedFileOther;
+    var isOwner = false;
+    var notMember = false;
+    var active = false;
+    var originalValues = {};
+    var linkUrls = []; 
 
-    function handleFileUpload(file) {
-        var formData = new FormData();
-        formData.append('username', '<?php echo $_SESSION["username"]?>');
-        formData.append('banner', file);
+    $('#doneiscool').hide(); 
+
+    if(!isOwner) {
+        $('#first-href-p').hide(); 
+        $('#pick-photo').hide(); 
+    }
+
+
         $.ajax({
-            url: '<?php echo $siteurl ?>/apiv1-internal/upload_pfp.php',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                alert(response);
-                smoothReload(500);
-            },
-            error: function(xhr, status, error) {
-                alert("Failed to upload banner. Error: " + error);
+        url: '<?php echo $siteurl; ?>/apiv1/fetch_community.php?community_id=<?php echo $comeget;?>', 
+        type: 'GET',
+        success: function(data) {
+            var communityData = data[0];
+            $('#first-text-p').text(communityData.name);
+
+            if (communityData.tagline === null) {
+                $('#second-text-p').text(isOwner ? 'bob' : 'bob');
+            } else {
+                $('#second-text-p').text(communityData.tagline);
             }
+
+            if (communityData.tagline === null) {
+                $('#text-area-bob').text(isOwner ? 'bob' : 'bob');
+            } else {
+                $('#text-area-bob').text(communityData.description);
+            }
+
+            var currentUser = '<?php echo $_SESSION["username"];?>';
+            var membersList = communityData.members_list;
+            var memberIndex = membersList.indexOf(currentUser + ':member');
+            var ownerIndex = membersList.indexOf('d:owner');
+
+            var notMember = true;
+            if (memberIndex !== -1) {
+                notMember = false;
+            }
+
+            if (notMember && ownerIndex === -1) {
+                $('#write-create').hide(); 
+            }
+
+            if (communityData.links !== null && communityData.links !== '') {
+                var linksArray = communityData.links.split(',');
+                $('#link-con').empty();
+
+                $.each(linksArray, function(index, link) {
+                    var linkElement = $('<a>', { href: link, text: link });
+                    var lineBreak = $('<br>');
+                    var linkWrapper = $('<div>').css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' });
+                    linkWrapper.append(linkElement);
+                    $('#link-con').append(linkWrapper, lineBreak);
+                    linkUrls.push(link);
+                });
+            }
+
+            isOwner = (communityData.creator_username === '<?php echo $person; ?>');
+        },
+        error: function(xhr, status, error) {
+            console.log(error);
+            console.log('Request URL: <?php echo $siteurl; ?>/apiv1/fetch_community.php?community_id=<?php echo $_GET['community_id'];?>');
+        }   
+    });
+
+
+
+    function smoothReload(delay) {
+        $("body").fadeOut(delay, function() {
+        location.reload();
         });
     }
+
+
     
-    $('#pfp-upload-inside').click(function() {
-        $('<input type="file" accept="image/png,image/webp,image/jpeg,image/jpg">').change(function() {
-            selectedFileOther = this.files[0];
-        }).click();
-    });
-    
-    $('.upload-area-pfp').on('drop', function(e) {
-        e.preventDefault();
-        selectedFileOther = e.originalEvent.dataTransfer.files[0];
-        handleFileUpload(selectedFileOther);
-    }).on('dragover', function(e) {
-        e.preventDefault();
-    });
-    
-    $('#pfp-upload').click(function(e) {
-        e.preventDefault();
-        if (selectedFileOther) {
-            handleFileUpload(selectedFileOther);
-        } else {
-            alert("Please select a photo first.");
+    $(document).on('dblclick', '#first-text-p, #second-text-p, #text-p-bob, #text-area-bob', function() {
+        if (isOwner && !active) {
+            active = true;
+            var id = $(this).attr('id');
+            var text = $(this).text();
+
+            originalValues[id] = text;
+            $(this).replaceWith(function() {
+                var textarea = $('<textarea>', { id: id === 'text-p-bob' ? 'text-area-bob' : id, value: text });
+                textarea.addClass(id + '-textarea');
+                return textarea;
+            });
+            $('#doneiscool').show(); 
         }
     });
-});
 
- $(".change-photo-button").click(function() {
-        $("#uploadbanner-pfp").css("display", "block");
+    $('#first-href-p').click(function() {
+        if (isOwner) {
+            active = true;
+            $('#doneiscool').show(); 
+            addLinkInput();
+
+        }
     });
 
-    $("#donotaskwhatwedidtojapaninthe40s, #boi1, #uploadbanner-banner-banner .close").click(function() {
-        $("#uploadbanner-pfp").css("display", "none");
- });
-
- function smoothReload(delay) {
-    setTimeout(function() {
-        location.reload();
-    }, delay);
-}
-</script>
-
-<script>
-
-$(document).ready(function() {
-    var selectedFileOther;
-
-    function handleFileUpload(file) {
-        var formData = new FormData();
-        formData.append('username', '<?php echo $_SESSION["username"]?>');
-        formData.append('banner', file);
-        $.ajax({
-            url: '<?php echo $siteurl ?>/apiv1-internal/upload_banner.php',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                alert(response);
-                smoothReload(500);
-            },
-            error: function(xhr, status, error) {
-                alert("Failed to upload banner. Error: " + error);
-            }
-        });
+    function addLinkInput() {
+        var linkInput = $('<input>', { type: 'text', class: 'link-input', placeholder: 'Enter link URL' });
+        $('#link-con').append(linkInput);
     }
     
-    $('#banner-upload-inside-cool').click(function() {
-        $('<input type="file" accept="image/png,image/webp,image/jpeg,image/jpg">').change(function() {
-            selectedFileOther = this.files[0];
-        }).click();
-    });
-    
-    $('.upload-area-banner').on('drop', function(e) {
-        e.preventDefault();
-        selectedFileOther = e.originalEvent.dataTransfer.files[0];
-        handleFileUpload(selectedFileOther);
-    }).on('dragover', function(e) {
-        e.preventDefault();
-    });
-    
-    $('#banner-upload').click(function(e) {
-        e.preventDefault();
-        if (selectedFileOther) {
-            handleFileUpload(selectedFileOther);
-        } else {
-            alert("Please select a photo first.");
-        }
-    });
-});
 
- $(".fuckjohnhinckleyjunior").click(function() {
-        $("#uploadbanner-banner-banner").css("display", "block");
-    });
+    $('#doneiscool').click(function() {
+        if (isOwner && active) {
+            active = false;
+            var originalValues = {
+                'first-text-p': $('#first-text-p').text(),
+                'second-text-p': $('#second-text-p').text(),
+                'text-p-bob': $('#text-p-bob').text()
+            };
 
-    $("#donotaskwhatwedidtojapaninthe40s, #boi1, #uploadbanner-banner-banner .close, .close-banner").click(function() {
-        $("#uploadbanner-banner-banner").css("display", "none");
- });
+            var updateFields = {
+                'name': $('#first-text-p').val(),
+                'tagline': $('#second-text-p').val(), 
+                'description': $('#text-area-bob').val(),
+                'links': getLinkUrls().join(', ') 
+            };
 
- function smoothReload(delay) {
-    setTimeout(function() {
-        location.reload();
-    }, delay);
-}
-</script>
+            console.log('JSON Object:', {
+                community_id: <?php echo $comeget; ?>,
+                username: '<?php echo $_SESSION['username'];?>', 
+                updateFields: updateFields
+            });
 
-
-
-<!-- END SCRIPTS -->
-
-
-
-
-<script>
-$(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar-1');
-    let sidebarOpen = false;
-
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
+            $.ajax({
+                url: '<?php echo $siteurl; ?>/apiv1/update_community.php',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    community_id: <?php echo $comeget; ?>,
+                    username: '<?php echo $_SESSION['username'];?>', 
+                    updateFields: updateFields
+                }),
+                success: function(response) {
+                    if (response.success) {
+                        $('#first-text-p').replaceWith($('<h3>', { id: 'first-text-p', text: originalValues['first-text-p'] }));
+                        $('#second-text-p').replaceWith($('<p>', { id: 'second-text-p', text: originalValues['second-text-p'] }));
+                        $('#text-p-bob').replaceWith($('<p>', { id: 'text-p-bob', text: originalValues['text-p-bob'] }));
+                        smoothReload(500);
+                        active = false;
+                    } else {
+                        console.log('Failed to update community information.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error occurred while updating community information: ' + error);
+                }
+            });
         }
     });
 
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-});
+    function getLinkUrls() {
+        linkUrls = []; 
+        $('.link-input').each(function() {
+            var url = $(this).val().trim();
+            if (url !== '') {
+                linkUrls.push(url);
+            }
+        });
+        return linkUrls;
+    }
 
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-
-
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-
-</script>
-
-
-<script>
-$(document).ready(function() {
-	const sidebar = $('.sidebar');
-	const openSidebarButton = $('#open-sidebar');
-	let sidebarOpen = false;
-
-	openSidebarButton.on('click', function() {
-		if (!sidebarOpen) {
-			sidebar.css('transform', 'translateX(0)');
-			sidebarOpen = true;
-		} else {
-			sidebar.css('transform', 'translateX(-100%)');
-			sidebarOpen = false;
-		}
-	});
-
-	$(document).on('click', function(event) {
-		if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-			sidebar.css('transform', 'translateX(-100%)');
-			sidebarOpen = false;
-		}
-	});
-});
-
-$(document).ready(function() {
-	$(document).keydown(function(e) {
-		if (e.key === "Escape") {
-			$(".sidebar").css("transform", "translateX(-100%)");
-		}
-	});
-
-
-	$(document).on("click dblclick", function(e) {
-		if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-			$(".sidebar").css("transform", "translateX(-100%)");
-		}
-	});
 });
 </script>
 
@@ -1501,15 +1451,135 @@ $(document).ready(function() {
 </script>
 
 <script>
-$('.change-photo-button').hide();
+$(document).ready(function() {
+    const sidebar = $('.sidebar');
+    const openSidebarButton = $('#open-sidebar-1');
+    let sidebarOpen = false;
 
-$('.pfp-picture').mouseenter(function() {
-    $('.change-photo-button').show();
+    openSidebarButton.on('click', function() {
+        if (!sidebarOpen) {
+            sidebar.css('transform', 'translateX(0)');
+            sidebarOpen = true;
+        } else {
+            sidebar.css('transform', 'translateX(-100%)');
+            sidebarOpen = false;
+        }
+    });
+
+    $(document).on('click', function(event) {
+        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
+            sidebar.css('transform', 'translateX(-100%)');
+            sidebarOpen = false;
+        }
+    });
 });
 
-$('.pfp-picture').mouseleave(function() {
-    $('.change-photo-button').hide();
+$(document).ready(function() {
+    $(document).keydown(function(e) {
+        if (e.key === "Escape") {
+            $(".sidebar").css("transform", "translateX(-100%)");
+        }
+    });
+
+
+    $(document).on("click dblclick", function(e) {
+        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
+            $(".sidebar").css("transform", "translateX(-100%)");
+        }
+    });
 });
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        $(".dropdown-toggle").click(function(e) {
+            e.preventDefault(); 
+            var $dropdownMenu = $(this).next(".dropdown-menu");
+            $dropdownMenu.toggleClass("show");
+        });
+
+        $(document).click(function(e) {
+            if (!$(e.target).closest(".dropdown-toggle").length && $(".dropdown-menu").hasClass("show")) {
+                $(".dropdown-menu").removeClass("show");
+            }
+        });
+    });
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#al1').on('input', function() {
+        var linkInput = $(this).val().trim();
+        if (!linkInput.startsWith('http://')) {
+            linkInput = 'http://' + linkInput;
+            $(this).val(linkInput);
+        }
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    var selectedFileOther;
+
+    function handleFileUpload(file) {
+        var formData = new FormData();
+        formData.append('username', '<?php echo $comeget ?>');
+        formData.append('banner', file);
+        $.ajax({
+            url: '<?php echo $siteurl ?>/apiv1-internal/upload_cover.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert(response);
+                smoothReload(500);
+            },
+            error: function(xhr, status, error) {
+                alert("Failed to upload banner. Error: " + error);
+            }
+        });
+    }
+    
+    $('#com-upload-inside').click(function() {
+        $('<input type="file" accept="image/png,image/webp,image/jpeg,image/jpg">').change(function() {
+            selectedFileOther = this.files[0];
+        }).click();
+    });
+    
+    $('.upload-area-com').on('drop', function(e) {
+        e.preventDefault();
+        selectedFileOther = e.originalEvent.dataTransfer.files[0];
+        handleFileUpload(selectedFileOther);
+    }).on('dragover', function(e) {
+        e.preventDefault();
+    });
+    
+    $('#com-upload').click(function(e) {
+        e.preventDefault();
+        if (selectedFileOther) {
+            handleFileUpload(selectedFileOther);
+        } else {
+            alert("Please select a photo first.");
+        }
+            });
+        });
+
+    $("#pick-photo").click(function() {
+            $("#uploadbanner-com").css("display", "block");
+        });
+
+        $("#donotaskwhatwedidtojapaninthe40s, #boi1, #uploadbanner-banner-banner .close").click(function() {
+            $("#uploadbanner-com").css("display", "none");
+    });
+
+    function smoothReload(delay) {
+        setTimeout(function() {
+            location.reload();
+        }, delay);
+    }
 </script>
 
 </body>

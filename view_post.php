@@ -9,113 +9,116 @@ if (!isset($_SESSION["username"])) {
 include("important/db.php");
 
 $icon = "home";
+
 ?>
 
-    
-        <script type="text/javascript">
+<?php
+if(isset($_GET['trump'])) {
+    echo '<link rel="stylesheet" href="assets/css/trump.css">';
+}
+?>
+
+    <script type="text/javascript">
         var idFromPHP = <?php echo json_encode($id); ?>;
         console.log(idFromPHP);
     </script>
 
-<link rel="icon" 
-      type="image/png" 
-      href="assets/icons/fav.png" />
+    <link rel="icon" 
+        type="image/png" 
+        href="assets/icons/fav.png" />
 
-      <title>Loogle+ View Post</title>
+        <title>Loogle+ View Post</title>
 
-    <html lang="en">
+        <html lang="en">
 
-        <head>
-            <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-                    <link rel="stylesheet" href="assets/css/post1.css">
-                    <link rel="stylesheet" href="assets/css/2013isamess.css">
-                    
-                    <link rel="stylesheet" href="assets/css/2013notes.css">
-					<link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
+            <head>
+                <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+                        <link rel="stylesheet" href="assets/css/post1.css">
+                        <link rel="stylesheet" href="assets/css/2013isamess.css">
 
-                    <link rel="stylesheet" href="assets/css/post2.css">
+                        <link rel="stylesheet" href="assets/css/2013notes.css">
+                        <link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
 
-                    <link rel="stylesheet" href="assets/css/writespost.css">
+                        <link rel="stylesheet" href="assets/css/post2.css">
 
-                    <link rel="stylesheet" href="assets/css/headerfix.css">
-                    <link rel="icon" 
-      type="image/png" 
-      href="../assets/important-images/fav.png" />
+                        <link rel="stylesheet" href="assets/css/writespost.css">
 
-</head>
+                        <link rel="stylesheet" href="assets/css/headerfix.css">
+                        <link rel="icon"type="image/png"href="../assets/important-images/fav.png" />
+            </head>
 
-<link rel="icon" 
-      type="image/png" 
-      href="/assets/icons/fav.png" />
+    <link rel="icon"type="image/png"href="/assets/icons/fav.png" />
 
-                    <body>
-					
-<?php require_once("inc/topstuffs.php")?>
+    <body>
 
-                <div class="container">
-                    <div class="user-card">
-                        <div class="card-info">
-                        <div class="user-pfp">
-						
-						</div>
-                        <br>
-                        <div class="username-big"></div>
+    <?php require_once("inc/topstuffs.php")?>
+
+                    <div class="container">
+                        <div class="user-card">
+                            <div class="card-info">
+                            <div class="user-pfp">
+
+                            </div>
+                            <br>
+                            <div class="username-big"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="post">
+                        <div class="post">
 
-
-                    <div class="posto-pfp-con">
-                        <div class="post-pfp"></div>
-                        <div class="post-info">
-                            <div class="post-username"></div>
-                            <div class="post-metadata">N/A</div>
+                        <div class="posto-pfp-con">
+                            <div class="post-pfp"></div>
+                            <div class="post-info">
+                                <div class="post-username"></div>
+                                <div class="post-metadata">N/A</div>
+                            </div>
                         </div>
-                     </div>
-                        <div class="post-content"><p></p></div>
-                        <img class="post-image" src="">
-                   
+                            <div class="post-content"><p></p></div>
+                            <img class="post-image" src="">
 
-                        <div class="link-preview">
-                </div>
-             
-                        <div class="youtube-emded">
-                        </div>
-
-
-                    <div class="comment-main">
-                    
+                            <div class="link-preview">
                     </div>
 
-                    
-                    </div>
+                            <div class="youtube-emded">
+                            </div>
 
-        
+                        <div class="comment-main">
+
+                        <div class="comments"></div>
+
+                        </div>
+
+                        </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-            <script>
+                <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-
-                $(document).ready(function() {
-
-
-
-                    var id = <?php echo json_encode($id); ?>;
+                <script>
+                     $(document).ready(function() {
+                        var id = <?php echo json_encode($id); ?>;
 
                     $.ajax({
                         url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
                         type: 'GET',
                         dataType: 'json',
                         success: function (userData) {
+                            const profileURL = '<?php echo $siteurl; ?>/profile.php?profile=' + userData.username;
 
-                            const usernameElement = $(".username-big");
-                            usernameElement.text(userData.username);
+                            
+                            const anchorElement = $('<a>').attr({
+                                href: profileURL,
+                                style: 'text-decoration: none; color: inherit;'
+                            }).text(userData.username);
+
+                           
+                            $('.username-big, .post-username').each(function() {
+                                $(this).html(anchorElement.clone()); 
+                            });
 
                             
 
@@ -126,265 +129,271 @@ $icon = "home";
                             console.log('Error fetching user data.');
                         }
                     });
-        });
 
+                    });
 
-        
+                    $(document).ready(function() {
 
-                $(document).ready(function() {
- 
+                        var id = <?php echo json_encode($id); ?>;
 
+                        $.ajax({
+                            url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
 
-                    var id = <?php echo json_encode($id); ?>;
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (postData) {
 
-                    $.ajax({
-                        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
+                                const usernameElement = $(".username, .post-username");
+                                usernameElement.text(postData.username);
 
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (postData) {
+                                const userPfpElement = $(".user-pfp");
+                                userPfpElement.css('background-image', `url(<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${postData.username})`);
+                                const postPfpElement = $(".post-pfp");
+                                postPfpElement.css('background-image', `url(<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${postData.username})`);
 
-                            const usernameElement = $(".username, .post-username");
-                            usernameElement.text(postData.username);
+                                const postMetadataElement = $(".post-metadata");
+                                postMetadataElement.text("Placeholder - " + getRelativeTime(postData.created_at));
 
-                            const userPfpElement = $(".user-pfp");
-                            userPfpElement.css('background-image', `url(<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${postData.username})`);
-                            const postPfpElement = $(".post-pfp");
-                            postPfpElement.css('background-image', `url(<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${postData.username})`);
+                                const postContentElement = $(".post-content");
+                                postContentElement.text(postData.content);
 
-                            const postMetadataElement = $(".post-metadata");
-                            postMetadataElement.text("Placeholder - " + getRelativeTime(postData.created_at));
+                                
 
-                            const postContentElement = $(".post-content");
-                            postContentElement.text(postData.content);
+                            },
+                            error: function () {
+                                console.log('Error fetching user and post data.');
+                            }
+                        });
+                    });
 
+                    function getFormattedTime(createdAt) {
 
-                        },
-                        error: function () {
-                            console.log('Error fetching user and post data.');
+                    const postDate = new Date(createdAt);
+                    const currentDate = new Date();
+
+                    const timeDifference = currentDate - postDate;
+
+                    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                    const monthsDifference = (currentDate.getFullYear() - postDate.getFullYear()) * 12 + (currentDate.getMonth() - postDate.getMonth());
+
+                    if (daysDifference === 0) {
+                    const hours = postDate.getHours();
+                    const minutes = postDate.getMinutes();
+                    const amOrPm = hours >= 12 ? 'pm' : 'am';
+                    let formattedHours = hours > 12 ? hours - 12 : hours;
+
+                    if (formattedHours === 0) {
+                    formattedHours = 12;
+                    }
+
+                    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+                    return `Today ${formattedHours}:${formattedMinutes}${amOrPm}`;
+                    } else if (daysDifference === 1) {
+                         return 'Yesterday';
+                    } else if (monthsDifference < 1) {
+                        return `${daysDifference} Days Ago`;
+                    } else {
+                        return `${monthsDifference} Months Ago`;
+                }
+            }
+
+    $(document).ready(function () {
+        var id = <?php echo json_encode($id); ?>;
+
+        $.ajax({
+            url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
+            type: 'GET',
+            dataType: 'json',
+            success: function (postData) {
+                console.log(postData);
+                const usernameElement = $(".username, .post-username");
+                usernameElement.text(postData.username);
+
+                if (postData.image_url) {
+                    const postImageElement = $(".post-image");
+                    postImageElement.attr('src', postData.image_url);
+                    postImageElement.show();
+                }
+
+                if (postData.content) {
+                    const postContentDiv = $(".post-content");
+                    const pElement = postContentDiv.find('p');
+                    pElement.text(postData.content);
+                    postContentDiv.show();
+                }
+
+                const $postElement = $('.post');
+
+                if (postData.post_link_url) {
+                    $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(postData.post_link_url) + '&format=json', function (metadata) {
+                        const linkPreviewContainer = $('<div>', { class: 'link-preview' });
+
+                        const faviconContainer = $('<div>', { class: 'favicon-container' });
+                        const faviconImg = $('<img>', {
+                            src: metadata.image,
+                            alt: 'Favicon',
+                            class: 'favicon-img'
+                        });
+                        faviconContainer.append(faviconImg);
+
+                        const contentContainer = $('<div>', { class: 'content-container' });
+                        const title = $('<h2>');
+                        const titleLink = $('<a>', {
+                            href: postData.post_link_url,
+                            text: metadata.title,
+                            target: '_blank'
+                        });
+                        title.append(titleLink);
+
+                        const linkText = $('<p>', {
+                            text: postData.post_link_url,
+                            class: 'link-text'
+                        });
+                        contentContainer.append(title, linkText);
+
+                        linkPreviewContainer.append(faviconContainer, contentContainer);
+                        $('.post .link-preview').append(linkPreviewContainer);
+
+                        const containerWidth = linkPreviewContainer.width();
+                        const faviconWidth = containerWidth * 0.3;
+                        const contentWidth = containerWidth * 0.8;
+                        faviconContainer.width(faviconWidth);
+                        contentContainer.width(contentWidth);
+
+                        const maxFaviconHeight = 50;
+                        const maxFaviconWidth = containerWidth * 0.3;
+                        faviconImg.css({
+                            'max-width': maxFaviconWidth + 'px',
+                        });
+
+                        if (contentContainer.height() > 200) {
+                            contentContainer.css('height', '200px');
+                            contentContainer.css('overflow', 'hidden');
                         }
                     });
-        });
+                }
 
-                function getFormattedTime(createdAt) {
+                if (postData.post_link && postData.post_link.includes("youtube.com/embed")) {
+                    const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
+                    $postElement.find('.youtube-emded').html(iframeHTML);
 
-                 const postDate = new Date(createdAt);
-                const currentDate = new Date();
+                    const protocol = window.location.protocol;
+                    if (protocol === 'https:' && !postData.post_link.startsWith('https:')) {
+                        postData.post_link = postData.post_link.replace(/^http:/, 'https:');
+                    }
 
-                const timeDifference = currentDate - postDate;
+                    $postElement.find('.youtube-emded iframe').attr('src', postData.post_link);
+                }
 
-                const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                const monthsDifference = (currentDate.getFullYear() - postDate.getFullYear()) * 12 + (currentDate.getMonth() - postDate.getMonth());
-
-                if (daysDifference === 0) {
-        const hours = postDate.getHours();
-                const minutes = postDate.getMinutes();
-        const amOrPm = hours >= 12 ? 'pm' : 'am';
-        let formattedHours = hours > 12 ? hours - 12 : hours;
-                if (formattedHours === 0) {
-                    formattedHours = 12;
-        }
-                const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-                return `Today ${formattedHours}:${formattedMinutes}${amOrPm}`;
-    } else if (daysDifference === 1) {
-        return 'Yesterday';
-    } else if (monthsDifference < 1) {
-        return `${daysDifference} Days Ago`;
-    } else {
-        return `${monthsDifference} Months Ago`;
-    }
-}
-
-$(document).ready(function () {
-    var id = <?php echo json_encode($id); ?>;
-
-    $.ajax({
-        url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + id,
-        type: 'GET',
-        dataType: 'json',
-        success: function (postData) {
-            console.log(postData);
-            const usernameElement = $(".username, .post-username");
-            usernameElement.text(postData.username);
-
-            if (postData.image_url) {
-                const postImageElement = $(".post-image");
-                postImageElement.attr('src', postData.image_url);
-                postImageElement.show();
+                const postMetadataElement = $(".post-metadata");
+                postMetadataElement.text("Placeholder - " + getFormattedTime(postData.created_at));
+            },
+            error: function () {
+                console.log('Error fetching user and post data.');
             }
+                });
+            });
 
-            if (postData.content) {
-                const postContentDiv = $(".post-content");
-                const pElement = postContentDiv.find('p');
-                pElement.text(postData.content);
-                postContentDiv.show();
-            }
+                </script>
+                        <script>
+                            $(document).ready(function () {
+                            var mainHeader = $(".main-header");
+                            var subHeader = $(".sub-header");
+                            var stickyHeader = $(".sticky-header");
+                            var sidebar = $(".sidebar");
+                            var offset = mainHeader.offset().top;
+                            var sidebarTopPosition = 60; 
 
-            const $postElement = $('.post');
+                            $(window).scroll(function () {
+                            var scrollTop = $(window).scrollTop();
+                            var mainHeaderHeight = mainHeader.height();
+                            var subHeaderHeight = subHeader.height();
+                            var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
 
-            if (postData.post_link_url) {
-                $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(postData.post_link_url) + '&format=json', function (metadata) {
-                    const linkPreviewContainer = $('<div>', { class: 'link-preview' });
+                            if (scrollTop >= offset + totalHeaderHeight) {
+                                stickyHeader.css('display', 'block');
+                                sidebarTopPosition = 40; 
+                            } else {
+                                stickyHeader.css('display', 'none');
+                                sidebarTopPosition = 60; 
+                            }
 
-                    const faviconContainer = $('<div>', { class: 'favicon-container' });
-                    const faviconImg = $('<img>', {
-                        src: metadata.image,
-                        alt: 'Favicon',
-                        class: 'favicon-img'
-                    });
-                    faviconContainer.append(faviconImg);
+                            sidebar.css('top', sidebarTopPosition + 'px');
+                            });
+                            });
+                        </script>
+                    <script>
 
-                    const contentContainer = $('<div>', { class: 'content-container' });
-                    const title = $('<h2>');
-                    const titleLink = $('<a>', {
-                        href: postData.post_link_url,
-                        text: metadata.title,
-                        target: '_blank'
-                    });
-                    title.append(titleLink);
-
-                    const linkText = $('<p>', {
-                        text: postData.post_link_url,
-                        class: 'link-text'
-                    });
-                    contentContainer.append(title, linkText);
-
-                    linkPreviewContainer.append(faviconContainer, contentContainer);
-                    $('.post .link-preview').append(linkPreviewContainer);
-
-                    const containerWidth = linkPreviewContainer.width();
-                    const faviconWidth = containerWidth * 0.3;
-                    const contentWidth = containerWidth * 0.8;
-                    faviconContainer.width(faviconWidth);
-                    contentContainer.width(contentWidth);
-
-                    const maxFaviconHeight = 50;
-                    const maxFaviconWidth = containerWidth * 0.3;
-                    faviconImg.css({
-                        'max-width': maxFaviconWidth + 'px',
-                    });
-
-                    if (contentContainer.height() > 200) {
-                        contentContainer.css('height', '200px');
-                        contentContainer.css('overflow', 'hidden');
+                            $(document).ready(function() {
+                const sidebar = $('.sidebar');
+                            const openSidebarButton = $('#open-sidebar');
+                            let sidebarOpen = false;
+                            openSidebarButton.on('click', function() {
+                    if (!sidebarOpen) {
+                                sidebar.css('transform', 'translateX(0)');
+                            sidebarOpen = true;
+                    } else {
+                                sidebar.css('transform', 'translateX(-100%)');
+                            sidebarOpen = false;
                     }
                 });
-            }
+                            $(document).on('click', function(event) {
+                    if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
+                                sidebar.css('transform', 'translateX(-100%)');
+                            sidebarOpen = false;
+                    }
+                });
+            });
+                            $(document).ready(function() {
+                const sidebar = $('.sidebar');
+                            const openSidebarButton = $('#open-sidebar-1');
+                            let sidebarOpen = false;
+                            openSidebarButton.on('click', function() {
+                    if (!sidebarOpen) {
+                                sidebar.css('transform', 'translateX(0)');
+                            sidebarOpen = true;
+                    } else {
+                                sidebar.css('transform', 'translateX(-100%)');
+                            sidebarOpen = false;
+                    }
+                });
+                            $(document).on('click', function(event) {
+                    if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
+                                sidebar.css('transform', 'translateX(-100%)');
+                            sidebarOpen = false;
+                    }
+                });
+            });
+                        </script>
+    </body>
 
-            if (postData.post_link && postData.post_link.includes("youtube.com/embed")) {
-                const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
-                $postElement.find('.youtube-emded').html(iframeHTML);
+    <script>
 
-                const protocol = window.location.protocol;
-                if (protocol === 'https:' && !postData.post_link.startsWith('https:')) {
-                    postData.post_link = postData.post_link.replace(/^http:/, 'https:');
-                }
+    $(document).ready(function() {
+        let singlePostData;
 
-                $postElement.find('.youtube-emded iframe').attr('src', postData.post_link);
-            }
-
-            const postMetadataElement = $(".post-metadata");
-            postMetadataElement.text("Placeholder - " + getFormattedTime(postData.created_at));
-        },
-        error: function () {
-            console.log('Error fetching user and post data.');
-        }
-    });
-});
-
-
-  
-            </script>
-            <script>
-
-                <script>
-                    <script>
-                        $(document).ready(function () {
-    var mainHeader = $(".main-header");
-                        var subHeader = $(".sub-header");
-                        var stickyHeader = $(".sticky-header");
-                        var sidebar = $(".sidebar");
-                        var offset = mainHeader.offset().top;
-                        var sidebarTopPosition = 60; 
-
-                        $(window).scroll(function () {
-        var scrollTop = $(window).scrollTop();
-                        var mainHeaderHeight = mainHeader.height();
-                        var subHeaderHeight = subHeader.height();
-                        var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
-
-        if (scrollTop >= offset + totalHeaderHeight) {
-                            stickyHeader.css('display', 'block');
-                        sidebarTopPosition = 40; 
-        } else {
-                            stickyHeader.css('display', 'none');
-                        sidebarTopPosition = 60; 
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
-                        sidebar.css('top', sidebarTopPosition + 'px');
-    });
-});
-                    </script>
-                    <script>
-                    </script>
-                    <script>
-                    </script>
-                    <script>
-                        $(document).ready(function() {
-            const sidebar = $('.sidebar');
-                        const openSidebarButton = $('#open-sidebar');
-                        let sidebarOpen = false;
-                        openSidebarButton.on('click', function() {
-                if (!sidebarOpen) {
-                            sidebar.css('transform', 'translateX(0)');
-                        sidebarOpen = true;
-                } else {
-                            sidebar.css('transform', 'translateX(-100%)');
-                        sidebarOpen = false;
-                }
-            });
-                        $(document).on('click', function(event) {
-                if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-                            sidebar.css('transform', 'translateX(-100%)');
-                        sidebarOpen = false;
-                }
-            });
+        function fetchSinglePostData(callback) {
+        $.ajax({
+            url: '<?php echo $siteurl; ?>/apiv1/fetch_single_post.php?id=' + getParameterByName('id'),
+            type: 'GET',
+            dataType: 'json',
+            success: function(postData) {
+                callback(postData);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
         });
-                        $(document).ready(function() {
-            const sidebar = $('.sidebar');
-                        const openSidebarButton = $('#open-sidebar-1');
-                        let sidebarOpen = false;
-                        openSidebarButton.on('click', function() {
-                if (!sidebarOpen) {
-                            sidebar.css('transform', 'translateX(0)');
-                        sidebarOpen = true;
-                } else {
-                            sidebar.css('transform', 'translateX(-100%)');
-                        sidebarOpen = false;
-                }
-            });
-                        $(document).on('click', function(event) {
-                if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-                            sidebar.css('transform', 'translateX(-100%)');
-                        sidebarOpen = false;
-                }
-            });
-        });
-                    </script>
-  </body>
-
-
-
-<script>
-$(document).ready(function() {
-    function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
     $('.comment-main').each(function() {
@@ -392,6 +401,11 @@ $(document).ready(function() {
 
         if ($(this).next('.comment-input-container').length === 0) {
             const commentArea = $(this);
+
+            fetchSinglePostData(function(postData) {
+
+            const plusOneUsernamesString = postData.plus_one_usernames || '';
+            const isLikedByCurrentUser = plusOneUsernamesString.includes('<?php echo $_SESSION["username"];?>');
 
             const commentInputContainer = $('<div>').addClass('comment-input-container');
             commentInputContainer.css({
@@ -411,7 +425,6 @@ $(document).ready(function() {
 
             commentInput.css({
                 height: '30px',
-                width: '400px',
                 background: '#fff',
                 border: '1px solid #ccc',
                 resize: 'none'
@@ -422,28 +435,38 @@ $(document).ready(function() {
             const submitButton = $('<button>').text('Submit').addClass('submit-button').css('display', 'none');
             const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
 
-            buttonContainer.append(submitButton, cancelButton);
+            plusOneIcon = $('<div>').addClass('plus-one-icon').attr('id', isLikedByCurrentUser ? 'liked-icon' : '');
+            const plusOneSpan = $('<span>').attr('id', 'georgewallace').text(`+${postData.plus_one}`);
+            plusOneIcon.append(plusOneSpan);
+
+            buttonContainer.append(submitButton, cancelButton, plusOneIcon); 
             commentInputContainer.append(buttonContainer);
 
             commentInputContainer.insertAfter(commentArea);
+
 
             commentInput.on('click', function() {
                 submitButton.css('display', 'inline-block');
                 cancelButton.css('display', 'inline-block');
 
+                
+                $('.plus-one-icon').hide();
+
                 commentInput.css({
                     height: '60px',
-                    width: '425px',
+                    width: '500px',
                     textIndent: '2ch',
                     background: '#fff',
                     border: '1px solid #ccc',
                     padding: '0px',
                     resize: 'none',
-                    overflowY: 'auto'
+                    overflowY: 'auto',
+                    left: '1%',
+                    top: '1px'
                 });
 
                 commentInputContainer.css('background', '#f6f6f6');
-                commentInputContainer.css('height', '125px');
+                commentInputContainer.css('height', '150px');
             });
 
             submitButton.on('click', function() {
@@ -458,7 +481,8 @@ $(document).ready(function() {
                 });
 
 
-                
+           
+
                 $.ajax({
                     url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
                     type: 'POST',
@@ -478,15 +502,38 @@ $(document).ready(function() {
                 });
             });
 
+            $(buttonContainer).find('.plus-one-icon').click(function() {
+               var username = '<?php echo $_SESSION["username"];?>';
+
+               $.ajax({
+                    url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
+                    type: 'POST',
+                    data: { add_plus_one: true, id: postData.id, username: username
+                },
+                    success: function(response) {
+                    console.log(response);
+                    location.reload(); 
+               },
+                    error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+                    });
+                });
+
+
             cancelButton.on('click', function() {
                 submitButton.css('display', 'none');
                 cancelButton.css('display', 'none');
+
+                $('.plus-one-icon').show();
 
                 commentInput.css({
                     height: '30px',
                     width: '400px',
                     background: '#fff',
-                    border: '1px solid #ccc'
+                    border: '1px solid #ccc',
+                    left: '17%',
+                    top: '27%'
                 });
 
                 commentInputContainer.css('background-color', '#fff');
@@ -495,6 +542,8 @@ $(document).ready(function() {
 
                 commentInput.trigger('blur');
             });
+        });
+
 
             $.ajax({
                 url: '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=' +  getParameterByName('id'),
@@ -502,7 +551,7 @@ $(document).ready(function() {
                 success: function(commentsData) {
                     if (commentsData.status === 'success') {
                         const comments = commentsData.comments;
-                        const commentsContainer = $('<div>').addClass('comments');
+                        const commentsContainer = $('.comments');
                         comments.forEach(function(comment) {
                             const commentElement = $('<div>').addClass('comment');
                             commentElement.html(`
@@ -530,11 +579,11 @@ $(document).ready(function() {
                 }
             });
         }
-        
+
     });
 });
-</script>
 
+</script>
 
 </body>
 

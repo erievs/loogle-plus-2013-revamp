@@ -2181,17 +2181,8 @@ installPlugin(FLASH_PLUGIN);
   <div class="sign-up">
     <div class="signup-box">
 
-		<b>DO NOT USE REAL PASSWORDS, THIS IS NOT AN OFFICAL Loogle OR ALPHABET PROJECT</b>		
-
-
-
-<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is more if Loogle wants me to shut it down, or basic support)</p></address>
-
-<address>ksportalcraft@gmail.com</adress>
 
 <br>
-
-<a href="https://github.com/erievs/loogle-plus-2013-revamp"><p>Github</p></a>
 
 	
 
@@ -2282,6 +2273,10 @@ installPlugin(FLASH_PLUGIN);
   <li><a href="https://web.archive.org/web/20130606023031/https://accounts.Loogle.com/TOS?hl=en">Terms of Service</a></li>
   <li><a href="https://web.archive.org/web/20130606023031/http://www.Loogle.com/intl/en/privacy/">Privacy Policy</a></li>
   <li><a href="https://web.archive.org/web/20130606023031/http://www.Loogle.com/support/accounts?hl=en">Help</a></li>
+		<b>DO NOT USE REAL PASSWORDS, THIS IS NOT AN OFFICAL GOOGLE OR ALPHABET PROJECT</b>	
+
+<a href="https://github.com/erievs/loogle-plus-2013-revamp"><p>Github</p></a>
+
   </ul>
   <span id="lang-chooser-wrap" class="lang-chooser-wrap" style="">
   <img src="//web.archive.org/web/20130606023031im_/https://ssl.gstatic.com/images/icons/ui/common/universal_language_settings-21.png">

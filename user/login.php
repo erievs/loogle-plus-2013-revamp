@@ -1418,22 +1418,7 @@
 </div>
   <img src="../assets/accounts/ui/alt_hp_icons.png" alt="">
 <h1>One password. All of Loogle.</h1>
-
-<b>This is a recreation of Loogle plus from 2013, all rights reserved to Loogle and Alphabet inc!, 
-FOR THE LOVE OF GOD DO NOT USE REAL PASSWORDS OR REUSE PASSWORDS AT ALL. THIS ISN'T SPONSERED OR
-IN ANYWAY INVLOVED WITH Loogle</b>
-
-
-
-<address href="ksportalcraft@gmail.com"><br><p style="margin-top: 10px;">Contact me (this is more if Loogle wants me to shut it down, or basic support)</p></address>
-
-<address>ksportalcraft@gmail.com</adress>
-
 <br>
-
-<a href="https://github.com/erievs/loogle-plus-2013-revamp"><p>Github</p></a>
-
-
 
 <p>Want to enjoy the best of Loogle? Just stay signed in. One username 
 and password is all you need to unlock more features from services you 
@@ -1447,6 +1432,8 @@ use every day, like Gmail, Maps, Loogle+, and YouTube.</p>
   <li><a href="#" target="_blank">Terms of Service</a></li>
   <li><a href="#" target="_blank">Privacy Policy</a></li>
   <li><a href="#" target="_blank">Help</a></li>
+  <a href="https://github.com/erievs/loogle-plus-2013-revamp"><p>Github</p></a>
+  <b>This project is is no way is supported by Google, please do not use reuse passwords, and remeber this IS NOT OWNED BY GOOGLE.</b>
   </ul>
   <span id="lang-chooser-wrap" class="lang-chooser-wrap" style="">
   <img src="../assets/accounts/ui/universal_language_settings-21.png">
