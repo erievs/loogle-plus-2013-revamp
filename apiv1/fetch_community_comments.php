@@ -12,7 +12,7 @@ function getCommentsForPost() {
             $response['status'] = 'error';
             $response['message'] = "Connection failed: " . mysqli_connect_error();
         } else {
-            $sql = "SELECT * FROM comments WHERE post_id = ?";
+            $sql = "SELECT * FROM community_comments WHERE post_id = ?";
 
             if ($stmt = mysqli_prepare($conn, $sql)) {
                 mysqli_stmt_bind_param($stmt, "i", $post_id);
@@ -26,7 +26,7 @@ function getCommentsForPost() {
                         $comments[] = array(
                             'username' => htmlspecialchars($comment['username']),
                             'comment_content' => htmlspecialchars($comment['comment_content']),
-							'comment_time' => htmlspecialchars($comment['created_at'])
+                            'comment_time' => htmlspecialchars($comment['created_at'])
                         );
                     }
 

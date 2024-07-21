@@ -62,6 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    $duplicateCheckQuery = "SELECT COUNT(*) AS count FROM comments WHERE post_id = ? AND username = ? AND comment_content = ? AND created_at >= NOW() - INTERVAL 2 MINUTE";
+    $stmt = $conn->prepare($duplicateCheckQuery);
+    $stmt->bind_param("iss", $postID, $username, $commentContent);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    if ($row['count'] > 0) {
+        $response['status'] = 'error';
+        $response['message'] = 'Duplicate comment detected. Please wait before posting the same comment again.';
+        echo json_encode($response);
+        exit();
+    }
+
     $query = "INSERT INTO comments (post_id, username, comment_content) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iss", $postID, $username, $commentContent);

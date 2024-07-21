@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
     }
 
     if (!empty($post_link)) {
-
         if (preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $post_link, $matches)) {
             $video_id = $matches[4];
             $post_link = "http://www.youtube.com/embed/$video_id";
@@ -49,44 +48,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
         exit;
     }
 
-if (isset($_FILES["postImage"]) && $_FILES["postImage"]["error"] === 0) {
-    $targetDir = "../assets/images/";
-    $targetFile = $targetDir . basename($_FILES["postImage"]["name"]);
-    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-    $check = getimagesize($_FILES["postImage"]["tmp_name"]);
-    if ($check !== false) {
-
-        $allowedFormats = array("jpg", "jpeg", "png", "gif");
-        if (in_array($imageFileType, $allowedFormats)) {
-            if (move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile)) {
-                $imageURL = $targetFile;
+    if (isset($_FILES["postImage"]) && $_FILES["postImage"]["error"] === 0) {
+        $targetDir = "../assets/images/";
+        $imageFileType = strtolower(pathinfo($_FILES["postImage"]["name"], PATHINFO_EXTENSION));
+        
+        $randomString = bin2hex(random_bytes(5));
+        $targetFile = $targetDir . basename($_FILES["postImage"]["name"], ".$imageFileType") . "_$randomString.$imageFileType";
+        
+        $check = getimagesize($_FILES["postImage"]["tmp_name"]);
+        if ($check !== false) {
+            $allowedFormats = array("jpg", "jpeg", "png", "gif");
+            if (in_array($imageFileType, $allowedFormats)) {
+                if (move_uploaded_file($_FILES["postImage"]["tmp_name"], $targetFile)) {
+                    $imageURL = $targetFile;
+                } else {
+                    $response['status'] = 'error';
+                    $response['message'] = "Failed to move uploaded file.";
+                    echo json_encode($response);
+                    exit;
+                }
             } else {
                 $response['status'] = 'error';
-                $response['message'] = "Failed to move uploaded file.";
+                $response['message'] = "Only JPG, JPEG, PNG, and GIF files are allowed.";
                 echo json_encode($response);
                 exit;
             }
         } else {
             $response['status'] = 'error';
-            $response['message'] = "Only JPG, JPEG, PNG, and GIF files are allowed.";
+            $response['message'] = "File is not an image.";
             echo json_encode($response);
             exit;
         }
-    } else {
+    }
+
+    if (empty($postContent) && empty($imageURL) && empty($post_link) && empty($post_link_url)) {
         $response['status'] = 'error';
-        $response['message'] = "File is not an image.";
+        $response['message'] = 'Invalid request. At least one content field (postContent, post_link, or post_link_url) must be provided.';
         echo json_encode($response);
         exit;
     }
-}
-
-if (empty($postContent) && empty($imageURL) && empty($post_link) && empty($post_link_url)) {
-    $response['status'] = 'error';
-    $response['message'] = 'Invalid request. At least one content field (postContent, post_link, or post_link_url) must be provided.';
-    echo json_encode($response);
-    exit;
-}
 
     function extractMentions($content) {
         preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
@@ -97,7 +97,6 @@ if (empty($postContent) && empty($imageURL) && empty($post_link) && empty($post_
 
     $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt';
     if (!isRateLimited($rateLimitFile, $rateLimit)) {
-
         $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
         if ($conn->connect_error) {
@@ -131,13 +130,8 @@ if (empty($postContent) && empty($imageURL) && empty($post_link) && empty($post_
             }
         }
     } else {
-        if ($isCommandLine) {
-            $response['status'] = 'error';
-            $response['message'] = "Error: You can only post once every $rateLimit second(s).";
-        } else {
-            $response['status'] = 'error';
-            $response['message'] = "Error: You can only post once every $rateLimit second(s).";
-        }
+        $response['status'] = 'error';
+        $response['message'] = "Error: You can only post once every $rateLimit second(s).";
         echo json_encode($response);
         exit;
     }

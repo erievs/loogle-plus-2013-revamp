@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commentContent = $_POST['commentContent'];
     $postID = $_POST['postID']; 
     $communityID = $_POST['communityID']; 
-    $username = $_SESSION['username'];
+    $username = $_POST['username']; // Retrieve username from POST data
 
     include("../important/db.php");
 
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $query = "INSERT INTO community_comments (post_id, community_id, username, comment_content) VALUES (?, ?, ?, ?)";
+    $query = "INSERT INTO community_comments (post_id, community_id, username, comment_content, created_at) VALUES (?, ?, ?, ?, NOW())";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iiss", $postID, $communityID, $username, $commentContent);
 
