@@ -254,7 +254,7 @@ header #header-notifications a.active {
   margin: 13px 0 0 0;
   height: 37px;
   padding-left: 119px;
-  background: url(http://placehold.it/119x37);
+  background: url(assets/images/loogle.png);
   overflow: hidden;
 }
 
@@ -487,4 +487,36 @@ header #header-notifications a.active {
   line-height: 15px;
   word-wrap: break-word;
 }
-  
+
+.comment {
+  margin-bottom: 10px;
+}
+
+.comment .username {
+  font-weight: bold;
+}
+
+.comment .comment-content {
+  margin-left: 33px;
+  color: #666;
+  top: -12px;
+  position: relative;
+}
+
+.comment .comment-time {
+  margin-left: 10px;
+  color: #999;
+  position: relative;
+  top: -12px;
+}
+
+.username  {
+  margin-left: 10px;
+  position: relative;
+  top: -12px;
+}
+
+.comment-content {
+  margin-left: 33px;
+}
+
