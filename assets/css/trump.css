@@ -1,13 +1,29 @@
-@media (prefers-color-scheme: dark) {
-* {
-	background: #000!important;
-	color: #000!important;
-	border: none!important;
-	outline: 0!important;
-	box-shadow: none!important;
-}
+
 
 img {
-	display: none!important;
+    content: url('assets/images/trump.webp');
 }
+
+
+body, p, h1, h2, h3, h4, h5, h6 {
+    color: orange;
 }
+
+
+body {
+    background-color: #FFA500; 
+}
+
+@media (prefers-color-scheme: dark) {
+	* {
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAP8AAACGCAMAAAAl+6zxAAAAb1BMVEWzGUL///8KMWHoucXip7a5KlDFTm7Wg5nz3OLQwc5cdpZ1i6YaP2xsg6AWO2k7WoEPNWRHZYmVpruFmLC+yNWls8Xf5OuNn7VZc5QyU3vJ0tzp7PGdrcArTHYgRG/Y3uazv85QbI719/m5xNLEztm5UMKjAAADbUlEQVR4nO2dbW+iQBSFndmX7vIOKlSRKtb//xsXGESguZvd5MBlMvdJMM35dB6h7XCn2J1ehd1mEX/xb0nnlaEBtyVNXzDJk2l1bMBtSdP1DIJ39R4EQ314wG1J01XNVMsxGrqjA25LGlPWa5p640sXHHBb0ph+qbqryU8vcMBtSWP6ZVmyz8bdwQG3JY3pd+oPrYNggUB/2ypf1j9huECg1Vb54v/5uUBgi793zZXKrx40sMhfx233GBxY5K9vSt3ggT3+URl6ZQQOrPDvf2VVWlcncGCF/3F2xWIDbk2Sp3+lTtPq2IBbk6Tzj4rLQz0uxfBNCw++bxVz/qtH81acq9GZAwfcq3ya55Wq1Kg6POC2pDH9/DzM/XF3cMBtSdNXDXQw7Y4NuC1p9Ix0PsRFBBb5Z9kCgS3+aRiWZRim0MAifzOzfc1wIYFF/s2KtakODyzyz8/nHB5o/WOrzOcfWZLsY3Cgt77+bzHzqmR4AQY2+EfziQU24NYk6fyDOPaVH8fDuAIecGuSmPPv39uv968zhw545P6BYf9PzffuoAGn4l/p/Wt1VfW4Ozjg1iTp/S++DieLdnDArUnS+3/0R/P6sUCwef8Xvr9AYJH/47FAoH9ulan/e9m+J3cPGrRw3+XQTM9TdZ7OcCGBRf76oNQBHtjjH+RpfP0AB1b4mwu2albrQQUOrPCfX7HYgNuSpi8Yq9nEAhtwW9K07aLL4aquh8tr7xIdcFvSmK5HNR3ZogNuSxrT9dRUnWzeg4O3rdL778/peT/uDg7WXNL/F8+//0500k8vkwWCzfu/qOsFAov8j/OtG0Rgi39dFGVZFDU0sMhf+222BwcW+S+1/8mtSTL3L2+3Eh7Y4x/7WocxOLDC/8vIEhr82ipP/+AeTKtjA+5VPk3X0/MKVXjea+8SHXBb0nRdu5nteGSLDrgtaUzXpe//uC1pTD9P3ebPrkIDbksa0y+rdTp9dhMbcFvSmH5RfwyAA25LGr0K3JY04u+2/+9V4F7mkux4bjs2g/i7jfi7jfi7jfi7zY57A5oZ7uW3IAiCIAjC6nA/gMKM8+t/7gLMiL/biL/biL/biL/b7Lg/gIgZ7tsPQRAEQRCE1eH+AHJmnF//cxdgRvzdRvzdRvzdxnl/7n9AyAz38lsQBEEQBEFYlz/cCfoAM4YaAQAAAABJRU5ErkJggg==")!important;
+		color: #000!important;
+		border: none!important;
+		outline: 0!important;
+		box-shadow: none!important;
+	}
+	
+	img {
+		display: none!important;
+	}
+	}

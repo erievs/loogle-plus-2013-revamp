@@ -111,6 +111,14 @@ margin: 20px;
   width: 90px;
 }
 
+#youaredead {
+  background-image: -webkit-linear-gradient(top, #3d7fec, #4479d6);
+  margin-left: 15px;
+  margin-top: 15px;
+  color: black;
+  font-weight: bold;
+  width: 90px;
+}
 
 #pick-photo {
 border: 1px solid rgb(204, 204, 204);
@@ -174,6 +182,7 @@ margin-top: 15px;
   margin-left: 5%;
   font-weight: bold;
   font-size: 20px;
+  word-wrap: break-word;
 }
 
 #second-text-p {

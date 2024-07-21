@@ -173,7 +173,7 @@
         }
 
         .post-meta {
-            color: #808080;
+            color: #999;
         }
 
         .upload-time {
@@ -186,6 +186,10 @@
             white-space: pre-wrap;
             line-height: 1.5;
             margin-left: 3%;
+            color: #404040;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-top: 12px;
         }
         .main-header .search-text {
             background: url(assets/icons/search.png) no-repeat;
@@ -1174,7 +1178,7 @@ position: relative;
 max-height: 400px;
 overflow: auto;
     background-color: #f6f6f6;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #fff;
 
 }
 
@@ -1480,3 +1484,10 @@ overflow: auto;
     left: 26px;
     position: relative;
 }   
+
+#ronnieisnum1 {
+    position: relative;
+    top: 3px;
+    height: 30px;
+    right: 14px;
+}

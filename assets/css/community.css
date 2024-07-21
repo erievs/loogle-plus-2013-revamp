@@ -60,6 +60,7 @@ cursor: grab;
 
 h3 {
   font-size: 22px;
+  color: #606060;
 }
 
 .create-community {
@@ -204,7 +205,7 @@ h3 {
 
 .card {
   color: #646766;
-  width: 250px;
+  width: 315px;
   height: 80px;
   margin: 10px;
   display: inline-block;
@@ -217,6 +218,7 @@ h3 {
   float: left;
   height: 100%;
   object-fit: cover;
+  margin-right: 8px;
 }
 
 .card-name {
@@ -224,12 +226,22 @@ h3 {
   width: 50%;
   padding: 5px;
   font-weight: bold;
+  color: #4d4c4c;
+  font-size: 13px;
+  top: 10px;
+  position: relative;
+  left: 0px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .card-members {
   float: left;
   width: 50%;
   padding: 5px;
+  color: #b4b4b4;
+  font-size: 12px;
 }
 
 #whatwein {
@@ -267,7 +279,7 @@ h3 {
 .card-name-other {
   margin: 0;
   margin-top: 10px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   text-align: left;
   margin-left: 10px;
@@ -275,9 +287,10 @@ h3 {
   min-height: 25px;
   height: auto;
   overflow: hidden;
-
+  
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: #606060;
 }
 
 .card-img-two {
@@ -296,3 +309,37 @@ h3 {
   margin-left: 10px;
   font-size: 11.5px;
 }
+
+.comments {
+  margin-top: 10px;
+}
+
+.comment {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.pfp {
+  flex-shrink: 0; /* Prevent the profile picture from shrinking */
+}
+
+.pfp img {
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.comment-time {
+  color: #999;
+  margin-right: 10px; /* Add some space between username and comment time */
+}
+
+.comment-content {
+  margin-left: 5px; /* Adjust as needed */
+}
+  
