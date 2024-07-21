@@ -123,7 +123,7 @@ if(isset($_GET['trump'])) {
                             
 
                             const postMetadataElement = $(".post-metadata");
-                            postMetadataElement.text("Placeholder - " + getRelativeTime(userData.created_at));
+                            postMetadataElement.text("Sharing Publicly " + getRelativeTime(userData.created_at));
                         },
                         error: function () {
                             console.log('Error fetching user data.');
@@ -152,7 +152,7 @@ if(isset($_GET['trump'])) {
                                 postPfpElement.css('background-image', `url(<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${postData.username})`);
 
                                 const postMetadataElement = $(".post-metadata");
-                                postMetadataElement.text("Placeholder - " + getRelativeTime(postData.created_at));
+                                postMetadataElement.text("Sharing Publicly " + getRelativeTime(postData.created_at));
 
                                 const postContentElement = $(".post-content");
                                 postContentElement.text(postData.content);
@@ -166,36 +166,32 @@ if(isset($_GET['trump'])) {
                         });
                     });
 
-                    function getFormattedTime(createdAt) {
-
+              function getFormattedTime(createdAt) {
                     const postDate = new Date(createdAt);
                     const currentDate = new Date();
 
                     const timeDifference = currentDate - postDate;
-
                     const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
                     const monthsDifference = (currentDate.getFullYear() - postDate.getFullYear()) * 12 + (currentDate.getMonth() - postDate.getMonth());
 
                     if (daysDifference === 0) {
-                    const hours = postDate.getHours();
-                    const minutes = postDate.getMinutes();
-                    const amOrPm = hours >= 12 ? 'pm' : 'am';
-                    let formattedHours = hours > 12 ? hours - 12 : hours;
-
-                    if (formattedHours === 0) {
-                    formattedHours = 12;
-                    }
-
-                    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-                    return `Today ${formattedHours}:${formattedMinutes}${amOrPm}`;
+                        const hours = postDate.getHours();
+                        const minutes = postDate.getMinutes();
+                        const amOrPm = hours >= 12 ? 'pm' : 'am';
+                        let formattedHours = hours > 12 ? hours - 12 : hours;
+                        if (formattedHours === 0) {
+                            formattedHours = 12;
+                        }
+                        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+                        return `Today ${formattedHours}:${formattedMinutes}${amOrPm}`;
                     } else if (daysDifference === 1) {
-                         return 'Yesterday';
+                        return 'Yesterday';
                     } else if (monthsDifference < 1) {
                         return `${daysDifference} Days Ago`;
                     } else {
                         return `${monthsDifference} Months Ago`;
+                    }
                 }
-            }
 
     $(document).ready(function () {
         var id = <?php echo json_encode($id); ?>;
@@ -286,87 +282,18 @@ if(isset($_GET['trump'])) {
                 }
 
                 const postMetadataElement = $(".post-metadata");
-                postMetadataElement.text("Placeholder - " + getFormattedTime(postData.created_at));
+
+                let formattedTime = getFormattedTime(postData.created_at).replace(/-/g, ' ');
+                postMetadataElement.text("Sharing Publicly - " + formattedTime);
+
             },
             error: function () {
                 console.log('Error fetching user and post data.');
             }
                 });
             });
-
-                </script>
-                        <script>
-                            $(document).ready(function () {
-                            var mainHeader = $(".main-header");
-                            var subHeader = $(".sub-header");
-                            var stickyHeader = $(".sticky-header");
-                            var sidebar = $(".sidebar");
-                            var offset = mainHeader.offset().top;
-                            var sidebarTopPosition = 60; 
-
-                            $(window).scroll(function () {
-                            var scrollTop = $(window).scrollTop();
-                            var mainHeaderHeight = mainHeader.height();
-                            var subHeaderHeight = subHeader.height();
-                            var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
-
-                            if (scrollTop >= offset + totalHeaderHeight) {
-                                stickyHeader.css('display', 'block');
-                                sidebarTopPosition = 40; 
-                            } else {
-                                stickyHeader.css('display', 'none');
-                                sidebarTopPosition = 60; 
-                            }
-
-                            sidebar.css('top', sidebarTopPosition + 'px');
-                            });
-                            });
-                        </script>
-                    <script>
-
-                            $(document).ready(function() {
-                const sidebar = $('.sidebar');
-                            const openSidebarButton = $('#open-sidebar');
-                            let sidebarOpen = false;
-                            openSidebarButton.on('click', function() {
-                    if (!sidebarOpen) {
-                                sidebar.css('transform', 'translateX(0)');
-                            sidebarOpen = true;
-                    } else {
-                                sidebar.css('transform', 'translateX(-100%)');
-                            sidebarOpen = false;
-                    }
-                });
-                            $(document).on('click', function(event) {
-                    if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-                                sidebar.css('transform', 'translateX(-100%)');
-                            sidebarOpen = false;
-                    }
-                });
-            });
-                            $(document).ready(function() {
-                const sidebar = $('.sidebar');
-                            const openSidebarButton = $('#open-sidebar-1');
-                            let sidebarOpen = false;
-                            openSidebarButton.on('click', function() {
-                    if (!sidebarOpen) {
-                                sidebar.css('transform', 'translateX(0)');
-                            sidebarOpen = true;
-                    } else {
-                                sidebar.css('transform', 'translateX(-100%)');
-                            sidebarOpen = false;
-                    }
-                });
-                            $(document).on('click', function(event) {
-                    if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-                                sidebar.css('transform', 'translateX(-100%)');
-                            sidebarOpen = false;
-                    }
-                });
-            });
-                        </script>
+        </script>
     </body>
-
     <script>
 
     $(document).ready(function() {
@@ -520,7 +447,6 @@ if(isset($_GET['trump'])) {
                     });
                 });
 
-
             cancelButton.on('click', function() {
                 submitButton.css('display', 'none');
                 cancelButton.css('display', 'none');
@@ -543,7 +469,6 @@ if(isset($_GET['trump'])) {
                 commentInput.trigger('blur');
             });
         });
-
 
             $.ajax({
                 url: '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=' +  getParameterByName('id'),
@@ -584,6 +509,8 @@ if(isset($_GET['trump'])) {
 });
 
 </script>
+
+<script src="assets/js/sidebar.js"></script>
 
 </body>
 

@@ -65,9 +65,13 @@ if(isset($_GET['trump'])) {
         <button id="pick-photo" class="ihavestrongfeelingsagaistaman" type="submit">
             <p>Pick a photo</p>
         </button>
-
+        
         <button id="joinusordie" class="ihavestrongfeelingsagaistaman" type="submit">
                 <p>Join</p>
+        </button>
+
+        <button id="youaredead" class="ihavestrongfeelingsagaistaman" type="submit">
+                <p>Leave</p>
         </button>
         
     </div>
@@ -393,7 +397,7 @@ return urlParams.get(name);
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
+ 
 
             $writePostDiv.show();
             $level4.show();
@@ -405,6 +409,16 @@ return urlParams.get(name);
             position: 'relative',
             border: '1px solid rgba(10, 10, 10, 0.1)',
         });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
+        });
+
 
         $level4.css({
             top: '90px'
@@ -492,7 +506,7 @@ return urlParams.get(name);
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
+  
 
             $writePostDiv.show();
             $level4.show();
@@ -508,6 +522,16 @@ return urlParams.get(name);
         $level4.css({
             top: '90px'
         });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
+        });
+
 
         $writePostImage.show();
         $writePostLevel2.show();
@@ -581,7 +605,7 @@ $('#postTextArea').click(function () {
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
+      
 
             $writePostDiv.show();
             $level4.show();
@@ -592,6 +616,15 @@ $('#postTextArea').click(function () {
             left: '22%',
             position: 'relative',
             border: '1px solid rgba(10, 10, 10, 0.1)',
+        });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
         });
 
         $level4.css({
@@ -800,13 +833,13 @@ $.ajax({
     }); 
 });
 
-const apiEndpoint = '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=';
+const apiEndpoint = '<?php echo $siteurl; ?>/apiv1/fetch_community_comments.php?id=';
 
 let currentColumnIndex = 0;
 
 for (let i = 0; i < data.length; i++) {
     const post = data[i];
-    
+        
     const postElement = document.createElement('div');
     postElement.className = 'post';
     const formattedTime = formatTime(post.created_at);
@@ -814,8 +847,6 @@ for (let i = 0; i < data.length; i++) {
     const plusOneUsernamesString = post.plus_one_usernames || '';
     const isLikedByCurrentUser = plusOneUsernamesString.includes('<?php echo $_SESSION["username"];?>');
     
-
-
     postElement.innerHTML = `
     <div class="post-main">  
      <div class="hacky-fix">
@@ -1123,10 +1154,11 @@ $(document).ready(function() {
 
          success: function(response) {
             console.log(response);
-            fetchPosts();
+            smoothReload(500);
         },
          error: function(xhr, status, error) {
             console.error(xhr.responseText);
+            smoothReload(250);
             }
         });
         });
@@ -1237,76 +1269,98 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function() {
-    var isOwner = false;
-    var notMember = false;
-    var active = false;
+
+    var userStatus = {
+        isOwner: false,
+        isMember: false,
+   
+    };
+
+    var isActive = false;
+
     var originalValues = {};
     var linkUrls = []; 
 
     $('#doneiscool').hide(); 
 
-    if(!isOwner) {
-        $('#first-href-p').hide(); 
-        $('#pick-photo').hide(); 
-    }
 
+    $.ajax({
+            url: '<?php echo $siteurl; ?>/apiv1/fetch_community.php?community_id=<?php echo $comeget;?>',
+            type: 'GET',
+            success: function(data) {
+                
+                var communityData = data[0];
 
-        $.ajax({
-        url: '<?php echo $siteurl; ?>/apiv1/fetch_community.php?community_id=<?php echo $comeget;?>', 
-        type: 'GET',
-        success: function(data) {
-            var communityData = data[0];
-            $('#first-text-p').text(communityData.name);
+                $('#first-text-p').text(communityData.name);
+                
+                if (communityData.tagline === null) {
+                    $('#second-text-p').text(userStatus.isOwner ? 'bob' : 'bob');
+                } else {
+                    $('#second-text-p').text(communityData.tagline);
+                }
+                
+                if (communityData.tagline === null) {
+                    $('#text-area-bob').text(userStatus.isOwner ? 'bob' : 'bob');
+                } else {
+                    $('#text-area-bob').text(communityData.description);
+                }
+                
+                var currentUser = '<?php echo $_SESSION["username"];?>';
 
-            if (communityData.tagline === null) {
-                $('#second-text-p').text(isOwner ? 'bob' : 'bob');
-            } else {
-                $('#second-text-p').text(communityData.tagline);
+                var membersList = communityData.members_list;
+                var memberIndex = membersList.indexOf(currentUser + ':member');
+                var ownerIndex = membersList.indexOf('d:owner');
+
+                userStatus.isOwner = (communityData.creator_username === '<?php echo $person; ?>');
+
+                if (communityData.members_list.includes(currentUser + ':member')) {
+                    userStatus.isMember = true;
+                }
+
+                
+                if (userStatus.isMember) {
+                    $('#pick-photo').hide();
+                    $('#joinusordie').hide();
+                    $('#first-href-p').hide();
+                }
+              
+                if (!userStatus.isMember) {
+                    $('#pick-photo').hide();
+                    $('#doneiscool').hide();
+                    $('#first-href-p').hide();
+                    $('.comment-input-container').hide();
+                    $('#youaredead').hide();
+                    $('.post-create').hide();
+                }
+
+                if (userStatus.isOwner) {
+                    $('#pick-photo').show();
+                    $('#joinusordie').hide();
+                    $('#youaredead').hide();
+                    $('.post-create').show();
+                    $('.comment-input-container').show();
+                }
+
+                
+                if (communityData.links !== null && communityData.links !== '') {
+                    var linksArray = communityData.links.split(',');
+                    $('#link-con').empty();
+                    
+                    $.each(linksArray, function(index, link) {
+                        var linkElement = $('<a>', { href: link, text: link });
+                        var lineBreak = $('<br>');
+                        var linkWrapper = $('<div>').css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' });
+                        linkWrapper.append(linkElement);
+                        $('#link-con').append(linkWrapper, lineBreak);
+                        linkUrls.push(link);
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+                console.log('Request URL: <?php echo $siteurl; ?>/apiv1/fetch_community.php?community_id=<?php echo $_GET['community_id'];?>');
             }
-
-            if (communityData.tagline === null) {
-                $('#text-area-bob').text(isOwner ? 'bob' : 'bob');
-            } else {
-                $('#text-area-bob').text(communityData.description);
-            }
-
-            var currentUser = '<?php echo $_SESSION["username"];?>';
-            var membersList = communityData.members_list;
-            var memberIndex = membersList.indexOf(currentUser + ':member');
-            var ownerIndex = membersList.indexOf('d:owner');
-
-            var notMember = true;
-            if (memberIndex !== -1) {
-                notMember = false;
-            }
-
-            if (notMember && ownerIndex === -1) {
-                $('#write-create').hide(); 
-            }
-
-            if (communityData.links !== null && communityData.links !== '') {
-                var linksArray = communityData.links.split(',');
-                $('#link-con').empty();
-
-                $.each(linksArray, function(index, link) {
-                    var linkElement = $('<a>', { href: link, text: link });
-                    var lineBreak = $('<br>');
-                    var linkWrapper = $('<div>').css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' });
-                    linkWrapper.append(linkElement);
-                    $('#link-con').append(linkWrapper, lineBreak);
-                    linkUrls.push(link);
-                });
-            }
-
-            isOwner = (communityData.creator_username === '<?php echo $person; ?>');
-        },
-        error: function(xhr, status, error) {
-            console.log(error);
-            console.log('Request URL: <?php echo $siteurl; ?>/apiv1/fetch_community.php?community_id=<?php echo $_GET['community_id'];?>');
-        }   
-    });
-
-
+        });
 
     function smoothReload(delay) {
         $("body").fadeOut(delay, function() {
@@ -1315,26 +1369,28 @@ $(document).ready(function() {
     }
 
 
-    
-    $(document).on('dblclick', '#first-text-p, #second-text-p, #text-p-bob, #text-area-bob', function() {
-        if (isOwner && !active) {
-            active = true;
-            var id = $(this).attr('id');
-            var text = $(this).text();
 
-            originalValues[id] = text;
-            $(this).replaceWith(function() {
-                var textarea = $('<textarea>', { id: id === 'text-p-bob' ? 'text-area-bob' : id, value: text });
-                textarea.addClass(id + '-textarea');
-                return textarea;
-            });
-            $('#doneiscool').show(); 
-        }
+    $(document).on('dblclick', '#first-text-p, #second-text-p, #text-p-bob, #text-area-bob', function() {
+            if (userStatus.isOwner && !isActive) {
+                isActive = true;
+                var id = $(this).attr('id');
+                var text = $(this).text();
+
+                originalValues[id] = text;
+                $(this).replaceWith(function() {
+                    var newId = id === 'text-p-bob' ? 'text-area-bob' : id; 
+                    var textarea = $('<textarea>', { id: newId, text: text }); 
+                    textarea.addClass(newId + '-textarea');
+                    return textarea;
+                });
+                $('#doneiscool').show();
+            }
     });
 
+
     $('#first-href-p').click(function() {
-        if (isOwner) {
-            active = true;
+        if (userStatus.isOwner) {
+            isActive = true;
             $('#doneiscool').show(); 
             addLinkInput();
 
@@ -1345,169 +1401,129 @@ $(document).ready(function() {
         var linkInput = $('<input>', { type: 'text', class: 'link-input', placeholder: 'Enter link URL' });
         $('#link-con').append(linkInput);
     }
-    
 
-    $('#doneiscool').click(function() {
-        if (isOwner && active) {
-            active = false;
-            var originalValues = {
-                'first-text-p': $('#first-text-p').text(),
-                'second-text-p': $('#second-text-p').text(),
-                'text-p-bob': $('#text-p-bob').text()
-            };
+        $('#joinusordie').click(function() {
+            var communityID = <?php echo $comeget; ?>; 
+            var username = '<?php echo $_SESSION['username'];?>';
 
-            var updateFields = {
-                'name': $('#first-text-p').val(),
-                'tagline': $('#second-text-p').val(), 
-                'description': $('#text-area-bob').val(),
-                'links': getLinkUrls().join(', ') 
-            };
-
-            console.log('JSON Object:', {
-                community_id: <?php echo $comeget; ?>,
-                username: '<?php echo $_SESSION['username'];?>', 
-                updateFields: updateFields
-            });
+            console.log('Community ID:', communityID);
+            console.log('Username:', username);
 
             $.ajax({
-                url: '<?php echo $siteurl; ?>/apiv1/update_community.php',
+                url: '<?php echo $siteurl; ?>/apiv1/join_community_api.php',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    community_id: <?php echo $comeget; ?>,
-                    username: '<?php echo $_SESSION['username'];?>', 
-                    updateFields: updateFields
+                    community_id: communityID,
+                    username: username
                 }),
                 success: function(response) {
-                    if (response.success) {
-                        $('#first-text-p').replaceWith($('<h3>', { id: 'first-text-p', text: originalValues['first-text-p'] }));
-                        $('#second-text-p').replaceWith($('<p>', { id: 'second-text-p', text: originalValues['second-text-p'] }));
-                        $('#text-p-bob').replaceWith($('<p>', { id: 'text-p-bob', text: originalValues['text-p-bob'] }));
+                    if (response.status === 'success') {
                         smoothReload(500);
-                        active = false;
                     } else {
-                        console.log('Failed to update community information.');
+                        console.log('Failed to join the community.');
+                        alert('failed to join');
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log('Error occurred while updating community information: ' + error);
+                    console.log('Error occurred while joining the community: ' + error);
                 }
             });
-        }
-    });
+        });
 
-    function getLinkUrls() {
-        linkUrls = []; 
-        $('.link-input').each(function() {
-            var url = $(this).val().trim();
-            if (url !== '') {
-                linkUrls.push(url);
+        $('#youaredead').click(function() {
+            var communityID = <?php echo $comeget; ?>; 
+            var username = '<?php echo $_SESSION['username'];?>';
+
+            console.log('Community ID:', communityID);
+            console.log('Username:', username);
+
+            $.ajax({
+                url: '<?php echo $siteurl; ?>/apiv1/leave_community_api.php',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    community_id: communityID,
+                    username: username
+                }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        smoothReload(500);
+                    } else {
+                        console.log('Failed to leaving the community.');
+                        alert('failed to leave');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error occurred while leaving the community: ' + error);
+                }
+            });
+        });
+
+    
+        $('#doneiscool').click(function() {
+            if (userStatus.isOwner && isActive) {
+                isActive = false;
+                var originalValues = {
+                    'first-text-p': $('#first-text-p').text(),
+                    'second-text-p': $('#second-text-p').text(),
+                    'text-p-bob': $('#text-p-bob').text()
+                };
+
+                var updateFields = {
+                    'name': $('#first-text-p').val(),
+                    'tagline': $('#second-text-p').val(),
+                    'description': $('#text-area-bob').val(),
+                    'links': getLinkUrls().join(', ')
+                };
+
+                console.log('JSON Object:', {
+                    community_id: <?php echo $comeget; ?>,
+                    username: '<?php echo $_SESSION['username'];?>',
+                    updateFields: updateFields
+                });
+
+                $.ajax({
+                    url: '<?php echo $siteurl; ?>/apiv1/update_community.php',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        community_id: <?php echo $comeget; ?>,
+                        username: '<?php echo $_SESSION['username'];?>',
+                        updateFields: updateFields
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            $('#first-text-p').replaceWith($('<h3>', { id: 'first-text-p', text: originalValues['first-text-p'] }));
+                            $('#second-text-p').replaceWith($('<p>', { id: 'second-text-p', text: originalValues['second-text-p'] }));
+                            $('#text-p-bob').replaceWith($('<p>', { id: 'text-p-bob', text: originalValues['text-p-bob'] }));
+                            smoothReload(500);
+                            isActive = false;
+                        } else {
+                            console.log('Failed to update community information.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error occurred while updating community information: ' + error);
+                    }
+                });
             }
         });
-        return linkUrls;
-    }
-
-});
-</script>
-
-<script>
-$(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar');
-    let sidebarOpen = false;
-
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-});
-
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
 
 
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-</script>
-
-<script>
-$(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar-1');
-    let sidebarOpen = false;
-
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-});
-
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-
-
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-
-</script>
-
-<script>
-    $(document).ready(function() {
-        $(".dropdown-toggle").click(function(e) {
-            e.preventDefault(); 
-            var $dropdownMenu = $(this).next(".dropdown-menu");
-            $dropdownMenu.toggleClass("show");
-        });
-
-        $(document).click(function(e) {
-            if (!$(e.target).closest(".dropdown-toggle").length && $(".dropdown-menu").hasClass("show")) {
-                $(".dropdown-menu").removeClass("show");
+        function getLinkUrls() {
+                linkUrls = []; 
+                $('.link-input').each(function() {
+                    var url = $(this).val().trim();
+                    if (url !== '') {
+                        linkUrls.push(url);
+                    }
+                });
+                return linkUrls;
             }
-        });
-    });
-</script>
 
-<script>
+        });
+
 $(document).ready(function() {
     $('#al1').on('input', function() {
         var linkInput = $(this).val().trim();
@@ -1517,9 +1533,7 @@ $(document).ready(function() {
         }
     });
 });
-</script>
 
-<script>
 $(document).ready(function() {
     var selectedFileOther;
 
@@ -1581,6 +1595,8 @@ $(document).ready(function() {
         }, delay);
     }
 </script>
+
+<script src="assets/js/sidebar.js"></script>
 
 </body>
 </html>

@@ -118,127 +118,139 @@ if(isset($_GET['trump'])) {
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
 <script>
+$(".create-community").hide();
 
-    $(".create-community").hide();
-
-    function smoothReload(delay) {
+function smoothReload(delay) {
     $("body").fadeOut(delay, function() {
         history.replaceState({}, document.title, window.location.pathname);
         location.reload();
-        });
+    });
+}
+
+$("#menshallonlycryonthe5thofjune").click(function() {
+    $(".create-community").hide();
+});
+
+$("#bobisshit").click(function() {
+    $(".create-community").show();
+});
+
+$('#loogleshutdownjune4th').click(function() {
+
+    var communityName = $('#ci1').val();
+
+    if (communityName === '') {
+        alert('Please enter a community name.');
+        return;
     }
-    
-    $("#menshallonlycryonthe5thofjune").click(function() {
-        $(".create-community").hide();
-    });
 
-    $("#bobisshit").click(function() {
-        $(".create-community").show();
-    });
-
-    $('#loogleshutdownjune4th').click(function() {
-        
-        var communityName = $('#ci1').val(); 
-
-        if (communityName === '') {
-            alert('Please enter a community name.');
-            return;
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: '<?php echo $siteurl?>/apiv1/create_community.php',
-            data: {
-                name: communityName,
-                creator_username: '<?php echo $_SESSION["username"]; ?>' 
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    $(".create-community").hide();
-                    smoothReload(500);  
-                    smoothRel
-                } else {
-                    $(".create-community").hide();
-                    smoothReload(500);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('Error: ' + error);
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo $siteurl?>/apiv1/create_community.php',
+        data: {
+            name: communityName,
+            creator_username: '<?php echo $_SESSION["username"]; ?>'
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                $(".create-community").hide();
+                smoothReload(500);
+                smoothRel
+            } else {
+                $(".create-community").hide();
+                smoothReload(500);
             }
+        },
+        error: function(xhr, status, error) {
+            alert('Error: ' + error);
+        }
+    });
+});
+
+
+$.ajax({
+    url: '<?php echo $siteurl ?>/apiv1/fetch_all_coms.php?username=<?php echo $_SESSION["username"];?>',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+        var container = $('#whatwein');
+
+        $.each(data, function(index, community) {
+            var card = $('<div class="card"></div>');
+
+            var image = $('<img class="card-img" src="<?php echo $siteurl ?>/apiv1/fetch_cover_api.php?cover=' + community.community_id + '" style="width: 30%;">');
+
+            card.append(image);
+
+            var name = $('<div class="card-name">' + community.name + '</div>');
+            card.append(name);
+
+            var membersArray = community.members_list.split(':');
+            var membersCount = membersArray.length - 1;
+            var members = $('<div class="card-members">' + membersCount + ' members</div>');
+            card.append(members);
+
+            card.on('click', function() {
+                window.location.href = '<?php echo $siteurl ?>/view_community.php?community_id=' + community.community_id;
+            });
+
+
+            container.append(card);
         });
-    });
+    },
+    error: function(xhr, status, error) {
+        console.error('Error fetching community data: ' + error);
+    }
+});
+
+$.ajax({
+    url: '<?php echo $siteurl ?>/apiv1/fetch_all_coms.php',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+        var container = $('#emerwhatthesigma');
+
+        $.each(data, function(index, community) {
+            var card = $('<div class="card-other"></div>');
+
+            var image = $('<img style="100%" class="card-img-other" src="<?php echo $siteurl ?>/apiv1/fetch_cover_api.php?cover=' + community.community_id + '" style="width: 50%;">');
+
+            card.append(image);
+
+            var name = $('<div class="card-name-other">' + community.name + '</div>');
+            card.append(name);
+
+            var membersArray = community.members_list.split(':');
+            var membersCount = membersArray.length - 1;
+            var membersText = membersCount === 1 ? ' member' : (membersCount > 1 ? ' members' : '0 members');
+
+            var postsText = community.total_posts === '1' ? ' post' : ' posts';
+
+            var space = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            var members = $('<div class="card-members-other">' + membersCount + membersText + space + community.total_posts + postsText + '</div>');
+
+            card.append(members);
+
+            var image1 = $('<img style="100%" class="card-img-two" src="<?php echo $siteurl ?>/apiv1/fetch_cover_api.php?cover=' + community.community_id + '" style="width: 50%;">');
+            card.append(image1);
 
 
-    $.ajax({
-        url: '<?php echo $siteurl ?>/apiv1/fetch_all_coms.php?username=<?php echo $_SESSION["username"];?>',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            var container = $('#whatwein');
-
-            $.each(data, function(index, community) {
-                var card = $('<div class="card"></div>');
-
-                var image = $('<img class="card-img" src="<?php echo $siteurl ?>/apiv1/fetch_cover_api.php?cover=' + community.community_id + '" style="width: 50%;">');
-
-                card.append(image);
- 
-                var name = $('<div class="card-name">' + community.name + '</div>');
-                card.append(name);
-
-                var membersArray = community.members_list.split(':');
-                var membersCount = membersArray.length - 1; 
-                var members = $('<div class="card-members">Members: ' + membersCount + '</div>');
-                card.append(members);
-
-                container.append(card);
+            card.on('click', function() {
+                window.location.href = '<?php echo $siteurl ?>/view_community.php?community_id=' + community.community_id;
             });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching community data: ' + error);
-        }
-    });
-
-    $.ajax({
-        url: '<?php echo $siteurl ?>/apiv1/fetch_all_coms.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            var container = $('#emerwhatthesigma');
-
-            $.each(data, function(index, community) {
-                var card = $('<div class="card-other"></div>');
-
-                var image = $('<img style="100%" class="card-img-other" src="<?php echo $siteurl ?>/apiv1/fetch_cover_api.php?cover=' + community.community_id + '" style="width: 50%;">');
-
-                card.append(image);
- 
-                var name = $('<div class="card-name-other">' + community.name + '</div>');
-                card.append(name);
-
-                var membersArray = community.members_list.split(':');
-                var membersCount = membersArray.length - 1; 
-                var members = $('<div class="card-members-other">Members: ' + membersCount + '  Posts: ' + community.total_posts + '</div>');
-                card.append(members);
-
-                var image1 = $('<img style="100%" class="card-img-two" src="<?php echo $siteurl ?>/apiv1/fetch_cover_api.php?cover=' + community.community_id + '" style="width: 50%;">');
-                card.append(image1);
-
-                container.append(card);
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching community data: ' + error);
-        }
-    });
 
 
-</script>
+            container.append(card);
+        });
+    },
+    error: function(xhr, status, error) {
+        console.error('Error fetching community data: ' + error);
+    }
+});
 
-<script>
 $(document).ready(function() {
-    const sidebar = $('.sidebar'); 
-    const openSidebarButton = $('.com-c-icon'); 
+    const sidebar = $('.sidebar');
+    const openSidebarButton = $('.com-c-icon');
     let sidebarOpen = false;
 
     openSidebarButton.on('click', function() {
@@ -259,6 +271,4 @@ $(document).ready(function() {
         }
     });
 });
-
-
 </script>

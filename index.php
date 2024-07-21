@@ -16,6 +16,26 @@ if(isset($_GET['trump'])) {
 }
 ?>
 
+<style>
+.white-color {
+    color: white !important;
+}
+
+#bob-loadmore {
+  font-size: 18px;
+} 
+
+.comment-input {
+    padding-top: 3px;
+}
+
+textarea {
+    padding-top: 3px;
+}
+
+</style>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +43,7 @@ if(isset($_GET['trump'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
- 
+
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
     <title>Loogle+</title>
@@ -41,8 +61,6 @@ if(isset($_GET['trump'])) {
 
 <?php require_once("inc/topstuffs.php")?>
 
-
-
 <div class="banner">
     <!-- LOADED IN A SUCH   -->
 </div>
@@ -55,9 +73,19 @@ if(isset($_GET['trump'])) {
     <div class="container" id="posts-container">
 
     </div>
+
+    <div id="bob-loadmore">
+      <p id="loadmore" style="color: #black;cursor: pointer;text-align: center;">Load More</p>
+    </div>
+
 </div>
 
 <script>
+
+const urlParams = new URLSearchParams(window.location.search);
+
+let limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) ? parseInt(urlParams.get('postlimit')) : 20;
+
 $(document).ready(function () {
     var mainHeader = $(".main-header");
     var subHeader = $(".sub-header");
@@ -86,14 +114,20 @@ $(document).ready(function () {
 </script>
 
 <script>
+
 function formatTime(timestamp) {
     const date = new Date(timestamp);
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
     return date.toLocaleString('en-US', options);
 }
 
-    function fetchPosts() {
-    fetch('<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php')
+function increasePostLimit() {
+    limit += 10; 
+    fetchPosts();
+}
+
+function fetchPosts() {
+fetch('<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php')
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
@@ -146,7 +180,6 @@ postCreate.innerHTML = `
 </div>
 
     <div class="level-2">
-
     <div class="attach-photos-row">
             <div class="attach">
                 Attach:
@@ -178,13 +211,10 @@ postCreate.innerHTML = `
 
         <input type="file" id="fileUploadInput" accept="image/*" style="display: none">
         <button class="upload-button" id="openFileDialog">Upload from computer</button>
-        
-
     </div>
-    
 
     <div class="add-link" style="display: none;">
-    
+
     <p id="pthingy1">
     Add Link:
     </p>
@@ -194,16 +224,14 @@ postCreate.innerHTML = `
 
     </div>
 
-
     <div class="add-video" style="display: none;">
-    
+
     <p id="pthingy1">
     Add Video:
     </p>
 
-     <textarea class="add-link1" id="al2" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold;
+     <textarea class="add-link1" id="al2" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); 
     font-size: 14px;" placeholder="Insert your youtube video here, it must be a standerd youtube url or it wont send."></textarea>
-
     </div>
 
     </div>
@@ -214,7 +242,7 @@ postCreate.innerHTML = `
             <br>
             <span style="color: black; font-weight: bold;">Text</span>
         </div>
-        
+
         <div class="iconstuff">
             <div class="image-photo"></div>
             <br>
@@ -240,7 +268,6 @@ function getQueryParameter(name) {
     return urlParams.has(name);
 }
 
-
 function getQueryParameter(name) {
 const urlParams = new URLSearchParams(window.location.search);
 return urlParams.has(name);
@@ -253,12 +280,11 @@ return urlParams.get(name);
 
  if (getQueryParameter('linkopen') || getQueryParameter('write_post_link_open')) {
         console.log('Link open query parameter is present');
-   
+
         const urlParam = getQueryParameterValue('url');
     if (urlParam) {
         $('#al1').val(urlParam);
     }
-
 
         if (!postCreateMoved) {
         const $postCreate = $('.post-create'); 
@@ -281,7 +307,6 @@ return urlParams.get(name);
 
         const destination = $writePostDiv.position();
 
-
         $postCreate.animate({
             left: destination.left,
             top: destination.top,
@@ -291,7 +316,6 @@ return urlParams.get(name);
             $writePostDiv.append($postCreate);
 
             $addLinktext.show();
-
 
             $postCreate.css({
                 background: '#f6f6f6',
@@ -309,10 +333,18 @@ return urlParams.get(name);
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
 
             $writePostDiv.show();
             $level4.show();
+        });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
         });
 
         $('#postTextArea').css({
@@ -338,21 +370,17 @@ return urlParams.get(name);
            height: '350px'
          });
 
-         
-
         $level4.css({
         top: '80px'
          });
        });
 
-       
     }
  }
 
-
  if (getQueryParameter('videoopen') || getQueryParameter('write_post_video_open')) {
         console.log('Link open query parameter is present');
-   
+
         const urlParam = getQueryParameterValue('url');
     if (urlParam) {
         $('#al2').val(urlParam);
@@ -380,7 +408,6 @@ return urlParams.get(name);
 
         const destination = $writePostDiv.position();
 
-
         $postCreate.animate({
             left: destination.left,
             top: destination.top,
@@ -390,7 +417,6 @@ return urlParams.get(name);
             $writePostDiv.append($postCreate);
 
             $addVideotext.show();
-
 
             $postCreate.css({
                 background: '#f6f6f6',
@@ -408,10 +434,18 @@ return urlParams.get(name);
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
 
             $writePostDiv.show();
             $level4.show();
+        });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
         });
 
         $('#postTextArea').css({
@@ -437,14 +471,11 @@ return urlParams.get(name);
            height: '350px'
          });
 
-         
-
         $level4.css({
         top: '80px'
          });
        });
 
-       
     }
  }
 
@@ -497,7 +528,6 @@ $('#postTextArea').click(function () {
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
 
             $writePostDiv.show();
             $level4.show();
@@ -508,6 +538,16 @@ $('#postTextArea').click(function () {
             left: '22%',
             position: 'relative',
             border: '1px solid rgba(10, 10, 10, 0.1)',
+            zIndex: '2',
+        });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
         });
 
         $level4.css({
@@ -521,25 +561,20 @@ $('#postTextArea').click(function () {
 
         postCreateMoved = true;
 
-        // THIS IS THE WRITE POST LINK NOT PHOTO, NCP - THE DUMB NUTS
-
         $writePostLinkIcon.click(function () {
-
 
             $('.attach-photos-row').hide();
 
         $addLinktext.show();
-  
 
             $postCreate.css({
                         height: '350px'
                     });
 
-
             $level4.css({
                         top: '80px'
             });
-            
+
         })
 
         $writePostVideoIcon.click(function () {
@@ -547,8 +582,6 @@ $('#postTextArea').click(function () {
             $attachRow.hide();
 
         $addVideotext.show();
-
- 
 
         $postCreate.css({
             height: '350px'
@@ -606,7 +639,7 @@ $('#postTextArea').click(function () {
                 }
             });
         });
-        
+
     }
 });
 
@@ -664,14 +697,12 @@ const postContent = $('#postTextArea').val();
 const postLink = $('#al1').val(); 
 const postVideo = $('#al2').val(); 
 
-
 const username = '<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : ""; ?>';
 
 if (!postContent && $('#fileUploadInput')[0].files.length === 0 && !postLink && !postVideo) {
 console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 return;
 }
-
 
 const formData = new FormData();
 formData.append('username', username);
@@ -681,7 +712,6 @@ if (postLink) {
     formData.append('post_link_url', postLink);
 }
 
-
 if (postVideo) { 
     formData.append('post_link', postVideo);
 }
@@ -689,47 +719,50 @@ if (postVideo) {
 if ($('#fileUploadInput')[0].files.length > 0) {
     formData.append('postImage', $('#fileUploadInput')[0].files[0]);
 }
-
 $.ajax({
-    type: 'POST',
-    url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
-    data: formData,
-    processData: false,
-    contentType: false,
-    dataType: 'json',
-    success: function (response) {
-        smoothReload(500);
+type: 'POST',
+url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
+data: formData,
+processData: false,
+contentType: false,
+dataType: 'json',
+success: function(response) {
+smoothReload(500);
 
-        if (response.status === 'success') {
-            console.log(response.message);
-        } else {
-          
-            console.log(response.message);
-        }
-    },
-    error: function (error) {
-  
-        console.log('Error:', error);
-    }
+if (response.status === 'success') {
+    console.log(response.message);
+} else {
+
+    console.log(response.message);
+}
+},
+error: function(error) {
+
+console.log('Error:', error);
+}
 });
-    }); 
+});
 });
 
 const apiEndpoint = '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=';
 
 let currentColumnIndex = 0;
 
-for (let i = 0; i < data.length; i++) {
+const loadMoreText = $('#load-more');
+
+$(document).on('click', '#loadmore', function() {
+    increasePostLimit();
+});
+
+for (let i = 0; i < Math.min(limit, data.length); i++) {
     const post = data[i];
-    
+
     const postElement = document.createElement('div');
     postElement.className = 'post';
     const formattedTime = formatTime(post.created_at);
 
     const plusOneUsernamesString = post.plus_one_usernames || '';
     const isLikedByCurrentUser = plusOneUsernamesString.includes('<?php echo $_SESSION["username"];?>');
-    
-
 
     postElement.innerHTML = `
     <div class="post-main">  
@@ -755,7 +788,7 @@ for (let i = 0; i < data.length; i++) {
 
             <div class="link-preview">
             </div>
-         
+
             <div class="youtube-emded">
             </div>
 
@@ -764,107 +797,112 @@ for (let i = 0; i < data.length; i++) {
     </div>
 
     </div>
-    
+
   `;
 
-if (post.post_link && post.post_link.includes("youtube.com/embed")) {
-const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
-$(postElement).find('.youtube-emded').html(iframeHTML);
+    if (post.post_link && post.post_link.includes("youtube.com/embed")) {
+        const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
+        $(postElement).find('.youtube-emded').html(iframeHTML);
 
-const protocol = window.location.protocol;
-if (protocol === 'https:' && !post.post_link.startsWith('https:')) {
-    post.post_link = post.post_link.replace(/^http:/, 'https:');
-}
-
-$(postElement).find('.youtube-emded iframe').attr('src', post.post_link);
-}
-
-if (post.post_link_url) {
-    $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(post.post_link_url) + '&format=json', function(metadata) {
-        const linkPreviewContainer = $('<div>', { class: 'link-preview' });
-        const faviconContainer = $('<div>', { class: 'favicon-container' });
-        const faviconImg = $('<img>', { 
-            src: metadata.image, 
-            alt: 'Favicon', 
-            class: 'favicon-img'
-        });
-        faviconContainer.append(faviconImg);
-        const contentContainer = $('<div>', { class: 'content-container' });
-        const title = $('<h2>');
-        const titleLink = $('<a>', { 
-            href: post.post_link_url, 
-            text: metadata.title, 
-            target: '_blank' 
-        });
-        title.append(titleLink);
-        const linkText = $('<p>', { 
-            text: post.post_link_url,
-            class: 'link-text' 
-        });
-        contentContainer.append(title, linkText);
-        linkPreviewContainer.append(faviconContainer, contentContainer);
-        $(postElement).find('.link-preview').append(linkPreviewContainer);
-        const containerWidth = linkPreviewContainer.width();
-        const faviconWidth = containerWidth * 0.3;
-        const contentWidth = containerWidth * 0.8; 
-        faviconContainer.width(faviconWidth);
-        contentContainer.width(contentWidth);
-        const maxFaviconHeight = 50;
-        const maxFaviconWidth = containerWidth * 0.3; 
-        faviconImg.css({
-            'max-width': maxFaviconWidth + 'px',
-        });
-        if (contentContainer.height() > 200) {
-            contentContainer.css('height', '200px');
-            contentContainer.css('overflow', 'hidden');
+        const protocol = window.location.protocol;
+        if (protocol === 'https:' && !post.post_link.startsWith('https:')) {
+            post.post_link = post.post_link.replace(/^http:/, 'https:');
         }
-    })
-    .fail(function(jqxhr, textStatus, error) {
-        const err = textStatus + ", " + error;
-        console.log("Request Failed: " + err);
-    });
-}
 
-
-postElement.dataset.postId = post.id;
-postElement.dataset.plusOne = post.plus_one;
-postElement.dataset.isLikedByCurrentUser = isLikedByCurrentUser;
-
-columns[currentColumnIndex].appendChild(postElement);
-
-const commentArea = document.createElement('div');
-commentArea.className = 'comment-main';
-
-const hideShowCommentsLink = document.createElement('a');
-
-hideShowCommentsLink.addEventListener('click', function (e) {
-    e.preventDefault();
-    const comments = commentArea.querySelector('.comments');
-    if (comments.style.display === 'none') {
-        comments.style.display = 'block';
-
-    } else {
-        comments.style.display = 'none';
-
+        $(postElement).find('.youtube-emded iframe').attr('src', post.post_link);
     }
-});
 
-commentArea.appendChild(hideShowCommentsLink);
+    if (post.post_link_url) {
+        $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(post.post_link_url) + '&format=json', function(metadata) {
+                const linkPreviewContainer = $('<div>', {
+                    class: 'link-preview'
+                });
+                const faviconContainer = $('<div>', {
+                    class: 'favicon-container'
+                });
+                const faviconImg = $('<img>', {
+                    src: metadata.image,
+                    alt: 'Favicon',
+                    class: 'favicon-img'
+                });
+                faviconContainer.append(faviconImg);
+                const contentContainer = $('<div>', {
+                    class: 'content-container'
+                });
+                const title = $('<h2>');
+                const titleLink = $('<a>', {
+                    href: post.post_link_url,
+                    text: metadata.title,
+                    target: '_blank'
+                });
+                title.append(titleLink);
+                const linkText = $('<p>', {
+                    text: post.post_link_url,
+                    class: 'link-text'
+                });
+                contentContainer.append(title, linkText);
+                linkPreviewContainer.append(faviconContainer, contentContainer);
+                $(postElement).find('.link-preview').append(linkPreviewContainer);
+                const containerWidth = linkPreviewContainer.width();
+                const faviconWidth = containerWidth * 0.3;
+                const contentWidth = containerWidth * 0.8;
+                faviconContainer.width(faviconWidth);
+                contentContainer.width(contentWidth);
+                const maxFaviconHeight = 50;
+                const maxFaviconWidth = containerWidth * 0.3;
+                faviconImg.css({
+                    'max-width': maxFaviconWidth + 'px',
+                });
+                if (contentContainer.height() > 200) {
+                    contentContainer.css('height', '200px');
+                    contentContainer.css('overflow', 'hidden');
+                }
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                const err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+            });
+    }
 
-postElement.appendChild(commentArea);
+    postElement.dataset.postId = post.id;
+    postElement.dataset.plusOne = post.plus_one;
+    postElement.dataset.isLikedByCurrentUser = isLikedByCurrentUser;
 
-$.ajax({
-    url: apiEndpoint + post.id,
-    dataType: 'json',
-    success: function (commentsData) {
-        if (commentsData.status === 'success') {
+    columns[currentColumnIndex].appendChild(postElement);
 
-            $.each(commentsData.comments, function (index, comment) {
-                const commentElement = document.createElement('div');
+    const commentArea = document.createElement('div');
+    commentArea.className = 'comment-main';
 
-                commentElement.className = 'comment';
-                
-                commentElement.innerHTML = `
+    const hideShowCommentsLink = document.createElement('a');
+
+    hideShowCommentsLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const comments = commentArea.querySelector('.comments');
+        if (comments.style.display === 'none') {
+            comments.style.display = 'block';
+
+        } else {
+            comments.style.display = 'none';
+
+        }
+    });
+
+    commentArea.appendChild(hideShowCommentsLink);
+
+    postElement.appendChild(commentArea);
+
+    $.ajax({
+        url: apiEndpoint + post.id,
+        dataType: 'json',
+        success: function(commentsData) {
+            if (commentsData.status === 'success') {
+
+                $.each(commentsData.comments, function(index, comment) {
+                    const commentElement = document.createElement('div');
+
+                    commentElement.className = 'comment';
+
+                    commentElement.innerHTML = `
                 <div class="hacky-fix">
                  <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${comment.username}" class="comment-picture">
                  <div class="agony">
@@ -877,231 +915,232 @@ $.ajax({
                 </div> 
                 `;
 
-                commentArea.appendChild(commentElement);
-            });
-        } else {
+                    commentArea.appendChild(commentElement);
+                });
+            } else {
 
-            console.log('No comments found for the post with ID ' + post.id);
-        }
-    },
-    error: function (error) {
-
-        console.log('Error:', error);
-    }
-});
-
-$(document).ready(function() {
-
-     $('.comment-main').each(function() {
-
-    
-     if ($(this).next('.comment-input-container').length === 0) {
-        
-        const postElement = $(this).closest('.post'); 
-        const postID = postElement.data('post-id'); 
-        const plusOneIs = postElement.data('plus-one');
-        const isLikedByCurrentUser = Boolean(postElement.data('is-liked-by-current-user'));
-
-
-        console.log(postID);
-
-        const commentInputContainer = $('<div>').addClass('comment-input-container');
-            commentInputContainer.css({
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            height: '50px', 
-            position: 'relative' 
-        });
-
-
-
-        const plusOneContainer = $('<div>').addClass('plus-one-container');
-            plusOneContainer.css({
-            position: 'absolute',
-            top: '5px',
-            right: '5px' 
-        });
-
-        const plusOneIcon = $('<div>').addClass('plus-one-icon').attr('id', isLikedByCurrentUser ? 'liked-icon' : '');
-        const plusOneSpan = $('<span>').attr('id', 'georgewallace').text(`+${plusOneIs}`);
-
-        plusOneIcon.append(plusOneSpan);
-        plusOneContainer.append(plusOneIcon);
-
-        $(plusOneContainer).find('.plus-one-icon').click(function() {
-           var username = '<?php echo $_SESSION["username"];?>';
-
-           $.ajax({
-           url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
-           type: 'POST',
-           data: { add_plus_one: true, id: postID, username: username },
-           success: function(response) {
-            console.log(response);
-            location.reload(); 
-           },
-            error: function(xhr, status, error) {
-            console.error(xhr.responseText);
+                console.log('No comments found for the post with ID ' + post.id);
             }
-        });
-            });
-
-
-        const commentInput = $('<textarea>').attr({
-            type: 'text',
-            id: 'comment-input-' + postID, 
-            placeholder: 'Add a comment...'
-        }).addClass('comment-input');
-        commentInputContainer.append(commentInput);
-        commentInputContainer.append(plusOneContainer);
-     
-
-        commentInput.css('height', '30px');
-        commentInput.css('width', '275px');
-        commentInput.css('background', '#fff');
-        commentInput.css('border', '1px solid #ccc');
-        commentInput.css('resize', 'none');
-
-        const buttonContainer = $('<div>');
-
-        const submitButton = $('<button>').text('Submit').addClass('submit-button').css('display', 'none');
-
-        const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
-
-        buttonContainer.append(submitButton, cancelButton);
-
-        commentInputContainer.append(buttonContainer);
-
-        $(this).after(commentInputContainer);
-
-        commentInput.on('click', function() {
-
-            submitButton.css('display', 'inline-block');
-            cancelButton.css('display', 'inline-block');
-
-            $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
-
-
-
-            commentInput.css('height', '60px');
-            commentInput.css('width', '425px');
-
-            commentInput.css('text-indent', '2ch');
-
-            commentInput.css('background', '#fff');
-            commentInput.css('border', '1px solid #ccc');
-
-            commentInput.css('background', '#fff');
-            commentInput.css('padding', '0px');
-
-            commentInput.css('resize', 'none');
-
-            commentInput.css('overflowY', 'auto')
-
-            commentInput.css('left', '0%')
-
-            commentInputContainer.css('background', '#f6f6f6');
-
-            commentInputContainer.css('height', '125px');
-        });
-
-        submitButton.on('click', function() {
-
-            const commentContent = $(this).closest('.comment-input-container').find('.comment-input').val();
-            console.log(commentContent);
-            const postID = $(this).closest('.post').data('postId');
-            const username = '<?php echo $_SESSION["username"]; ?>'; 
-
-            console.log("Data sent in AJAX request:", {
-            commentContent: commentContent,
-            postID: postID,
-            username: username
-        });
-
-
-
-       $.ajax({
-            
-        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
-        type: 'POST',
-        dataType: 'json',
-          data: {
-            commentContent: commentContent,
-            postID: postID,
-            username: username
-         },
-
-         success: function(response) {
-            console.log(response);
-                
         },
-         error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            }
-        });
-        });
+        error: function(error) {
 
-    cancelButton.on('click', function() {
-
-    submitButton.css('display', 'none');
-    cancelButton.css('display', 'none');
-
-    commentInputContainer.css('background-color', '#fff');
-    $('.plus-one-icon').show();
-
-
-   commentInput.css({
-      height: '30px',
-      width: '275px',
-      left: '17%'
-    });
-
-    commentInputContainer.css('height', '50px');
-
-      commentInput.css({
-      background: '#fff',
-      border: '1px solid #ccc'
-
-    });
-
-    commentInput.trigger('blur');
-    });
+            console.log('Error:', error);
         }
     });
+
+    $(document).ready(function() {
+
+        $('.comment-main').each(function() {
+
+            if ($(this).next('.comment-input-container').length === 0) {
+
+                const postElement = $(this).closest('.post');
+                const postID = postElement.data('post-id');
+                const plusOneIs = postElement.data('plus-one');
+                const isLikedByCurrentUser = Boolean(postElement.data('is-liked-by-current-user'));
+
+                console.log(postID);
+
+                const commentInputContainer = $('<div>').addClass('comment-input-container');
+                commentInputContainer.css({
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    height: '50px',
+                    position: 'relative',
+                    paddingTop: '3px'
+                });
+
+                const plusOneContainer = $('<div>').addClass('plus-one-container');
+                plusOneContainer.css({
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px'
+                });
+
+                const plusOneIcon = $('<div>').addClass('plus-one-icon').attr('id', isLikedByCurrentUser ? 'liked-icon' : '');
+
+                const plusOneSpan = $('<span>').attr('id', 'georgewallace').text(`+${plusOneIs}`);
+
+                plusOneIcon.append(plusOneSpan);
+                plusOneContainer.append(plusOneIcon);
+
+                $(plusOneContainer).find('.plus-one-icon').click(function() {
+                    var username = '<?php echo $_SESSION["username"];?>';
+
+                    $('#georgewallace').css('color', 'white');
+
+                    $.ajax({
+                        url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
+                        type: 'POST',
+                        data: {
+                            add_plus_one: true,
+                            id: postID,
+                            username: username
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            smoothReload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+
+                const commentInput = $('<textarea>').attr({
+                    type: 'text',
+                    id: 'comment-input-' + postID,
+                    placeholder: 'Add a comment...'
+                }).addClass('comment-input');
+                commentInputContainer.append(commentInput);
+                commentInputContainer.append(plusOneContainer);
+
+                commentInput.css('height', '30px');
+                commentInput.css('width', '275px');
+                commentInput.css('background', '#fff');
+                commentInput.css('border', '1px solid #ccc');
+                commentInput.css('resize', 'none');
+
+                const buttonContainer = $('<div>');
+
+                const submitButton = $('<button>').text('Submit').addClass('submit-button').css('display', 'none');
+
+                const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
+
+                buttonContainer.append(submitButton, cancelButton);
+
+                commentInputContainer.append(buttonContainer);
+
+                $(this).after(commentInputContainer);
+
+                commentInput.on('click', function() {
+
+                    submitButton.css('display', 'inline-block');
+                    cancelButton.css('display', 'inline-block');
+
+                    $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
+
+                    commentInput.css('height', '60px');
+                    commentInput.css('width', '425px');
+
+                    commentInput.css('text-indent', '2ch');
+
+                    commentInput.css('background', '#fff');
+                    commentInput.css('border', '1px solid #ccc');
+
+                    commentInput.css('background', '#fff');
+                    commentInput.css('padding', '0px');
+
+                    commentInput.css('resize', 'none');
+
+                    commentInput.css('overflowY', 'auto')
+
+                    commentInput.css('padding-top', '3px')
+
+                    commentInput.css('left', '0%')
+
+                    commentInputContainer.css('background', '#f6f6f6');
+
+                    commentInputContainer.css('height', '125px');
+                });
+
+                submitButton.on('click', function() {
+
+                    const commentContent = $(this).closest('.comment-input-container').find('.comment-input').val();
+                    console.log(commentContent);
+                    const postID = $(this).closest('.post').data('postId');
+                    const username = '<?php echo $_SESSION["username"]; ?>';
+
+                    console.log("Data sent in AJAX request:", {
+                        commentContent: commentContent,
+                        postID: postID,
+                        username: username
+                    });
+
+                    $.ajax({
+
+                        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            commentContent: commentContent,
+                            postID: postID,
+                            username: username
+                        },
+
+                        success: function(response) {
+                            console.log(response);
+                            smoothReload(500);
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                            smoothReload(250);
+                        }
+                    });
+                });
+
+                cancelButton.on('click', function() {
+
+                    submitButton.css('display', 'none');
+                    cancelButton.css('display', 'none');
+
+                    commentInputContainer.css('background-color', '#fff');
+                    $('.plus-one-icon').show();
+
+                    commentInput.css({
+                        height: '30px',
+                        width: '275px',
+                        left: '17%'
+                    });
+
+                    commentInputContainer.css('height', '50px');
+
+                    commentInput.css({
+                        background: '#fff',
+                        border: '1px solid #ccc'
+
+                    });
+
+                    commentInput.trigger('blur');
+                });
+            }
+        });
     });
 
     currentColumnIndex = (currentColumnIndex + 1) % numColumns;
-    }
+}
 
-    })
-    .catch(error => {
-        console.error('Error fetching posts:', error);
-    });
+})
+.catch(error => {
+    console.error('Error fetching posts:', error);
+});
 
-    $(document).on('click', function (event) {
-            if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoRealIcon) && !$(event.target).is($uploadButton) ) {
-                $("#fileDrop").hide();
-                $postCreate.css({
-                    height: '300px' 
-                });
-                $writePostLevel2.css({
-                    height: 'auto',
-                    display: 'block'
-                });
-                $photo.show();
-                $attach.show();
-                $addPhotostext.hide();
-                $uploadButton.hide();
-                $box.hide();
-                $level4.css({
-                    top: '90px'
-                });
-            }
+$(document).on('click', function(event) {
+    if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoRealIcon) && !$(event.target).is($uploadButton)) {
+        $("#fileDrop").hide();
+        $postCreate.css({
+            height: '300px'
+        });
+        $writePostLevel2.css({
+            height: 'auto',
+            display: 'block'
+        });
+        $photo.show();
+        $attach.show();
+        $addPhotostext.hide();
+        $uploadButton.hide();
+        $box.hide();
+        $level4.css({
+            top: '90px'
         });
     }
+});
+}
 
-$('#cancelButton').click(function () {
+$('#cancelButton').click(function() {
 
     smoothReload(1000);
 
@@ -1113,120 +1152,20 @@ fetchPosts();
 setInterval(fetchPosts, 600000);
 
 function smoothReload(delay) {
-$("body").fadeOut(delay, function() {
-    history.replaceState({}, document.title, window.location.pathname);
-    location.reload();
-});
+    $("body").fadeOut(delay, function() {
+        history.replaceState({}, document.title, window.location.pathname);
+        location.reload();
+    });
 }
 </script>
 
-<script>
-$(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar');
-    let sidebarOpen = false;
-
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-});
-
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
 
 
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-</script>
+<!-- Shit Made In July -->
 
-<script>
-$(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar-1');
-    let sidebarOpen = false;
-
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-});
-
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-
-
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-</script>
-
-<script>
-    $(document).ready(function() {
-        $(".dropdown-toggle").click(function(e) {
-            e.preventDefault(); 
-            var $dropdownMenu = $(this).next(".dropdown-menu");
-            $dropdownMenu.toggleClass("show");
-        });
-
-        $(document).click(function(e) {
-            if (!$(e.target).closest(".dropdown-toggle").length && $(".dropdown-menu").hasClass("show")) {
-                $(".dropdown-menu").removeClass("show");
-            }
-        });
-    });
-</script>
-
-<script>
-$(document).ready(function() {
-    $('#al1').on('input', function() {
-        var linkInput = $(this).val().trim();
-        if (!linkInput.startsWith('http://')) {
-            linkInput = 'http://' + linkInput;
-            $(this).val(linkInput);
-        }
-    });
-});
-</script>
+<script src="assets/js/sidebar.js"></script>
+<script src="assets/js/fixes.js"></script>
+<script src="assets/js/funshit.js"></script>
 
 </body>
 </html>

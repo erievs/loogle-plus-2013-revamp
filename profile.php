@@ -387,8 +387,7 @@ columns[0].appendChild(postCreate);
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
-
+      
             $writePostDiv.show();
             $level4.show();
         });
@@ -399,6 +398,16 @@ columns[0].appendChild(postCreate);
             position: 'relative',
             border: '1px solid rgba(10, 10, 10, 0.1)',
         });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
+        });
+
 
         $level4.css({
             top: '90px'
@@ -486,7 +495,7 @@ columns[0].appendChild(postCreate);
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
+         
 
             $writePostDiv.show();
             $level4.show();
@@ -498,6 +507,16 @@ columns[0].appendChild(postCreate);
             position: 'relative',
             border: '1px solid rgba(10, 10, 10, 0.1)',
         });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
+        });
+
 
         $level4.css({
             top: '90px'
@@ -575,10 +594,19 @@ $('#postTextArea').click(function () {
             });
 
             $('.post-create-icons').hide();
-            $('.triangle').hide();
+
 
             $writePostDiv.show();
             $level4.show();
+        });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
         });
 
         $('#postTextArea').css({
@@ -1419,87 +1447,6 @@ $(document).ready(function() {
 
 </script>
 
-
-<script>
-$(document).ready(function() {
-	const sidebar = $('.sidebar');
-	const openSidebarButton = $('#open-sidebar');
-	let sidebarOpen = false;
-
-	openSidebarButton.on('click', function() {
-		if (!sidebarOpen) {
-			sidebar.css('transform', 'translateX(0)');
-			sidebarOpen = true;
-		} else {
-			sidebar.css('transform', 'translateX(-100%)');
-			sidebarOpen = false;
-		}
-	});
-
-	$(document).on('click', function(event) {
-		if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-			sidebar.css('transform', 'translateX(-100%)');
-			sidebarOpen = false;
-		}
-	});
-});
-
-$(document).ready(function() {
-	$(document).keydown(function(e) {
-		if (e.key === "Escape") {
-			$(".sidebar").css("transform", "translateX(-100%)");
-		}
-	});
-
-
-	$(document).on("click dblclick", function(e) {
-		if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-			$(".sidebar").css("transform", "translateX(-100%)");
-		}
-	});
-});
-</script>
-
-<script>
-$(document).ready(function() {
-    const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar');
-    let sidebarOpen = false;
-
-    openSidebarButton.on('click', function() {
-        if (!sidebarOpen) {
-            sidebar.css('transform', 'translateX(0)');
-            sidebarOpen = true;
-        } else {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-
-    $(document).on('click', function(event) {
-        if (sidebarOpen && !$(event.target).closest('.sidebar').length && event.target !== openSidebarButton[0]) {
-            sidebar.css('transform', 'translateX(-100%)');
-            sidebarOpen = false;
-        }
-    });
-});
-
-$(document).ready(function() {
-    $(document).keydown(function(e) {
-        if (e.key === "Escape") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-
-
-    $(document).on("click dblclick", function(e) {
-        if (!$(e.target).closest(".sidebar").length || e.type === "dblclick") {
-            $(".sidebar").css("transform", "translateX(-100%)");
-        }
-    });
-});
-</script>
-
 <script>
 $('.change-photo-button').hide();
 
@@ -1511,6 +1458,8 @@ $('.pfp-picture').mouseleave(function() {
     $('.change-photo-button').hide();
 });
 </script>
+
+<script src="assets/js/sidebar.js"></script>
 
 </body>
 </html>
