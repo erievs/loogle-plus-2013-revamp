@@ -10,9 +10,9 @@
             </a>
             
             <ul class="dropdown-menu">
-                <li><a href="#">Placeholder</a></li>
-                <li><a href="#">Placeholder</a></li>
-                <li><a href="#">Placeholder</a></li>
+                <li><a href="#">janovski_cz stop whining</a></li>
+                <li><a href="#">Regean</a></li>
+                <li><a href="#">Geroge W. Bush</a></li>
             </ul>
         </li>
         <?php } elseif ($icon == 'profile') { ?>

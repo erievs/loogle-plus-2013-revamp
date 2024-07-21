@@ -14,8 +14,6 @@ if (strpos($current_url, 'whats_hot.php') !== false) {
     $icon = "photos";
 }
 
-$profileget = htmlspecialchars($_GET['profile']);
-$photoget = htmlspecialchars($_GET['username']);
 
 ?>
 
@@ -221,8 +219,9 @@ function fetchMentions() {
 		  <a class="sidebar-list" href="/">
 		   <div class="home-icon-side"></div>
 		   <p><?php 
+
 	if ($icon == "profile") {
-		echo 'Profile';
+		echo 'Home';
 	}
 	
 	if ($icon == "whats_hot") {
