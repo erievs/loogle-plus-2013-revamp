@@ -139,6 +139,12 @@ body {
 	font-weight: bold;
 	color: #000;
 }
+
+.username-comments {
+	font-weight: bold;
+	color: #000;
+}
+
 .post-meta {
 	color: #808080;
 }
