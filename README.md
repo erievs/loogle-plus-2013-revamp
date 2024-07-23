@@ -1,11 +1,5 @@
 
-WARNING:
-
-This build is a few days out of date, do not worry it will be up to date very soon
-just need to fix a few things and such, so please reframe from doing any super
-pull requests and such.
-
-<hr>
+![alt text](https://github.com/erievs/loogle-plus-2013-revamp/blob/main/loogle%20ss.png?raw=true)
 
 About Loogle Plus:
 
