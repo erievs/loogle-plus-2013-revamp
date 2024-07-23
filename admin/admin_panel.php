@@ -1,46 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Send Notification</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <h2>1984 Panel</h2>
-    <form id="notificationForm">
-        <label for="content">Content:</label><br>
-        <textarea id="content" name="content" rows="4" cols="50"></textarea><br>
-        <label for="sender">Sender:</label><br> <!-- Add a label for the sender input -->
-        <input type="text" id="sender" name="sender"><br> <!-- Add an input field for the sender -->
-        <input type="submit" value="Send Notification">
-    </form>
+<html>
+    <head></head>
+    <body>
+        <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/writepost.css" />
+        <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/headerfix.css" /><link rel="stylesheet" href="https://kspc.serv00.net/assets/css/univesalcoolstuff.css" />
+        <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/2013notes.css" /><link rel="stylesheet" href="https://kspc.serv00.net/assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/2013indexres.css" /><link rel="stylesheet" href="https://kspc.serv00.net/assets/css/2013isamess.css" />
+        <div class="post-create" style="height: 300px;">
+            <div class="write-post">
+                <h3 class="username" style="margin-left: 4px;">Notification</h3>
+                <p class="username" style="margin-left: 4px;">Content</p>
+                <textarea id="postTextArea" placeholder="Notification content.."></textarea>
 
-    <script>
-    $(document).ready(function() {
+                <p class="username" style="margin-left: 4px; margin-top: 8px;">Sender</p>
+                <textarea id="postTextArea" placeholder="Sent by.." style="height: 25px;"></textarea>
+                <button
+                    class="share-button"
+                    style="background-image: -webkit-linear-gradient(top, #4d90fe, #4787ed); border: 1px solid #3079ed; border-radius: 2px; background-color: #4d90fe; margin-top: 5px; color: white; margin-left: 4px;"
+                >
+                    Send Notification
+                </button>
+            </div>
+        </div>
+        <div class="post-create" style="height: 325px;">
+            <div class="write-post">
+                <h3 class="username" style="margin-left: 4px;">Ban User</h3>
+                <p class="username" style="margin-left: 4px;">User</p>
+                <textarea id="postTextArea" placeholder="User123" style="height: 25px;"></textarea>
 
-        $("#notificationForm").submit(function(event) {
-            event.preventDefault(); 
-
-            var content = $("#content").val();
-            var sender = $("#sender").val(); // Get the sender value from the input field
-
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:8090/apiv1/coolapi.php",
-                data: {
-                    content: content,
-                    sender: sender // Pass the sender along with content
-                },
-                success: function(response) {
-                    alert(response);
-                },
-                error: function(xhr, status, error) {
-                    alert("Error: " + error);
-                }
-            });
-        });
-    });
-    </script>
-</body>
+                <p class="username" style="margin-left: 4px; margin-top: 8px;">Reason</p>
+                <textarea id="postTextArea" placeholder="Harrassment/Bullying"></textarea><input type="radio" name="option" id="option1" />
+                <label for="option1">Permanently</label>
+                <input type="radio" name="option" id="option2" />
+                <label for="option2">7 days</label><input type="radio" name="option" id="option3" /><label for="option3">5 days</label><input type="radio" name="option" id="option4" /><label for="option4">1 day</label><br />
+                <button
+                    class="share-button"
+                    style="background-image: -webkit-linear-gradient(top, #fe4d4d, #ed4747); border: 1px solid #ed3030; border-radius: 2px; background-color: #fe4d4d; margin-top: 5px; color: white; margin-left: 4px;"
+                >
+                    Ban User
+                </button>
+            </div>
+        </div>
+    </body>
 </html>
