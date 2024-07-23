@@ -1,24 +1,12 @@
 $(document).ready(function() {
 
-$("img").each(function() {
-    console.log('Your mom');
-    if ($(this).attr("src") === "http://kspc.serv00.net/null") {
-        $(this).hide();
+    function isV8Engine() {
+      return /Chrome|Chromium|Edg/.test(navigator.userAgent);
     }
-});
-
-$("img").each(function() {
-    console.log('Your mom');
-    if ($(this).attr("src") === "https://kspc.serv00.net/null") {
-        $(this).hide();
+  
+    if (isV8Engine()) {
+      setInterval(function() {
+        $('img[src="null"]').hide();
+      }, 5); 
     }
-});
-
-$("img").each(function() {
-    console.log('Your mom');
-    if ($(this).attr("src") === "null") {
-        $(this).hide();
-    }
-});
-
-});
+  });
