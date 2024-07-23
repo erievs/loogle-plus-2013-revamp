@@ -84,7 +84,7 @@ textarea {
 
 const urlParams = new URLSearchParams(window.location.search);
 
-let limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) ? parseInt(urlParams.get('postlimit')) : 20;
+let limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) ? parseInt(urlParams.get('postlimit')) : 35;
 
 $(document).ready(function () {
     var mainHeader = $(".main-header");
@@ -122,7 +122,7 @@ function formatTime(timestamp) {
 }
 
 function increasePostLimit() {
-    limit += 10; 
+    limit += 15; 
     fetchPosts();
 }
 
@@ -749,6 +749,7 @@ const apiEndpoint = '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=';
 let currentColumnIndex = 0;
 
 const loadMoreText = $('#load-more');
+var isExperimentalLoading = urlParams.has('experimental_loading');
 
 $(document).on('click', '#loadmore', function() {
     increasePostLimit();
@@ -765,6 +766,7 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
     const isLikedByCurrentUser = plusOneUsernamesString.includes('<?php echo $_SESSION["username"];?>');
 
     postElement.innerHTML = `
+
     <div class="post-main">  
      <div class="hacky-fix">
      <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${post.username}" class="post-file-picture">
@@ -772,7 +774,14 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
        <div class="post-top">
        <a href="<?php echo $siteurl; ?>/profile.php?profile=${post.username}">
         <p class="username">${post.username}</p>
-       </a>
+       </a> 
+       
+        <span class="clickable-circle">&#709;</span>
+
+        <div class="dropdown-menu-del" style="display: none;">
+            <a href="#" class="delete-post-link">Delete post</a>
+        </div>
+
         </div>
        <div class="post-meta">
         <span>Sharing Publicly &nbsp;</span>
@@ -782,6 +791,7 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
       </div>
       </div>
      </div>
+
         <div class="post-content-container">
             <p class="post-content">${post.content}</p>
             <img class="post-image" src="${post.image_url}" alt="">
@@ -799,6 +809,46 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
     </div>
 
   `;
+
+    const sessionUsername = '<?php echo $_SESSION["username"]; ?>';
+
+    console.log(post.username);
+
+    $('.dropdown-menu-del').hide();
+
+    if (post.username !== sessionUsername) {
+        $(postElement).find('.clickable-circle').hide();
+    }
+
+    $(document).on('click', '.delete-post-link', function(event) {
+    event.preventDefault();
+
+    var $post = $(this).closest('.post');
+    var postId = $post.data('post-id');
+
+    $.ajax({
+        url: '<?php echo $siteurl; ?>/apiv1-internal/delete_post.php?id=' + postId, 
+        type: 'DELETE',
+        success: function(response) {
+            smoothReload(500);
+        },
+        error: function() {
+            alert('An error occurred while trying to delete the post.');
+        }
+        });
+    });
+
+    $(document).on('click', '.clickable-circle', function(event) {
+        $('.dropdown-menu-del').not($(this).siblings('.dropdown-menu-del')).hide();
+        $(this).siblings('.dropdown-menu-del').show();
+    });
+
+    $(document).on('dblclick', '.clickable-circle', function(event) {
+        $('.dropdown-menu-del').not($(this).siblings('.dropdown-menu-del')).hide();
+        $(this).siblings('.dropdown-menu-del').hide();
+    });
+
+        
 
     if (post.post_link && post.post_link.includes("youtube.com/embed")) {
         const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
@@ -1157,15 +1207,16 @@ function smoothReload(delay) {
         location.reload();
     });
 }
+
+
+
 </script>
-
-
 
 <!-- Shit Made In July -->
 
 <script src="assets/js/sidebar.js"></script>
-<script src="assets/js/fixes.js"></script>
 <script src="assets/js/funshit.js"></script>
+<script src="assets/js/fixes.js"></script>
 
 </body>
 </html>

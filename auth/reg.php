@@ -16,7 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $ipAddress = $_SERVER['REMOTE_ADDR'];
-            $hashedIp = hash('sha256', $ipAddress);
+            $hashedIp = md5($ipAddress);
+
+
+            $query = "SELECT reason FROM bans WHERE username = ? LIMIT 1";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                $stmt->bind_result($banReason);
+                $stmt->fetch();
+                echo "This username is banned: " . htmlspecialchars($banReason);
+                $stmt->close();
+                $conn->close();
+                exit();
+            }
 
             $banQuery = "SELECT reason FROM bans WHERE ip_address = ?";
             $stmt = $conn->prepare($banQuery);

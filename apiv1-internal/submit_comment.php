@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 header("Content-Type: application/json");
 
 $response = array();
@@ -76,28 +75,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    function extractMentions($content) {
+        preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
+        return array_unique($matches[1]); // Make sure mentions are unique
+    }    
+
     $query = "INSERT INTO comments (post_id, username, comment_content) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("iss", $postID, $username, $commentContent);
 
     if ($stmt->execute()) {
-        $postId = $conn->insert_id;
-
-        function extractMentions($content) {
-            preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
-            return $matches[1];
-        }    
+        $commentId = $conn->insert_id;
 
         $mentions = extractMentions($commentContent);
 
         foreach ($mentions as $mentionedUser) {
-            $mentionContent = "Someone commented on your post!";
+            $mentionContent = "$username mentioned you in a comment!";
             $insertMentionQuery = "INSERT INTO notifications (recipient, content, created_at, read_status, sender, post_id) VALUES (?, ?, NOW(), 0, ?, ?)";
             $stmt = $conn->prepare($insertMentionQuery);
-            $stmt->bind_param("sssi", $mentionedUser, $mentionContent, $username,  $_POST['postID']);
+            $stmt->bind_param("sssi", $mentionedUser, $mentionContent, $username, $postID);
             $stmt->execute();
         }
-
 
         if ($username !== $postOwnerUsername) {
             $ownerNotificationContent = "$username commented on your post!";
@@ -110,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['status'] = 'success';
         $response['message'] = 'Comment successfully added';
         $response['commentContent'] = $commentContent;
-        $response['postID'] = $postId;
+        $response['postID'] = $commentId;
         $response['username'] = $username;
     } else {
         $response['status'] = 'error';

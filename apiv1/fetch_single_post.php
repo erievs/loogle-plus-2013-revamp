@@ -25,7 +25,7 @@ function getPostById($postId) {
         if (!empty($post['image_url'])) {
             $image_url = str_replace('..', '', $siteurl) . str_replace('..', '', $post['image_url']);
         } else {
-            $image_url = null;
+            $image_url = 'null';
         }
 
 

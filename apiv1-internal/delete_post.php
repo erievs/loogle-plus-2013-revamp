@@ -18,38 +18,47 @@ function deletePost($postId) {
     if ($conn->connect_error) {
         $response['status'] = 'error';
         $response['message'] = "Connection failed: " . $conn->connect_error;
-    } else {
-        // Check if the post exists with the given ID
-        $checkQuery = "SELECT id FROM posts WHERE id = ?";
-        $checkStmt = $conn->prepare($checkQuery);
-        $checkStmt->bind_param("i", $postId);
-        $checkStmt->execute();
-        $checkResult = $checkStmt->get_result();
+        return $response;
+    }
 
-        if ($checkResult->num_rows > 0) {
-            // Post exists, proceed with deletion
-            $deleteQuery = "DELETE FROM posts WHERE id = ?";
-            $deleteStmt = $conn->prepare($deleteQuery);
-            $deleteStmt->bind_param("i", $postId);
+    $conn->query("SET FOREIGN_KEY_CHECKS = 0");
 
-            if ($deleteStmt->execute()) {
-                $response['status'] = 'success';
-                $response['message'] = 'Post successfully deleted.';
+    $checkQuery = "SELECT id FROM posts WHERE id = ?";
+    $checkStmt = $conn->prepare($checkQuery);
+    $checkStmt->bind_param("i", $postId);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
+
+    if ($checkResult->num_rows > 0) {
+        $deleteQuery = "DELETE FROM posts WHERE id = ?";
+        $deleteStmt = $conn->prepare($deleteQuery);
+        $deleteStmt->bind_param("i", $postId);
+
+        if ($deleteStmt->execute()) {
+            $response['status'] = 'success';
+            $response['message'] = 'Post successfully deleted.';
+        } else {
+            if ($conn->errno == 1451) { 
+                $response['status'] = 'warning';
+                $response['message'] = 'Post cannot be deleted due to foreign key constraints.';
             } else {
                 $response['status'] = 'error';
                 $response['message'] = 'Error deleting post: ' . $conn->error;
             }
-
-            $deleteStmt->close();
-        } else {
-            // Post with the given ID does not exist
-            $response['status'] = 'error';
-            $response['message'] = 'Post does not exist with ID: ' . $postId;
         }
 
-        $checkStmt->close();
-        $conn->close();
+        $deleteStmt->close();
+    } else {
+        $response['status'] = 'error';
+        $response['message'] = 'Post does not exist with ID: ' . $postId;
     }
+
+    $checkStmt->close();
+    $conn->close();
+
+    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    $conn->query("SET FOREIGN_KEY_CHECKS = 1");
+    $conn->close();
 
     return $response;
 }

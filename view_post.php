@@ -484,7 +484,7 @@ if(isset($_GET['trump'])) {
                      <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${comment.username}" class="comment-picture">
 					 <div class="agony">
 					  <div class="hacky-fix">
-                       <p class="username">${comment.username}</p>
+                       <p class="username-comments">${comment.username}</p>
 					   <p class="time">${comment.comment_time}</p>
 					  </div>
 					  <p class="comment-content">${comment.comment_content}</p>
@@ -511,6 +511,7 @@ if(isset($_GET['trump'])) {
 </script>
 
 <script src="assets/js/sidebar.js"></script>
+<script src="assets/js/fixes.js"></script>
 
 </body>
 
