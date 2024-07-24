@@ -3,7 +3,8 @@
 $(document).ready(function() {
     var replacementText = "regean";
     var conservativeWords = ["fuck", "I", "You", "We", "we", "i", "you", "they", "They", "Them", "them",
-        "He", "he", "she", "She", "her", "Her", "Him", "him"
+        "He", "he", "she", "She", "her", "Her", "Him", "him", "Gay", "gay", "trans", "Trans","Transgender"
+        ,"hippie","Hippie","hippies","Hippies"
     ];
 
     function replaceWordsInElements(selector, words, replacement) {
