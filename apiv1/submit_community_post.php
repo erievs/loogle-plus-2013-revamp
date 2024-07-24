@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
 
             $postId = $conn->insert_id;
             foreach ($mentions as $mentionedUser) {
-                $mentionContent = "Has mentioned you in a post";
+                $mentionContent = "Has mentioned you in a community post!";
                 $mentionSender = $username;
                 $insertMentionQuery = "INSERT INTO notifications (recipient, content, created_at, read_status, sender, post_id) VALUES (?, ?, NOW(), 0, ?, ?)";
                 $stmt = $conn->prepare($insertMentionQuery);

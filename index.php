@@ -1,11 +1,30 @@
 <?php
 session_start();
+
 if (!isset($_SESSION["username"])) {
     echo '<script>window.location.href = "../user/login.php";</script>';
     exit();
 }
 
 include("important/db.php");
+
+$username = $_SESSION["username"];
+
+$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$stmt = $conn->prepare("SELECT username FROM moderators WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$stmt->store_result();
+
+$isMod = ($stmt->num_rows > 0);
+
+$stmt->close();
+$conn->close();
 
 $icon = "home";
 ?>
@@ -811,13 +830,14 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
   `;
 
     const sessionUsername = '<?php echo $_SESSION["username"]; ?>';
-
+    var isMod = <?php echo json_encode($isMod); ?>;
+    
     console.log(post.username);
 
     $('.dropdown-menu-del').hide();
 
-    if (post.username !== sessionUsername) {
-        $(postElement).find('.clickable-circle').hide();
+    if (post.username !== sessionUsername && !isMod) {
+            $(postElement).find('.clickable-circle').hide();
     }
 
     $(document).on('click', '.delete-post-link', function(event) {

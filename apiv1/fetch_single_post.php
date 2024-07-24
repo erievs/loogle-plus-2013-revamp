@@ -14,7 +14,7 @@ function getPostById($postId) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $postId = $conn->real_escape_string($postId); // Sanitize the input to prevent SQL injection
+    $postId = $conn->real_escape_string($postId); 
 
     $query = "SELECT * FROM posts WHERE id = $postId";
     $result = $conn->query($query);
@@ -27,7 +27,6 @@ function getPostById($postId) {
         } else {
             $image_url = 'null';
         }
-
 
         if (!empty($post['post_link_url'])) {
             $post_url = $post['post_link_url'];
@@ -46,7 +45,7 @@ function getPostById($postId) {
         $postData = array(
             'id' => $post['id'],
             'username' => $post['username'],
-            'content' => htmlspecialchars($post['content']),
+            'content' => htmlspecialchars($post['content'], ENT_NOQUOTES), 
             'image_url' => $image_url,
             'post_link_url' => $post_url, 
             'post_link' => $post['post_link'],

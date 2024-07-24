@@ -219,11 +219,11 @@ postCreate.innerHTML = `
 
     <div class="level-1">
 
-    <div class="pfp-write-post" style="display: none;">
+    <div class="pfp-write-post" style="display: none; ">
     <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $_SESSION["username"];?>" alt="" class="round-image">
     </div>
 
-    <textarea id="postTextArea" placeholder="Share what's new..."></textarea>
+    <textarea id="postTextArea" style="z-index: 9;" placeholder="Share what's new..."></textarea>
         <div id="triangle" class="triangle"></div>
     </div>
 
