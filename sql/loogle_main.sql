@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 21, 2024 at 11:46 PM
+-- Generation Time: Jul 24, 2024 at 03:16 AM
 -- Server version: 8.0.37
 -- PHP Version: 8.3.8
 
@@ -194,7 +194,8 @@ CREATE TABLE `posts` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `post_link` varchar(255) DEFAULT NULL,
   `plus_one_usernames` varchar(255) DEFAULT NULL,
-  `plus_one` int DEFAULT '0'
+  `plus_one` int DEFAULT '0',
+  `visibility` enum('v','p','u') NOT NULL DEFAULT 'v'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
