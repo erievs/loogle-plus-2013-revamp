@@ -123,15 +123,29 @@ function fetchMentions() {
     });
 }
 
+function subtractOne() {
+        var $numElement = $('#numsfornot'); 
+        var currentValue = parseInt($numElement.text(), 10); 
+        var newValue = currentValue - 1; 
+        $numElement.text(newValue); 
+}
 
- function dismissMention(mentionElement, postId) {
+function dismissMention(mentionElement, postId) {
 
-    mentionElement.fadeOut(300, function () {
-        $(this).remove();
-        console.log(postId);
-        window.location.href = '<?php echo $siteurl; ?>/view_post.php?id=' + postId;
+    mentionElement.on('click', function(event) {
+        console.log('You think you just fell out of a coconut tree?');
+        if (!$(event.target).closest('.exit').length) {
+            window.location.href = '<?php echo $siteurl; ?>/view_post.php?id=' + postId;
+        }
     });
-
+    
+    mentionElement.find('.exit').off('click').on('click', function(event) {
+        subtractOne();
+        mentionElement.fadeOut(300, function () {
+            $(this).remove();
+        });
+        return false; 
+    });
 
     $.ajax({
         url: "<?php echo $siteurl; ?>/apiv1/toggle_notification_status.php",
@@ -140,12 +154,21 @@ function fetchMentions() {
             username: "<?php echo $_SESSION['username']?>",
             post_id: postId
         },
-        success: function (response) {
+        success: function(response) {
         },
-        error: function (xhr, status, error) {
+        error: function(xhr, status, error) {
         }
     });
 }
+
+$(document).ready(function() {
+    $('#mentionsContainer').on('mouseenter', function() {
+        $(this).addClass('highlight');
+    }).on('mouseleave', function() {
+        $(this).removeClass('highlight');
+    });
+});
+
 
 </script>
 
