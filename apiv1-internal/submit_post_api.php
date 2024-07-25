@@ -7,12 +7,31 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 $isCommandLine = php_sapi_name() === 'cli';
 
 $rateLimit = 2.5;
+$checkSiteUrl = true; 
 
 $response = array();
 
 include("../important/db.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
+
+    if ($checkSiteUrl) {
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        if (strpos($referer, $siteurl) === false) {
+            $response = array('status' => 'error', 'message' => 'Invalid request origin.');
+            echo json_encode($response);
+            exit;
+        }
+    }
+
+    if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
+        $response = array('status' => 'error', 'message' => 'Unauthorized access. Please log in.');
+        echo json_encode($response);
+        exit;
+    }
+
+    $sessionUsername = $_SESSION['username'];
+
     if ($isCommandLine) {
         $username = $argv[1];
     } else {
@@ -20,6 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
         $postContent = isset($_POST['postContent']) ? $_POST['postContent'] : '';
         $post_link_url = isset($_POST['post_link_url']) ? $_POST['post_link_url'] : '';
         $post_link = isset($_POST['post_link']) ? $_POST['post_link'] : '';
+    }
+
+    if ($username !== $sessionUsername) {
+        $response['status'] = 'error';
+        $response['message'] = 'Unauthorized action. You can only submit your own posts.';
+        echo json_encode($response);
+        exit;
     }
 
     if (empty($username)) {
@@ -51,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
     if (isset($_FILES["postImage"]) && $_FILES["postImage"]["error"] === 0) {
         $targetDir = "../assets/images/";
         $imageFileType = strtolower(pathinfo($_FILES["postImage"]["name"], PATHINFO_EXTENSION));
-        
+
         $randomString = bin2hex(random_bytes(5));
         $targetFile = $targetDir . basename($_FILES["postImage"]["name"], ".$imageFileType") . "_$randomString.$imageFileType";
-        
+
         $check = getimagesize($_FILES["postImage"]["tmp_name"]);
         if ($check !== false) {
             $allowedFormats = array("jpg", "jpeg", "png", "gif");

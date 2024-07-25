@@ -17,6 +17,34 @@ if ($origin !== $allowed_origin && $referer !== $allowed_origin) {
     exit();
 }
 
+session_start();
+
+if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
+    http_response_code(403);
+    echo json_encode(array('error' => 'Unauthorized access. Please log in.'));
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$stmt = $conn->prepare("SELECT COUNT(*) AS count FROM moderators WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+if ($row['count'] == 0) {
+    http_response_code(403);
+    echo json_encode(array('error' => 'Access denied. User is not a moderator.'));
+    exit();
+}
+
 function getIPsFromDatabase() {
     include("../important/db.php");
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
@@ -46,4 +74,5 @@ function getIPsFromDatabase() {
 
 $ipsData = getIPsFromDatabase();
 echo json_encode($ipsData);
+
 ?>

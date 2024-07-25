@@ -1,4 +1,5 @@
 <?php
+
 include("../important/db.php");
 
 $allowed_origin = parse_url($siteurl, PHP_URL_HOST);
@@ -10,6 +11,16 @@ if ($origin !== $allowed_origin && $referer !== $allowed_origin) {
     echo json_encode(array('error' => 'Access denied.'));
     exit();
 }
+
+session_start();
+
+if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
+    http_response_code(403);
+    echo json_encode(array('error' => 'Unauthorized: Please log in.'));
+    exit();
+}
+
+$logged_in_username = $_SESSION['username'];
 
 $mod_username = $_POST['mod_username'] ?? '';
 $user_to_ban = $_POST['user_to_ban'] ?? '';
@@ -24,7 +35,7 @@ if (!empty($mod_username) && !empty($user_to_ban) && !empty($reason)) {
     }
 
     $stmt1 = $conn->prepare("SELECT username FROM moderators WHERE username = ?");
-    $stmt1->bind_param("s", $mod_username);
+    $stmt1->bind_param("s", $logged_in_username);
     $stmt1->execute();
     $stmt1->store_result();
 
@@ -36,14 +47,16 @@ if (!empty($mod_username) && !empty($user_to_ban) && !empty($reason)) {
         $stmt2->execute();
         $stmt2->close();
 
-        echo "User $user_to_ban has been banned successfully.";
+        echo json_encode(array('success' => "User $user_to_ban has been banned successfully."));
     } else {
         $stmt1->close();
-        echo "Unauthorized: The user making the request is not a moderator.";
+        http_response_code(403);
+        echo json_encode(array('error' => 'Unauthorized: The user making the request is not a moderator.'));
     }
 
     $conn->close();
 } else {
-    echo "Mod username, user to ban, and reason are required.";
+    echo json_encode(array('error' => 'Mod username, user to ban, and reason are required.'));
 }
+
 ?>

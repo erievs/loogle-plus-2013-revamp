@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("../important/db.php");
 
 $allowed_origin = parse_url($siteurl, PHP_URL_HOST);
@@ -11,10 +12,33 @@ if ($origin !== $allowed_origin && $referer !== $allowed_origin) {
     exit();
 }
 
+$sessionUsername = $_SESSION['username'] ?? '';  
 $sender = $_POST['sender'] ?? '';
 $content = $_POST['content'] ?? '';
 
-if (!empty($sender) && !empty($content)) {
+function isUserModerator($username) {
+    global $db_host, $db_user, $db_pass, $db_name;
+
+    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+
+    if ($conn->connect_error) {
+        return false;
+    }
+
+    $query = "SELECT username FROM moderators WHERE username = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->store_result();
+
+    $isModerator = $stmt->num_rows > 0;
+    $stmt->close();
+    $conn->close();
+
+    return $isModerator;
+}
+
+if (!empty($sessionUsername) && isUserModerator($sessionUsername) && !empty($sender) && !empty($content)) {
 
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -55,6 +79,6 @@ if (!empty($sender) && !empty($content)) {
 
     $conn->close();
 } else {
-    echo "Sender and content are required.";
+    echo "Unauthorized: You must be a moderator to create a post.";
 }
 ?>

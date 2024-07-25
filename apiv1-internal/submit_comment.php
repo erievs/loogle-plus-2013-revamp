@@ -2,9 +2,9 @@
 session_start();
 header("Content-Type: application/json");
 
-$response = array();
-
 $rateLimit = 2.5;
+
+$response = array();
 
 function isRateLimited($rateLimitFile, $rateLimit) {
     if (!file_exists($rateLimitFile) || (time() - filemtime($rateLimitFile)) > $rateLimit) {
@@ -16,10 +16,35 @@ function isRateLimited($rateLimitFile, $rateLimit) {
 }
 
 $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit_comments.txt';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $commentContent = $_POST['commentContent'];
-    $postID = $_POST['postID'];
-    $username = $_POST['username'];
+
+    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+    if (parse_url($referer, PHP_URL_HOST) !== parse_url($siteurl, PHP_URL_HOST)) {
+        $response['status'] = 'error';
+        $response['message'] = 'Invalid request origin.';
+        echo json_encode($response);
+        exit();
+    }
+
+    if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
+        $response['status'] = 'error';
+        $response['message'] = 'Unauthorized access. Please log in.';
+        echo json_encode($response);
+        exit();
+    }
+    $sessionUsername = $_SESSION['username'];
+
+    $commentContent = isset($_POST['commentContent']) ? $_POST['commentContent'] : '';
+    $postID = isset($_POST['postID']) ? $_POST['postID'] : '';
+    $username = isset($_POST['username']) ? $_POST['username'] : '';
+
+    if ($username !== $sessionUsername) {
+        $response['status'] = 'error';
+        $response['message'] = 'Unauthorized action. You can only comment as yourself.';
+        echo json_encode($response);
+        exit();
+    }
 
     include("../important/db.php");
 
@@ -77,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     function extractMentions($content) {
         preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
-        return array_unique($matches[1]); // Make sure mentions are unique
+        return array_unique($matches[1]); 
     }    
 
     $query = "INSERT INTO comments (post_id, username, comment_content) VALUES (?, ?, ?)";
