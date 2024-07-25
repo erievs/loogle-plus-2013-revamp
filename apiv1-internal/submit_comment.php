@@ -2,9 +2,18 @@
 session_start();
 header("Content-Type: application/json");
 
-$rateLimit = 2.5;
-
 $response = array();
+
+if (!isset($_SESSION['username'])) {
+    $response['status'] = 'error';
+    $response['message'] = 'User not logged in';
+    echo json_encode($response);
+    exit();
+}
+
+$sessionUsername = $_SESSION['username'];
+
+$rateLimit = 2.5;
 
 function isRateLimited($rateLimitFile, $rateLimit) {
     if (!file_exists($rateLimitFile) || (time() - filemtime($rateLimitFile)) > $rateLimit) {
@@ -16,32 +25,14 @@ function isRateLimited($rateLimitFile, $rateLimit) {
 }
 
 $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit_comments.txt';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $commentContent = $_POST['commentContent'];
+    $postID = $_POST['postID'];
+    $username = $_POST['username'];
 
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-    if (parse_url($referer, PHP_URL_HOST) !== parse_url($siteurl, PHP_URL_HOST)) {
+    if ($sessionUsername !== $username) {
         $response['status'] = 'error';
-        $response['message'] = 'Invalid request origin.';
-        echo json_encode($response);
-        exit();
-    }
-
-    if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
-        $response['status'] = 'error';
-        $response['message'] = 'Unauthorized access. Please log in.';
-        echo json_encode($response);
-        exit();
-    }
-    $sessionUsername = $_SESSION['username'];
-
-    $commentContent = isset($_POST['commentContent']) ? $_POST['commentContent'] : '';
-    $postID = isset($_POST['postID']) ? $_POST['postID'] : '';
-    $username = isset($_POST['username']) ? $_POST['username'] : '';
-
-    if ($username !== $sessionUsername) {
-        $response['status'] = 'error';
-        $response['message'] = 'Unauthorized action. You can only comment as yourself.';
+        $response['message'] = 'Session username does not match the provided username';
         echo json_encode($response);
         exit();
     }

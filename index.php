@@ -5,6 +5,10 @@ include("important/db.php");
 
 $username = $_SESSION["username"];
 
+if (!isset($_SESSION["username"])) {
+    header("Location: ../user/login.php");
+    exit();
+}
 
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 

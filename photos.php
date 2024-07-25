@@ -2,6 +2,11 @@
 session_start();
 include("important/db.php");
 
+if (!isset($_SESSION["username"])) {
+  header("Location: ../user/login.php");
+  exit();
+}
+
 $username = $_SESSION["username"];
 
 $icon = "photos";
