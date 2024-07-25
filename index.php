@@ -1,14 +1,10 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["username"])) {
-    echo '<script>window.location.href = "../user/login.php";</script>';
-    exit();
-}
-
 include("important/db.php");
 
 $username = $_SESSION["username"];
+
 
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -64,6 +60,9 @@ textarea {
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="assets/js/purify.min.js"></script>
+
+
 
     <title>Loogle+</title>
 	<link rel="stylesheet" href="assets/css/2013isamess.css">
@@ -102,8 +101,9 @@ textarea {
 <script>
 
 const urlParams = new URLSearchParams(window.location.search);
-
-let limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) ? parseInt(urlParams.get('postlimit')) : 35;
+const limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) 
+    ? Math.max(1, parseInt(urlParams.get('postlimit'), 10)) 
+    : 35; 
 
 $(document).ready(function () {
     var mainHeader = $(".main-header");
@@ -151,8 +151,6 @@ fetch('<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php')
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
 
-            postsContainer.innerHTML = '';
-
 let numColumns = 3; 
 const screenWidth = window.innerWidth;
 
@@ -177,105 +175,240 @@ for (let i = 0; i < numColumns; i++) {
     postsContainer.appendChild(column);
 }
 
-            const postCreate = document.createElement('div');
+const postCreate = document.createElement('div');
 postCreate.className = 'post-create';
-postCreate.innerHTML = `
-    <div class="write-post">
 
-    <div class="level-1">
+const writePost = document.createElement('div');
+writePost.className = 'write-post';
 
-    <div class="pfp-write-post" style="display: none;">
-    <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $_SESSION["username"];?>" alt="" class="round-image">
-    </div>
+const level1 = document.createElement('div');
+level1.className = 'level-1';
 
-    <textarea id="postTextArea" placeholder="Share what's new..."></textarea>
-        <div id="triangle" class="triangle"></div>
-    </div>
+const pfpWritePost = document.createElement('div');
+pfpWritePost.className = 'pfp-write-post';
+pfpWritePost.style.display = 'none';
 
-    </div>
+const pfpImage = document.createElement('img');
+pfpImage.src = `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>`;
+pfpImage.alt = '';
+pfpImage.className = 'round-image';
 
-    <div id="fileDrop" class="file-drop"">
+pfpWritePost.appendChild(pfpImage);
 
-</div>
+const textArea = document.createElement('textarea');
+textArea.id = 'postTextArea';
+textArea.placeholder = "Share what's new...";
 
-    <div class="level-2">
-    <div class="attach-photos-row">
-            <div class="attach">
-                Attach:
-            </div>
+const triangle = document.createElement('div');
+triangle.id = 'triangle';
+triangle.className = 'triangle';
 
-            <div id="mymotherquestionmark" class="photo-icon" >
-            <p style="position: relative; top: -7px; left: 15px;">
-            Photos</p>
-            </div>
+level1.appendChild(pfpWritePost);
+level1.appendChild(textArea);
+level1.appendChild(triangle);
 
-            <div class="photo-icon" id="bobisbackbutfuckhim">
-            <p style="position: relative; top: -7px; left: 15px;">
-            Link</p>
-            </div>
+writePost.appendChild(level1);
+postCreate.appendChild(writePost);
 
-            <div class="photo-icon" id="videosarebackbaby">
-            <p style="position: relative; top: -8px; left: 15px;">
-            Video</p>
-            </div>
-    </div>
+const fileDrop = document.createElement('div');
+fileDrop.id = 'fileDrop';
+fileDrop.className = 'file-drop';
 
-    <div class="level-3" style="display: none;">
+postCreate.appendChild(fileDrop);
 
-    <div class="add-photos">
-            Add Photos:
-        </div>
+const level2 = document.createElement('div');
+level2.className = 'level-2';
 
-        <input type="file" id="fileUploadInput" accept="image/*" style="display: none;">
+const attachPhotosRow = document.createElement('div');
+attachPhotosRow.className = 'attach-photos-row';
 
-        <input type="file" id="fileUploadInput" accept="image/*" style="display: none">
-        <button class="upload-button" id="openFileDialog">Upload from computer</button>
-    </div>
+const attachDiv = document.createElement('div');
+attachDiv.className = 'attach';
+attachDiv.textContent = 'Attach:';
 
-    <div class="add-link" style="display: none;">
+const photoIcon1 = document.createElement('div');
+photoIcon1.id = 'mymotherquestionmark';
+photoIcon1.className = 'photo-icon';
+const photoIconText1 = document.createElement('p');
+photoIconText1.style.position = 'relative';
+photoIconText1.style.top = '-7px';
+photoIconText1.style.left = '15px';
+photoIconText1.textContent = 'Photos';
+photoIcon1.appendChild(photoIconText1);
 
-    <p id="pthingy1">
-    Add Link:
-    </p>
+const photoIcon2 = document.createElement('div');
+photoIcon2.id = 'bobisbackbutfuckhim';
+photoIcon2.className = 'photo-icon';
+const photoIconText2 = document.createElement('p');
+photoIconText2.style.position = 'relative';
+photoIconText2.style.top = '-7px';
+photoIconText2.style.left = '15px';
+photoIconText2.textContent = 'Link';
+photoIcon2.appendChild(photoIconText2);
 
-    <textarea class="add-link1" id="al1" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold;
-    font-size: 14px;" placeholder="Insert your link here, it must start with http/https or it wont send."></textarea>
+const photoIcon3 = document.createElement('div');
+photoIcon3.id = 'videosarebackbaby';
+photoIcon3.className = 'photo-icon';
+const photoIconText3 = document.createElement('p');
+photoIconText3.style.position = 'relative';
+photoIconText3.style.top = '-8px';
+photoIconText3.style.left = '15px';
+photoIconText3.textContent = 'Video';
+photoIcon3.appendChild(photoIconText3);
 
-    </div>
+attachPhotosRow.appendChild(attachDiv);
+attachPhotosRow.appendChild(photoIcon1);
+attachPhotosRow.appendChild(photoIcon2);
+attachPhotosRow.appendChild(photoIcon3);
 
-    <div class="add-video" style="display: none;">
+level2.appendChild(attachPhotosRow);
 
-    <p id="pthingy1">
-    Add Video:
-    </p>
+const level3 = document.createElement('div');
+level3.className = 'level-3';
+level3.style.display = 'none';
 
-     <textarea class="add-link1" id="al2" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); 
-    font-size: 14px;" placeholder="Insert your youtube video here, it must be a standerd youtube url or it wont send."></textarea>
-    </div>
+const addPhotos = document.createElement('div');
+addPhotos.className = 'add-photos';
+addPhotos.textContent = 'Add Photos:';
 
-    </div>
-    <div class="post-create-icons">
-        <div class="iconstuff">
-            <div class="image-write"></div>
-            <br>
-            <br>
-            <span style="color: black; font-weight: bold;">Text</span>
-        </div>
+const fileUploadInput1 = document.createElement('input');
+fileUploadInput1.type = 'file';
+fileUploadInput1.id = 'fileUploadInput';
+fileUploadInput1.accept = 'image/*';
+fileUploadInput1.style.display = 'none';
 
-        <div class="iconstuff">
-            <div class="image-photo"></div>
-            <br>
-            <br>
-            <span>Photos</span>
-        </div>
+const fileUploadInput2 = document.createElement('input');
+fileUploadInput2.type = 'file';
+fileUploadInput2.id = 'fileUploadInput';
+fileUploadInput2.accept = 'image/*';
+fileUploadInput2.style.display = 'none';
 
-    </div>
+const uploadButton = document.createElement('button');
+uploadButton.className = 'upload-button';
+uploadButton.id = 'openFileDialog';
+uploadButton.textContent = 'Upload from computer';
 
-    <div class="level-4" style="background: #fff;">
-    <button class="share-button" style="background: #55a644;">Share</button>
-    <button class="cancel-button"  id="cancelButton" style="background: #fbfbfb; color: black;">Cancel</button>
-    </div>
-`;
+level3.appendChild(addPhotos);
+level3.appendChild(fileUploadInput1);
+level3.appendChild(fileUploadInput2);
+level3.appendChild(uploadButton);
+
+level2.appendChild(level3);
+
+const addLink = document.createElement('div');
+addLink.className = 'add-link';
+addLink.style.display = 'none';
+
+const addLinkParagraph = document.createElement('p');
+addLinkParagraph.id = 'pthingy1';
+addLinkParagraph.textContent = 'Add Link:';
+
+const addLinkTextArea = document.createElement('textarea');
+addLinkTextArea.className = 'add-link1';
+addLinkTextArea.id = 'al1';
+addLinkTextArea.style.height = '46px';
+addLinkTextArea.style.width = '79%';
+addLinkTextArea.style.marginLeft = '120px';
+addLinkTextArea.style.marginTop = '8px';
+addLinkTextArea.style.position = 'relative';
+addLinkTextArea.style.top = '20px';
+addLinkTextArea.style.overflow = 'hidden';
+addLinkTextArea.style.border = '1px solid rgba(10, 10, 10, 0.1)';
+addLinkTextArea.style.fontWeight = 'bold';
+addLinkTextArea.style.fontSize = '14px';
+addLinkTextArea.placeholder = 'Insert your link here, it must start with http/https or it wont send.';
+
+addLink.appendChild(addLinkParagraph);
+addLink.appendChild(addLinkTextArea);
+
+const addVideo = document.createElement('div');
+addVideo.className = 'add-video';
+addVideo.style.display = 'none';
+
+const addVideoParagraph = document.createElement('p');
+addVideoParagraph.id = 'pthingy1';
+addVideoParagraph.textContent = 'Add Video:';
+
+const addVideoTextArea = document.createElement('textarea');
+addVideoTextArea.className = 'add-link1';
+addVideoTextArea.id = 'al2';
+addVideoTextArea.style.height = '46px';
+addVideoTextArea.style.width = '79%';
+addVideoTextArea.style.marginLeft = '120px';
+addVideoTextArea.style.marginTop = '8px';
+addVideoTextArea.style.position = 'relative';
+addVideoTextArea.style.top = '20px';
+addVideoTextArea.style.overflow = 'hidden';
+addVideoTextArea.style.border = '1px solid rgba(10, 10, 10, 0.1)';
+addVideoTextArea.style.fontSize = '14px';
+addVideoTextArea.placeholder = 'Insert your youtube video here, it must be a standerd youtube url or it wont send.';
+
+addVideo.appendChild(addVideoParagraph);
+addVideo.appendChild(addVideoTextArea);
+
+level2.appendChild(addLink);
+level2.appendChild(addVideo);
+
+postCreate.appendChild(level2);
+
+const postCreateIcons = document.createElement('div');
+postCreateIcons.className = 'post-create-icons';
+
+const iconstuff1 = document.createElement('div');
+iconstuff1.className = 'iconstuff';
+
+const imageWrite = document.createElement('div');
+imageWrite.className = 'image-write';
+
+const iconText1 = document.createElement('span');
+iconText1.style.color = 'black';
+iconText1.style.fontWeight = 'bold';
+iconText1.textContent = 'Text';
+
+iconstuff1.appendChild(imageWrite);
+iconstuff1.appendChild(document.createElement('br'));
+iconstuff1.appendChild(document.createElement('br'));
+iconstuff1.appendChild(iconText1);
+
+const iconstuff2 = document.createElement('div');
+iconstuff2.className = 'iconstuff';
+
+const imagePhoto = document.createElement('div');
+imagePhoto.className = 'image-photo';
+
+const iconText2 = document.createElement('span');
+iconText2.textContent = 'Photos';
+
+iconstuff2.appendChild(imagePhoto);
+iconstuff2.appendChild(document.createElement('br'));
+iconstuff2.appendChild(document.createElement('br'));
+iconstuff2.appendChild(iconText2);
+
+postCreateIcons.appendChild(iconstuff1);
+postCreateIcons.appendChild(iconstuff2);
+
+postCreate.appendChild(postCreateIcons);
+
+const level4 = document.createElement('div');
+level4.className = 'level-4';
+level4.style.background = '#fff';
+
+const shareButton = document.createElement('button');
+shareButton.className = 'share-button';
+shareButton.style.background = '#55a644';
+shareButton.textContent = 'Share';
+
+const cancelButton = document.createElement('button');
+cancelButton.className = 'cancel-button';
+cancelButton.id = 'cancelButton';
+cancelButton.style.background = '#fbfbfb';
+cancelButton.style.color = 'black';
+cancelButton.textContent = 'Cancel';
+
+level4.appendChild(shareButton);
+level4.appendChild(cancelButton);
+
+postCreate.appendChild(level4);
 
 columns[0].appendChild(postCreate);
 
@@ -712,7 +845,9 @@ if (selectedFile) {
 });
 
 $('.share-button').click(function () {
+
 const postContent = $('#postTextArea').val();
+
 const postLink = $('#al1').val(); 
 const postVideo = $('#al2').val(); 
 
@@ -784,50 +919,109 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
     const plusOneUsernamesString = post.plus_one_usernames || '';
     const isLikedByCurrentUser = plusOneUsernamesString.includes('<?php echo $_SESSION["username"];?>');
 
-    postElement.innerHTML = `
+    const postMain = document.createElement('div');
+    postMain.className = 'post-main';
 
-    <div class="post-main">  
-     <div class="hacky-fix">
-     <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${post.username}" class="post-file-picture">
-      <div class="aaaaaa">
-       <div class="post-top">
-       <a href="<?php echo $siteurl; ?>/profile.php?profile=${post.username}">
-        <p class="username">${post.username}</p>
-       </a> 
-       
-        <span class="clickable-circle">&#709;</span>
+    const hackyFix = document.createElement('div');
+    hackyFix.className = 'hacky-fix';
 
-        <div class="dropdown-menu-del" style="display: none;">
-            <a href="#" class="delete-post-link">Delete post</a>
-        </div>
+    const postFilePicture = document.createElement('img');
+    postFilePicture.className = 'post-file-picture';
+    postFilePicture.src = `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(post.username)}`;
 
-        </div>
-       <div class="post-meta">
-        <span>Sharing Publicly &nbsp;</span>
-        <a style="color: inherit; text-decoration: none;" href="view_post.php?id=${post.id}">
-         <span class="upload-time">- ${formattedTime}</span>
-        </a>
-      </div>
-      </div>
-     </div>
+    const aaaa = document.createElement('div');
+    aaaa.className = 'aaaaaa';
 
-        <div class="post-content-container">
-            <p class="post-content">${post.content}</p>
-            <img class="post-image" src="${post.image_url}" alt="">
+    const postTop = document.createElement('div');
+    postTop.className = 'post-top';
 
-            <div class="link-preview">
-            </div>
+    const usernameLink = document.createElement('a');
+    usernameLink.href = `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/profile.php?profile=${encodeURIComponent(post.username)}`;
 
-            <div class="youtube-emded">
-            </div>
+    const username = document.createElement('p');
+    username.className = 'username';
+    username.textContent = post.username;
 
-        </div>
+    usernameLink.appendChild(username);
 
-    </div>
+    const clickableCircle = document.createElement('span');
+    clickableCircle.className = 'clickable-circle';
 
-    </div>
+    const unicodeCharacter = document.createTextNode('˅');
+    clickableCircle.appendChild(unicodeCharacter);
 
-  `;
+    postTop.appendChild(usernameLink);
+    postTop.appendChild(clickableCircle);
+
+    const dropdownMenuDel = document.createElement('div');
+    dropdownMenuDel.className = 'dropdown-menu-del';
+    dropdownMenuDel.style.display = 'none';
+
+    const deletePostLink = document.createElement('a');
+    deletePostLink.href = '#';
+    deletePostLink.className = 'delete-post-link';
+    deletePostLink.textContent = 'Delete post';
+
+    dropdownMenuDel.appendChild(deletePostLink);
+
+    postTop.appendChild(dropdownMenuDel);
+
+    const postMeta = document.createElement('div');
+    postMeta.className = 'post-meta';
+
+    const sharingPublicly = document.createElement('span');
+    sharingPublicly.textContent = 'Sharing Publicly ';
+
+    const viewPostLink = document.createElement('a');
+    viewPostLink.href = `view_post.php?id=${encodeURIComponent(post.id)}`;
+    viewPostLink.style.color = 'inherit';
+    viewPostLink.style.textDecoration = 'none';
+
+    const uploadTime = document.createElement('span');
+    uploadTime.className = 'upload-time';
+    uploadTime.textContent = `- ${formattedTime}`;
+
+    viewPostLink.appendChild(uploadTime);
+
+    postMeta.appendChild(sharingPublicly);
+    postMeta.appendChild(viewPostLink);
+
+    aaaa.appendChild(postTop);
+    aaaa.appendChild(postMeta);
+
+    hackyFix.appendChild(postFilePicture);
+    hackyFix.appendChild(aaaa);
+
+    postMain.appendChild(hackyFix);
+
+    const postContentContainer = document.createElement('div');
+    postContentContainer.className = 'post-content-container';
+
+    const postContent = document.createElement('p');
+    postContent.className = 'post-content';
+    postContent.textContent = post.content;
+
+    const postImage = document.createElement('img');
+    postImage.className = 'post-image';
+    postImage.src = post.image_url;
+    postImage.alt = '';
+
+    const linkPreview = document.createElement('div');
+    linkPreview.className = 'link-preview';
+
+    const youtubeEmbed = document.createElement('div');
+    youtubeEmbed.className = 'youtube-emded';
+
+    postContentContainer.appendChild(postContent);
+    postContentContainer.appendChild(postImage);
+    postContentContainer.appendChild(linkPreview);
+    postContentContainer.appendChild(youtubeEmbed);
+
+    postMain.appendChild(postContentContainer);
+
+    postElement.appendChild(postMain);
+
+    columns[0].appendChild(postElement);
 
     const sessionUsername = '<?php echo $_SESSION["username"]; ?>';
     var isMod = <?php echo json_encode($isMod); ?>;
@@ -968,25 +1162,42 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
             if (commentsData.status === 'success') {
 
                 $.each(commentsData.comments, function(index, comment) {
-                    const commentElement = document.createElement('div');
 
-                    commentElement.className = 'comment';
+                    const commentElement = $('<div>', { class: 'comment' });
 
-                    commentElement.innerHTML = `
-                <div class="hacky-fix">
-                 <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${comment.username}" class="comment-picture">
-                 <div class="agony">
-                  <div class="hacky-fix">
-                  <a href="<?php echo $siteurl; ?>/profile.php?profile=${comment.username}"  <p class="username">${comment.username}</p></a>
-                   <p class="time">${comment.comment_time}</p>
-                  </div>
-                  <p class="comment-content">${comment.comment_content}</p>
-                 </div>
-                </div> 
-                `;
+                    const hackyFix = $('<div>', { class: 'hacky-fix' });
 
-                    commentArea.appendChild(commentElement);
+                    const commentPicture = $('<img>', {
+                        class: 'comment-picture',
+                        src: `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(comment.username)}`
+                    });
+
+                    const agony = $('<div>', { class: 'agony' });
+
+                    const innerHackyFix = $('<div>', { class: 'hacky-fix' });
+
+                    const usernameLink = $('<a>', {
+                        href: `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/profile.php?profile=${encodeURIComponent(comment.username)}`
+                    }).append($('<p>', { class: 'username', text: comment.username }));
+
+                    const commentTime = $('<p>', { class: 'time', text: comment.comment_time });
+
+                    innerHackyFix.append(usernameLink, commentTime);
+
+                    const commentContent = $('<p>', { class: 'comment-content', text: comment.comment_content });
+
+                    agony.append(innerHackyFix, commentContent);
+
+                    hackyFix.append(commentPicture, agony);
+
+                    commentElement.append(hackyFix);
+
+                    $(commentArea).append(commentElement);
+
+                commentArea.appendChild(commentElement);
+
                 });
+
             } else {
 
                 console.log('No comments found for the post with ID ' + post.id);
@@ -1189,6 +1400,7 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
 });
 
 $(document).on('click', function(event) {
+
     if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoRealIcon) && !$(event.target).is($uploadButton)) {
         $("#fileDrop").hide();
         $postCreate.css({
@@ -1211,15 +1423,12 @@ $(document).on('click', function(event) {
 }
 
 $('#cancelButton').click(function() {
-
-    smoothReload(1000);
-
+    smoothReload(500);
 });
 
 const commentMain = $('.comment-main');
 
 fetchPosts();
-setInterval(fetchPosts, 600000);
 
 function smoothReload(delay) {
     $("body").fadeOut(delay, function() {
@@ -1228,11 +1437,7 @@ function smoothReload(delay) {
     });
 }
 
-
-
 </script>
-
-<!-- Shit Made In July -->
 
 <script src="assets/js/sidebar.js"></script>
 <script src="assets/js/funshit.js"></script>
