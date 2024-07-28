@@ -24,9 +24,9 @@ function getCommentsForPost() {
 
                     while ($comment = mysqli_fetch_assoc($result)) {
                         $comments[] = array(
-                            'username' => htmlspecialchars($comment['username']),
-                            'comment_content' => htmlspecialchars($comment['comment_content']),
-							'comment_time' => htmlspecialchars($comment['created_at'])
+                            'username' => $comment['username'],
+                            'comment_content' => $comment['comment_content'],
+                            'comment_time' => $comment['created_at']
                         );
                     }
 
@@ -43,10 +43,9 @@ function getCommentsForPost() {
             mysqli_close($conn);
         }
 
-        header("Content-Type: application/json");
-        echo json_encode($response);
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
     } else {
-
         echo "Please provide a valid 'id' parameter in the URL.";
     }
 }

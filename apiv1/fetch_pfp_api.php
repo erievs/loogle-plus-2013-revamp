@@ -5,7 +5,7 @@ $availableProfilePictures = array(
     'default1.jpg',
     'default2.jpg',
     'default3.jpg',
-    'default4.jpg'
+    'default4.jpg',
 );
 
 $allowedExtensions = array('jpg', 'jpeg', 'png', 'webp');

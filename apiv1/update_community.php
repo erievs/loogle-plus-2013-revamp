@@ -5,55 +5,53 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-function updateCommunity($community_id, $username, $updateFields) {
-    include("../important/db.php");
-    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
-
-    if ($conn->connect_error) {
-        custom_error_log("Connection failed: " . $conn->connect_error); 
-        return false; 
+function getCommunityById($community_id, $conn) {
+    $query = "SELECT * FROM communities WHERE community_id = ?";
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $community_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        } else {
+            return null;
+        }
+    } else {
+        custom_error_log("Query preparation failed: " . $conn->error);
+        return null;
     }
+}
 
-    $query = "UPDATE communities SET ";
+function updateCommunity($community_id, $updateFields, $conn) {
+    $queryParts = array();
     $params = array();
     $types = '';
+
     foreach ($updateFields as $field => $value) {
-        if (!empty($value)) {
-            $query .= "$field = ?, ";
+        if ($value !== '') {
+            $queryParts[] = "$field = ?";
             $params[] = $value;
-            $types .= 's'; // Assuming all values are strings
+            $types .= 's'; 
         }
     }
+
     if (!empty($params)) {
-        $query = rtrim($query, ", ");
-        $query .= ", links = ?"; // Add links field to the query
-        $params[] = $updateFields['links']; // Add links value to the params array
-        $types .= 's'; // Assuming links is a string
-
-        $query .= " WHERE community_id = ?";
+        $query = "UPDATE communities SET " . implode(", ", $queryParts) . " WHERE community_id = ?";
         $params[] = $community_id;
-        $types .= 'i'; // Assuming community_id is an integer
+        $types .= 'i'; 
 
-        $stmt = $conn->prepare($query);
-        if (!$stmt) {
+        if ($stmt = $conn->prepare($query)) {
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+            $stmt->close();
+            return true;
+        } else {
             custom_error_log("Query preparation failed: " . $conn->error);
             return false;
         }
-
-        $stmt->bind_param($types, ...$params);
-        if (!$stmt->execute()) {
-            custom_error_log("Execution failed: " . $stmt->error);
-            return false;
-        }
-
-        $stmt->close();
-        $conn->close();
-        return true;
-    } else {
-        custom_error_log("No update fields provided.");
-        $conn->close();
-        return false;
     }
+
+    return true; 
 }
 
 function custom_error_log($message) {
@@ -77,12 +75,43 @@ if (!isset($input['community_id'], $input['username'], $input['updateFields'])) 
     exit;
 }
 
-$result = updateCommunity($input['community_id'], $input['username'], $input['updateFields']);
+include("../important/db.php");
+$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
-if ($result) {
-    echo json_encode(array('success' => true));
-} else {
-    echo json_encode(array('error' => 'Failed to update community information.'));
+if ($conn->connect_error) {
+    custom_error_log("Connection failed: " . $conn->connect_error); 
+    echo json_encode(array('success' => false, 'error' => 'Connection failed'));
+    exit;
 }
 
+$existingData = getCommunityById($input['community_id'], $conn);
+if (!$existingData) {
+    echo json_encode(array('success' => false, 'error' => 'No record found'));
+    $conn->close();
+    exit;
+}
+
+$updateResult = updateCommunity($input['community_id'], $input['updateFields'], $conn);
+
+if ($updateResult) {
+
+    $responseData = $existingData;
+
+    foreach ($input['updateFields'] as $field => $value) {
+        if ($value !== '') {
+            $responseData[$field] = $value;
+        }
+    }
+
+    echo json_encode(array(
+        'success' => true,
+        'community_id' => $input['community_id'],
+        'username' => $input['username'],
+        'updateFields' => $responseData
+    ), JSON_UNESCAPED_UNICODE);
+} else {
+    echo json_encode(array('success' => false, 'error' => 'Failed to update community information.'));
+}
+
+$conn->close();
 ?>

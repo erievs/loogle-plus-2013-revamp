@@ -31,7 +31,7 @@ if (isset($_SESSION['username']) && isset($_POST['username'])) {
         $postId = $_POST['id'];
         $username = $_POST['username'];
 
-        $sqlCheck = "SELECT plus_one_usernames FROM posts WHERE id = $postId";
+        $sqlCheck = "SELECT plus_one, plus_one_usernames FROM posts WHERE id = $postId";
         $resultCheck = $conn->query($sqlCheck);
 
         if ($resultCheck->num_rows > 0) {
@@ -42,20 +42,24 @@ if (isset($_SESSION['username']) && isset($_POST['username'])) {
                 $plusOneUsernames = [];
             }
 
-            // Check if username is already in the array
             $index = array_search($username, $plusOneUsernames);
             if ($index !== false) {
-                // Remove username and subtract 1 from plus one count
+
                 unset($plusOneUsernames[$index]);
                 $sqlUpdate = "UPDATE posts SET plus_one = plus_one - 1, plus_one_usernames = '" . json_encode($plusOneUsernames) . "' WHERE id = $postId";
+                $action = "subtracted";
             } else {
-                // Add username and add 1 to plus one count
+
                 $plusOneUsernames[] = $username;
                 $sqlUpdate = "UPDATE posts SET plus_one = plus_one + 1, plus_one_usernames = '" . json_encode($plusOneUsernames) . "' WHERE id = $postId";
+                $action = "added";
             }
 
             if ($conn->query($sqlUpdate) === TRUE) {
-                echo json_encode(array("message" => "Plus one updated successfully"));
+                echo json_encode(array(
+                    "message" => "Plus one updated successfully",
+                    "action" => $action
+                ));
             } else {
                 http_response_code(500);
                 echo json_encode(array("error" => "Error updating plus one count: " . $conn->error));
