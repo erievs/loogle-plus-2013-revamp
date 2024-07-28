@@ -18,6 +18,7 @@ $username = $_SESSION['username'];
 
 if (isset($_POST['username']) && isset($_FILES['banner'])) {
     $postUsername = $_POST['username'];
+    $comUsername = $_POST['community-username'];
     $bannerFile = $_FILES['banner'];
 
     if ($postUsername !== $username) {
@@ -34,10 +35,10 @@ if (isset($_POST['username']) && isset($_FILES['banner'])) {
 
     if (in_array($fileExtension, $allowedExtensions) && $fileSize < $maxFileSize) {
 
-        $existingImagePath = $uploadDirectory . $username . '.*';
+        $existingImagePath = $uploadDirectory . $comUsername . '.*';
         array_map('unlink', glob($existingImagePath));
 
-        $bannerFileName = $username . '.' . $fileExtension;
+        $bannerFileName = $comUsername . '.' . $fileExtension;
         $bannerFilePath = $uploadDirectory . $bannerFileName;
 
         if (move_uploaded_file($bannerFile['tmp_name'], $bannerFilePath)) {

@@ -13,7 +13,7 @@ if (!isset($_SESSION['username'])) {
 
 $sessionUsername = $_SESSION['username'];
 
-$rateLimit = 2.5;
+$rateLimit = 0;
 
 function isRateLimited($rateLimitFile, $rateLimit) {
     if (!file_exists($rateLimitFile) || (time() - filemtime($rateLimitFile)) > $rateLimit) {
@@ -83,13 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-
-    if ($row['count'] > 0) {
-        $response['status'] = 'error';
-        $response['message'] = 'Duplicate comment detected. Please wait before posting the same comment again.';
-        echo json_encode($response);
-        exit();
-    }
 
     function extractMentions($content) {
         preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
