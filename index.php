@@ -43,6 +43,7 @@ if(isset($_GET['trump'])) {
 
 #bob-loadmore {
   font-size: 18px;
+  display:none;
 } 
 
 .comment-input {
@@ -118,7 +119,7 @@ textarea {
 <script>
 
 const urlParams = new URLSearchParams(window.location.search);
-const limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) 
+var limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) 
     ? Math.max(1, parseInt(urlParams.get('postlimit'), 10)) 
     : 35; 
 
@@ -931,7 +932,7 @@ $(document).on('click', '#loadmore', function() {
     increasePostLimit();
 });
 
-for (let i = 0; i < Math.min(limit, data.length); i++) {
+for (let i = 0; i < Math.min(data.length); i++) {
 
     const post = data[i];
 
