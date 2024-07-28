@@ -29,7 +29,7 @@ if(isset($_GET['trump'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    
+
     <link rel="icon" 
       type="image/png" 
       href="assets/important-images/fav.png" />
@@ -1219,12 +1219,12 @@ $('.comment-main').each(function() {
                 $('<div>', { class: 'hacky-fix' }).append(
                     $('<img>', {
                         class: 'comment-picture',
-                        src: `http://localhost:8090/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
+                        src: `http://<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
                     }),
                     $('<div>', { class: 'agony' }).append(
                         $('<div>', { class: 'hacky-fix' }).append(
                             $('<a>', {
-                                href: `http://localhost:8090/profile.php?profile=${encodeURIComponent(username)}`
+                                href: `<?php echo $siteurl; ?>/profile.php?profile=${encodeURIComponent(username)}`
                             }).append($('<p>', { class: 'username', text:  username })),
                             $('<p>', { class: 'time', text: new Date().toISOString().slice(0, 19).replace('T', ' ') }) 
                         ),

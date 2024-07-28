@@ -1147,7 +1147,7 @@ $(document).ready(function() {
                     'position': 'relative'
                 });
 
-                let newElement = $('<img>')
+                let newElement = $('<img id="">')
                 .attr('src', '<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>')
                 .css({
                     'width': '25px',
@@ -1196,12 +1196,12 @@ $(document).ready(function() {
                 $('<div>', { class: 'hacky-fix' }).append(
                     $('<img>', {
                         class: 'comment-picture',
-                        src: `http://localhost:8090/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
+                        src: `<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
                     }),
                     $('<div>', { class: 'agony' }).append(
                         $('<div>', { class: 'hacky-fix' }).append(
                             $('<a>', {
-                                href: `http://localhost:8090/profile.php?profile=${encodeURIComponent(username)}`
+                                href: `<?php echo $siteurl; ?>/profile.php?profile=${encodeURIComponent(username)}`
                             }).append($('<p>', { class: 'username', text:  username })),
                             $('<p>', { class: 'time', text: new Date().toISOString().slice(0, 19).replace('T', ' ') }) 
                         ),
