@@ -1219,7 +1219,7 @@ $('.comment-main').each(function() {
                 $('<div>', { class: 'hacky-fix' }).append(
                     $('<img>', {
                         class: 'comment-picture',
-                        src: `http://<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
+                        src: `<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
                     }),
                     $('<div>', { class: 'agony' }).append(
                         $('<div>', { class: 'hacky-fix' }).append(

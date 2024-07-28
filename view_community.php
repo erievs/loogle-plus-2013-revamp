@@ -1147,7 +1147,7 @@ $(document).ready(function() {
                     'position': 'relative'
                 });
 
-                let newElement = $('<img id="">')
+                let newElement = $('<img id="khamlaharis">')
                 .attr('src', '<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>')
                 .css({
                     'width': '25px',
@@ -1228,6 +1228,8 @@ $(document).ready(function() {
             $('.plus-one-icon').show();
             $('#c').hide();
 
+            $('#khamlaharis').hide();
+
             commentInput.css({
                 height: '30px',
                 width: '275px',
@@ -1263,6 +1265,7 @@ $(document).ready(function() {
     commentInputContainer.css('background-color', '#fff');
     $('.plus-one-icon').show();
 
+    $('#khamlaharis').hide();
 
    commentInput.css({
       height: '30px',
