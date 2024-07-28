@@ -79,7 +79,7 @@ function fetchMentions() {
                 $.each(mentions, function (index, mention) {
                     const mentionDiv = $("<div>").addClass("mention");
                     const pfpImage = $("<img>").attr({
-                        src: "/assets/icons/default.png",
+                        src: "<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=" + mention.sender,
                         alt: "PFP",
                     }).addClass("not-pfp-image");
 
@@ -218,7 +218,7 @@ $(document).ready(function() {
     <span id="notfication-header">
     <div class="sb-card-body-arrow" style="display: none;" ></div>
     <div id="notificationContainer" style=" display: none; color: #aaa; max-height: 500px; overflow-y: auto;">
-            <span class="title" style="color: #6f6f6f; text-align: center; font-size: 15px;">Loogle+ notifications</span>
+            <span class="title" style="color: #6f6f6f; text-align: center; font-size: 15px;">Loogle+ Notifications</span>
             <br />
             <br />
             <div id="mentionsContainer"></div>
