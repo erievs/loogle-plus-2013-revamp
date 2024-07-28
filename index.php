@@ -3,12 +3,13 @@ session_start();
 
 include("important/db.php");
 
+if (!isset($_SESSION["username"])) {
+  header("Location: ../user/login.php");
+  exit();
+}
+
 $username = $_SESSION["username"];
 
-if (!isset($_SESSION["username"])) {
-    header("Location: ../user/login.php");
-    exit();
-}
 
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -51,6 +52,18 @@ if(isset($_GET['trump'])) {
 textarea {
     padding-top: 3px;
 }
+
+.smooth-transition {
+  position: relative; 
+}
+
+.content {
+    background-size: contain;
+    background-position: center;
+    transition: background-image 1s ease-in-out; /* Adjust duration and easing as needed */
+}
+
+
 
 </style>
 
@@ -138,6 +151,11 @@ $(document).ready(function () {
 
 <script>
 
+function decodeHTMLEntities(text) {
+    var tempElement = $('<textarea>').html(text);
+    return tempElement.val();
+}
+
 function formatTime(timestamp) {
     const date = new Date(timestamp);
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
@@ -145,7 +163,7 @@ function formatTime(timestamp) {
 }
 
 function increasePostLimit() {
-    limit += 15; 
+    limit += 10; 
     fetchPosts();
 }
 
@@ -914,6 +932,7 @@ $(document).on('click', '#loadmore', function() {
 });
 
 for (let i = 0; i < Math.min(limit, data.length); i++) {
+
     const post = data[i];
 
     const postElement = document.createElement('div');
@@ -1001,9 +1020,11 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
     const postContentContainer = document.createElement('div');
     postContentContainer.className = 'post-content-container';
 
+    const decodedContent = decodeHTMLEntities(post.content);
     const postContent = document.createElement('p');
     postContent.className = 'post-content';
-    postContent.textContent = post.content;
+    postContent.textContent = decodedContent;
+
 
     const postImage = document.createElement('img');
     postImage.className = 'post-image';
@@ -1048,7 +1069,7 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
         url: '<?php echo $siteurl; ?>/apiv1-internal/delete_post.php?id=' + postId, 
         type: 'DELETE',
         success: function(response) {
-            smoothReload(500);
+            $post.remove();
         },
         error: function() {
             alert('An error occurred while trying to delete the post.');
@@ -1188,7 +1209,9 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
 
                     innerHackyFix.append(usernameLink, commentTime);
 
-                    const commentContent = $('<p>', { class: 'comment-content', text: comment.comment_content });
+                    const decodedContent = decodeHTMLEntities(comment.comment_content);
+                    const commentContent = $('<p>', { class: 'comment-content' }).text(decodedContent);
+
 
                     agony.append(innerHackyFix, commentContent);
 
@@ -1198,8 +1221,7 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
 
                     $(commentArea).append(commentElement);
 
-                commentArea.appendChild(commentElement);
-
+              
                 });
 
             } else {
@@ -1254,7 +1276,9 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
                 $(plusOneContainer).find('.plus-one-icon').click(function() {
                     var username = '<?php echo $_SESSION["username"];?>';
 
-                    $('#georgewallace').css('color', 'white');
+                    var $closestPlusOneIcon = $(this).closest('.plus-one-icon');
+                    var $closestGeorgeWallace = $closestPlusOneIcon.find('#georgewallace');
+                    var currentValue = parseInt($closestGeorgeWallace.text().replace('+', '')) || 0;
 
                     $.ajax({
                         url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
@@ -1265,8 +1289,25 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
                             username: username
                         },
                         success: function(response) {
-                            console.log(response);
-                            smoothReload();
+
+                            var responseData = JSON.parse(response);
+
+                            if (responseData.action === 'added') {
+                                console.log("Plus one added.");
+                                $closestGeorgeWallace.text(`+${currentValue + 1}`);
+                                $closestPlusOneIcon.css('color', '#ffff'); 
+                                $closestPlusOneIcon.css('background-color', '#cc4331'); 
+                                $closestGeorgeWallace.css('color', '#ffff'); 
+                            }  
+                            
+                            if (responseData.action === 'subtracted') {
+                                console.log("Plus one subtracted.");
+                                $closestGeorgeWallace.text(`+${currentValue - 1}`);
+                                $closestPlusOneIcon.css('background-color', 'white'); 
+                                $closestPlusOneIcon.css('color', '#333'); 
+                                $closestGeorgeWallace.css('color', '#333'); 
+                                
+                            }
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
@@ -1274,7 +1315,7 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
                     });
                 });
 
-                const commentInput = $('<textarea>').attr({
+        const commentInput = $('<textarea>').attr({
                     type: 'text',
                     id: 'comment-input-' + postID,
                     placeholder: 'Add a comment...'
@@ -1288,9 +1329,9 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
                 commentInput.css('border', '1px solid #ccc');
                 commentInput.css('resize', 'none');
 
-                const buttonContainer = $('<div>');
+                const buttonContainer = $('<div style="margin-right: 250px;">');
 
-                const submitButton = $('<button>').text('Submit').addClass('submit-button').css('display', 'none');
+                const submitButton = $('<button>').text('Post comment').addClass('submit-button').css('display', 'none');
 
                 const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
 
@@ -1301,35 +1342,48 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
                 $(this).after(commentInputContainer);
 
                 commentInput.on('click', function() {
+                    
+                submitButton.css('display', 'inline-block');
+                cancelButton.css('display', 'inline-block');
 
-                    submitButton.css('display', 'inline-block');
-                    cancelButton.css('display', 'inline-block');
+                $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
 
-                    $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
+                commentInput.attr('placeholder', '');
 
-                    commentInput.css('height', '60px');
-                    commentInput.css('width', '425px');
-
-                    commentInput.css('text-indent', '2ch');
-
-                    commentInput.css('background', '#fff');
-                    commentInput.css('border', '1px solid #ccc');
-
-                    commentInput.css('background', '#fff');
-                    commentInput.css('padding', '0px');
-
-                    commentInput.css('resize', 'none');
-
-                    commentInput.css('overflowY', 'auto')
-
-                    commentInput.css('padding-top', '3px')
-
-                    commentInput.css('left', '0%')
-
-                    commentInputContainer.css('background', '#f6f6f6');
-
-                    commentInputContainer.css('height', '125px');
+                commentInput.css({
+                    'height': '60px',
+                    'width': '440px',
+                    'text-indent': '1ch',
+                    'background': '#fff',
+                    'border': '1px solid #ccc',
+                    'padding': '0px',
+                    'resize': 'none',
+                    'overflowY': 'auto',
+                    'padding-top': '3px',
+                    'left': '23px'
                 });
+
+                commentInputContainer.css({
+                    'background': '#f6f6f6',
+                    'height': '125px',
+                    'position': 'relative'
+                });
+
+                let newElement = $('<img id="khamlaharis">')
+                .attr('src', '<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>')
+                .css({
+                    'width': '25px',
+                    'height': '25px',
+                    'position': 'absolute',
+                    'top': '17px',
+                    'left': '18px',
+                    'border-radius': '5%'
+               });
+
+                commentInputContainer.prepend(newElement);
+            });
+
+            var $closestCommentMain = $(this).closest('.comment-main');
 
                 submitButton.on('click', function() {
 
@@ -1354,15 +1408,73 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
                             postID: postID,
                             username: username
                         },
-
                         success: function(response) {
                             console.log(response);
-                            smoothReload(500);
+
+                            var commentContent = response.commentContent;
+                            var postID = response.postID;
+                            var username = response.username;
+
+                            var newComment = $('<div>', { class: 'comment' }).append(
+                                $('<div>', { class: 'hacky-fix' }).append(
+                                    $('<img>', {
+                                        class: 'comment-picture',
+                                        src: `http://localhost:8090/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
+                                    }),
+                                    $('<div>', { class: 'agony' }).append(
+                                        $('<div>', { class: 'hacky-fix' }).append(
+                                            $('<a>', {
+                                                href: `http://localhost:8090/profile.php?profile=${encodeURIComponent(username)}`
+                                            }).append($('<p>', { class: 'username', text:  username })),
+                                            $('<p>', { class: 'time', text: new Date().toISOString().slice(0, 19).replace('T', ' ') }) 
+                                        ),
+                                        $('<p>', { class: 'comment-content', text: commentContent })
+                                    )
+                                )
+                            );
+
+                            $closestCommentMain.append(newComment);
+
+                            function scrollToBottom(element, duration = 400) {
+                                $(element).animate({
+                                    scrollTop: $(element)[0].scrollHeight
+                                }, duration);
+                            }
+
+                            scrollToBottom($closestCommentMain);
+
+                            submitButton.css('display', 'none');
+                            cancelButton.css('display', 'none');
+                            
+
+                            commentInputContainer.css('background-color', '#fff');
+                            $('.plus-one-icon').show();
+                            $('#khamlaharis').hide();
+
+                            commentInput.css({
+                                height: '30px',
+                                width: '275px',
+                                left: '17%'
+                            });
+
+                            commentInputContainer.css('height', '50px');
+
+                   
+                            commentInput.css({
+                                background: '#fff',
+                                border: '1px solid #ccc'
+
+                            });
+
+                            commentInput.attr('placeholder', 'Add a comment..');
+
+                            commentInput.val('');
+
+                            commentInput.trigger('blur');
 
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            smoothReload(250);
                         }
                     });
                 });
@@ -1371,15 +1483,20 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
 
                     submitButton.css('display', 'none');
                     cancelButton.css('display', 'none');
+                    
 
                     commentInputContainer.css('background-color', '#fff');
                     $('.plus-one-icon').show();
+                    $('#khamlaharis').hide();
 
                     commentInput.css({
                         height: '30px',
                         width: '275px',
                         left: '17%'
                     });
+
+
+                    commentInput.val('');
 
                     commentInputContainer.css('height', '50px');
 
@@ -1388,6 +1505,8 @@ for (let i = 0; i < Math.min(limit, data.length); i++) {
                         border: '1px solid #ccc'
 
                     });
+
+                    commentInput.attr('placeholder', 'Add a comment..');
 
                     commentInput.trigger('blur');
                 });
@@ -1442,6 +1561,8 @@ function smoothReload(delay) {
 }
 
 </script>
+
+
 
 <script src="assets/js/sidebar.js"></script>
 <script src="assets/js/funshit.js"></script>

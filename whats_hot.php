@@ -359,78 +359,120 @@ $(document).ready(function() {
         plusOneIcon.append(plusOneSpan);
         plusOneContainer.append(plusOneIcon);
 
+   
         $(plusOneContainer).find('.plus-one-icon').click(function() {
-           var username = '<?php echo $_SESSION["username"];?>';
+            var username = '<?php echo $_SESSION["username"];?>';
 
-           $.ajax({
-           url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
-           type: 'POST',
-           data: { add_plus_one: true, id: postID, username: username },
-           success: function(response) {
-            console.log(response);
-            location.reload(); 
-           },
-            error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            }
-        });
+            $('#georgewallace').css('color', 'white');
+
+            var $closestPlusOneIcon = $(this).closest('.plus-one-icon');
+            var $closestGeorgeWallace = $closestPlusOneIcon.find('#georgewallace');
+            var currentValue = parseInt($closestGeorgeWallace.text().replace('+', '')) || 0;
+
+            $.ajax({
+                url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
+                type: 'POST',
+                data: {
+                    add_plus_one: true,
+                    id: postID,
+                    username: username
+                },
+                success: function(response) {
+
+                    var responseData = JSON.parse(response);
+
+                    if (responseData.action === 'added') {
+                        console.log("Plus one added.");
+                        $closestGeorgeWallace.text(`+${currentValue + 1}`);
+                        $closestPlusOneIcon.css('color', '#ffff'); 
+                        $closestPlusOneIcon.css('background-color', '#cc4331'); 
+                        $closestGeorgeWallace.css('color', '#ffff'); 
+                    }  
+                    
+                    if (responseData.action === 'subtracted') {
+                        console.log("Plus one subtracted.");
+                        $closestGeorgeWallace.text(`+${currentValue - 1}`);
+                        $closestPlusOneIcon.css('background-color', 'white'); 
+                        $closestPlusOneIcon.css('color', '#333'); 
+                        $closestGeorgeWallace.css('color', '#333'); 
+                        
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
+       });
+       
+       var $closestCommentMain = $(this).closest('.comment-main');
 
+       const commentInput = $('<textarea>').attr({
+                    type: 'text',
+                    id: 'comment-input-' + postID,
+                    placeholder: 'Add a comment...'
+                }).addClass('comment-input');
+                commentInputContainer.append(commentInput);
+                commentInputContainer.append(plusOneContainer);
 
-        const commentInput = $('<textarea>').attr({
-            type: 'text',
-            id: 'comment-input-' + postID, 
-            placeholder: 'Add a comment...'
-        }).addClass('comment-input');
-        commentInputContainer.append(commentInput);
-        commentInputContainer.append(plusOneContainer);
-     
+                commentInput.css('height', '30px');
+                commentInput.css('width', '275px');
+                commentInput.css('background', '#fff');
+                commentInput.css('border', '1px solid #ccc');
+                commentInput.css('resize', 'none');
 
-        commentInput.css('height', '30px');
-        commentInput.css('width', '275px');
-        commentInput.css('background', '#fff');
-        commentInput.css('border', '1px solid #ccc');
-        commentInput.css('resize', 'none');
+                const buttonContainer = $('<div style="margin-right: 250px;">');
 
-        const buttonContainer = $('<div>');
+                const submitButton = $('<button>').text('Post comment').addClass('submit-button').css('display', 'none');
 
-        const submitButton = $('<button>').text('Submit').addClass('submit-button').css('display', 'none');
+                const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
 
-        const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
+                buttonContainer.append(submitButton, cancelButton);
 
-        buttonContainer.append(submitButton, cancelButton);
+                commentInputContainer.append(buttonContainer);
 
-        commentInputContainer.append(buttonContainer);
+                $(this).after(commentInputContainer);
 
-        $(this).after(commentInputContainer);
+                commentInput.on('click', function() {
+                    
+                submitButton.css('display', 'inline-block');
+                cancelButton.css('display', 'inline-block');
 
-        commentInput.on('click', function() {
+                $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
 
-            $(this).closest('.comment-input-container').find('.plus-one-icon').show();
+                commentInput.attr('placeholder', '');
 
-            submitButton.css('display', 'inline-block');
-            cancelButton.css('display', 'inline-block');
+                commentInput.css({
+                    'height': '60px',
+                    'width': '440px',
+                    'text-indent': '1ch',
+                    'background': '#fff',
+                    'border': '1px solid #ccc',
+                    'padding': '0px',
+                    'resize': 'none',
+                    'overflowY': 'auto',
+                    'padding-top': '3px',
+                    'left': '23px'
+                });
 
-            commentInput.css('height', '60px');
-            commentInput.css('width', '425px');
+                commentInputContainer.css({
+                    'background': '#f6f6f6',
+                    'height': '125px',
+                    'position': 'relative'
+                });
 
-            commentInput.css('text-indent', '2ch');
+                let newElement = $('<img id="khamlaharis">')
+                .attr('src', '<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>')
+                .css({
+                    'width': '25px',
+                    'height': '25px',
+                    'position': 'absolute',
+                    'top': '17px',
+                    'left': '18px',
+                    'border-radius': '5%'
+               });
 
-            commentInput.css('background', '#fff');
-            commentInput.css('border', '1px solid #ccc');
-
-            commentInput.css('background', '#fff');
-            commentInput.css('padding', '0px');
-
-            commentInput.css('resize', 'none');
-
-            commentInput.css('overflowY', 'auto')
-
-            commentInput.css('left', '0%')
-
-            commentInputContainer.css('background', '#f6f6f6');
-
-            commentInputContainer.css('height', '125px');
+                commentInputContainer.prepend(newElement);
         });
 
         submitButton.on('click', function() {
@@ -446,8 +488,6 @@ $(document).ready(function() {
             username: username
         });
 
-
-
        $.ajax({
             
         url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
@@ -461,7 +501,68 @@ $(document).ready(function() {
 
          success: function(response) {
             console.log(response);
-            location.reload(); 
+            
+            var commentContent = response.commentContent;
+            var postID = response.postID;
+            var username = response.username;
+
+            var newComment = $('<div>', { class: 'comment' }).append(
+                $('<div>', { class: 'hacky-fix' }).append(
+                    $('<img>', {
+                        class: 'comment-picture',
+                        src: `http://localhost:8090/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
+                    }),
+                    $('<div>', { class: 'agony' }).append(
+                        $('<div>', { class: 'hacky-fix' }).append(
+                            $('<a>', {
+                                href: `http://localhost:8090/profile.php?profile=${encodeURIComponent(username)}`
+                            }).append($('<p>', { class: 'username', text:  username })),
+                            $('<p>', { class: 'time', text: new Date().toISOString().slice(0, 19).replace('T', ' ') }) 
+                        ),
+                        $('<p>', { class: 'comment-content', text: commentContent })
+                    )
+                )
+            );
+
+            $closestCommentMain.append(newComment);
+
+            function scrollToBottom(element, duration = 400) {
+                $(element).animate({
+                    scrollTop: $(element)[0].scrollHeight
+                }, duration);
+            }
+
+            scrollToBottom($closestCommentMain);
+
+            submitButton.css('display', 'none');
+            cancelButton.css('display', 'none');
+            
+
+            commentInputContainer.css('background-color', '#fff');
+            $('.plus-one-icon').show();
+            $('#khamlaharis').hide();
+
+            commentInput.css({
+                height: '30px',
+                width: '275px',
+                left: '17%'
+            });
+
+            commentInputContainer.css('height', '50px');
+
+
+            commentInput.css({
+                background: '#fff',
+                border: '1px solid #ccc'
+
+            });
+
+            commentInput.attr('placeholder', 'Add a comment..');
+
+            commentInput.val('');
+
+            commentInput.trigger('blur');
+
         },
          error: function(xhr, status, error) {
             console.error(xhr.responseText);
@@ -473,12 +574,18 @@ $(document).ready(function() {
 
     submitButton.css('display', 'none');
     cancelButton.css('display', 'none');
-
+    $('#khamlaharis').hide();
+    
    commentInput.css({
       height: '30px',
       width: '275px',
       left: '17%'
     });
+
+
+    commentInput.attr('placeholder', 'Add a comment..');
+
+    commentInput.val('');   
 
     commentInputContainer.css('background-color', '#fff');
 
@@ -492,6 +599,7 @@ $(document).ready(function() {
       border: '1px solid #ccc'
 
     });
+    
 
     commentInput.trigger('blur');
     });

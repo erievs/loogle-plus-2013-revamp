@@ -155,6 +155,8 @@ $(document).ready(function () {
     var offset = mainHeader.offset().top;
     var sidebarTopPosition = 60; 
 
+    var ogLinks = [];
+
     $(window).scroll(function () {
         var scrollTop = $(window).scrollTop();
         var mainHeaderHeight = mainHeader.height();
@@ -1047,83 +1049,116 @@ $(document).ready(function() {
         plusOneIcon.append(plusOneSpan);
         plusOneContainer.append(plusOneIcon);
 
+       
         $(plusOneContainer).find('.plus-one-icon').click(function() {
-           var username = '<?php echo $_SESSION["username"];?>';
+            var username = '<?php echo $_SESSION["username"];?>';
 
-           $.ajax({
-           url: '<?php echo $siteurl; ?>/apiv1/community_add_plus_one.php',
-           type: 'POST',
-           data: { 
-            add_plus_one: true, 
-            id: postID, 
-            community_id: <?php echo $comeget?>, 
-            username: username 
-            },
-           success: function(response) {
-            console.log(response);
-            location.reload(); 
-           },
-            error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            }
-        });
+            var $closestPlusOneIcon = $(this).closest('.plus-one-icon');
+            var $closestGeorgeWallace = $closestPlusOneIcon.find('#georgewallace');
+            var currentValue = parseInt($closestGeorgeWallace.text().replace('+', '')) || 0;
+
+            $.ajax({
+                url: '<?php echo $siteurl; ?>/apiv1/add_com_plus_one.php',
+                type: 'POST',
+                data: {
+                    add_plus_one: true,
+                    id: postID,
+                    username: username
+                },
+                success: function(response) {
+
+                    var responseData = JSON.parse(response);
+
+                    if (responseData.action === 'added') {
+                        console.log("Plus one added.");
+                        $closestGeorgeWallace.text(`+${currentValue + 1}`);
+                        $closestPlusOneIcon.css('color', '#ffff'); 
+                        $closestPlusOneIcon.css('background-color', '#cc4331'); 
+                        $closestGeorgeWallace.css('color', '#ffff'); 
+                    }  
+                    
+                    if (responseData.action === 'subtracted') {
+                        console.log("Plus one subtracted.");
+                        $closestGeorgeWallace.text(`+${currentValue - 1}`);
+                        $closestPlusOneIcon.css('background-color', 'white'); 
+                        $closestPlusOneIcon.css('color', '#333'); 
+                        $closestGeorgeWallace.css('color', '#333'); 
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
+        });
 
+        var $closestCommentMain = $(this).closest('.comment-main');
 
         const commentInput = $('<textarea>').attr({
-            type: 'text',
-            id: 'comment-input-' + postID, 
-            placeholder: 'Add a comment...'
-        }).addClass('comment-input');
-        commentInputContainer.append(commentInput);
-        commentInputContainer.append(plusOneContainer);
-     
+                    type: 'text',
+                    id: 'comment-input-' + postID,
+                    placeholder: 'Add a comment...'
+                }).addClass('comment-input');
+                commentInputContainer.append(commentInput);
+                commentInputContainer.append(plusOneContainer);
 
-        commentInput.css('height', '30px');
-        commentInput.css('width', '275px');
-        commentInput.css('background', '#fff');
-        commentInput.css('border', '1px solid #ccc');
-        commentInput.css('resize', 'none');
+                commentInput.css('height', '30px');
+                commentInput.css('width', '275px');
+                commentInput.css('background', '#fff');
+                commentInput.css('border', '1px solid #ccc');
+                commentInput.css('resize', 'none');
 
-        const buttonContainer = $('<div>');
+                const buttonContainer = $('<div style="margin-right: 250px;">');
 
-        const submitButton = $('<button>').text('Submit').addClass('submit-button').css('display', 'none');
+                const submitButton = $('<button>').text('Post comment').addClass('submit-button').css('display', 'none');
 
-        const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
+                const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
 
-        buttonContainer.append(submitButton, cancelButton);
+                buttonContainer.append(submitButton, cancelButton);
 
-        commentInputContainer.append(buttonContainer);
+                commentInputContainer.append(buttonContainer);
 
-        $(this).after(commentInputContainer);
+                $(this).after(commentInputContainer);
 
-        commentInput.on('click', function() {
+                commentInput.on('click', function() {
+                    
+                submitButton.css('display', 'inline-block');
+                cancelButton.css('display', 'inline-block');
 
-            submitButton.css('display', 'inline-block');
-            cancelButton.css('display', 'inline-block');
+                $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
 
-            $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
-            
-            commentInput.css('height', '60px');
-            commentInput.css('width', '425px');
+                commentInput.attr('placeholder', '');
 
-            commentInput.css('text-indent', '2ch');
+                commentInput.css({
+                    'height': '60px',
+                    'width': '440px',
+                    'text-indent': '1ch',
+                    'background': '#fff',
+                    'border': '1px solid #ccc',
+                    'padding': '0px',
+                    'resize': 'none',
+                    'overflowY': 'auto',
+                    'padding-top': '3px',
+                    'left': '23px'
+                });
 
-            commentInput.css('background', '#fff');
-            commentInput.css('border', '1px solid #ccc');
+                commentInputContainer.css({
+                    'background': '#f6f6f6',
+                    'height': '125px',
+                    'position': 'relative'
+                });
 
-            commentInput.css('background', '#fff');
-            commentInput.css('padding', '0px');
+                let newElement = $('<img>')
+                .attr('src', '<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>')
+                .css({
+                    'width': '25px',
+                    'height': '25px',
+                    'position': 'absolute',
+                    'top': '17px',
+                    'left': '18px',
+                    'border-radius': '5%'
+               });
 
-            commentInput.css('resize', 'none');
-
-            commentInput.css('overflowY', 'auto')
-
-            commentInput.css('left', '0%')
-
-            commentInputContainer.css('background', '#f6f6f6');
-
-            commentInputContainer.css('height', '125px');
+                commentInputContainer.prepend(newElement);
         });
 
         submitButton.on('click', function() {
@@ -1134,12 +1169,10 @@ $(document).ready(function() {
             const username = '<?php echo $_SESSION["username"]; ?>'; 
 
             console.log("Data sent in AJAX request:", {
-            commentContent: commentContent,
+            commsubmitntent: commentContent,
             postID: postID,
             username: username
         });
-
-
 
        $.ajax({
             
@@ -1155,11 +1188,69 @@ $(document).ready(function() {
 
          success: function(response) {
             console.log(response);
-            smoothReload(500);
+            var commentContent = response.commentContent;
+            var postID = response.postID;
+            var username = response.username;
+
+            var newComment = $('<div>', { class: 'comment' }).append(
+                $('<div>', { class: 'hacky-fix' }).append(
+                    $('<img>', {
+                        class: 'comment-picture',
+                        src: `http://localhost:8090/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
+                    }),
+                    $('<div>', { class: 'agony' }).append(
+                        $('<div>', { class: 'hacky-fix' }).append(
+                            $('<a>', {
+                                href: `http://localhost:8090/profile.php?profile=${encodeURIComponent(username)}`
+                            }).append($('<p>', { class: 'username', text:  username })),
+                            $('<p>', { class: 'time', text: new Date().toISOString().slice(0, 19).replace('T', ' ') }) 
+                        ),
+                        $('<p>', { class: 'comment-content', text: commentContent })
+                    )
+                )
+            );
+
+            $closestCommentMain.append(newComment);
+
+            function scrollToBottom(element, duration = 400) {
+                $(element).animate({
+                    scrollTop: $(element)[0].scrollHeight
+                }, duration);
+            }
+
+            scrollToBottom($closestCommentMain);
+
+            submitButton.css('display', 'none');
+            cancelButton.css('display', 'none');
+            
+
+            commentInputContainer.css('background-color', '#fff');
+            $('.plus-one-icon').show();
+            $('#c').hide();
+
+            commentInput.css({
+                height: '30px',
+                width: '275px',
+                left: '17%'
+            });
+
+            commentInputContainer.css('height', '50px');
+
+
+            commentInput.css({
+                background: '#fff',
+                border: '1px solid #ccc'
+
+            });
+
+            commentInput.attr('placeholder', 'Add a comment..');
+
+            commentInput.val('');
+
+            commentInput.trigger('blur');
         },
          error: function(xhr, status, error) {
             console.error(xhr.responseText);
-            smoothReload(250);
             }
         });
         });
@@ -1284,6 +1375,24 @@ $(document).ready(function() {
 
     $('#doneiscool').hide(); 
 
+    function smoothReload(delay) {
+        $("body").fadeOut(delay, function() {
+        location.reload();
+        });
+    }
+
+    ogLinks = getLinkUrls();
+
+    console.log(ogLinks);
+
+    function addLinkToArray() {
+            $('.link-input').each(function() {
+                if ($(this).val()) {
+                    ogLinks.push($(this).val());
+                }
+                $(this).remove(); 
+            });
+    }
 
     $.ajax({
             url: '<?php echo $siteurl; ?>/apiv1/fetch_community.php?community_id=<?php echo $comeget;?>',
@@ -1295,13 +1404,30 @@ $(document).ready(function() {
                 $('#first-text-p').text(communityData.name);
                 
                 if (communityData.tagline === null) {
-                    $('#second-text-p').text(userStatus.isOwner ? 'bob' : 'bob');
+
+                    let tagLine;
+                    if (userStatus.isOwner = true) {
+                        tagLine = 'Add a tagline!';
+                    } else {
+                        tagLine = '';
+                    }
+
+                    $('#second-text-p').text(tagLine);
                 } else {
                     $('#second-text-p').text(communityData.tagline);
                 }
                 
                 if (communityData.tagline === null) {
-                    $('#text-area-bob').text(userStatus.isOwner ? 'bob' : 'bob');
+
+                    let comDesc;
+                    if (userStatus.isOwner = true) {
+                        comDesc = 'Add a description!';
+                    } else {
+                        comDesc = '';
+                    }
+
+                    $('#text-area-bob').text(comDesc);
+
                 } else {
                     $('#text-area-bob').text(communityData.description);
                 }
@@ -1336,6 +1462,7 @@ $(document).ready(function() {
 
                 if (userStatus.isOwner) {
                     $('#pick-photo').show();
+                    $('#first-href-p').show();
                     $('#joinusordie').hide();
                     $('#youaredead').hide();
                     $('.post-create').show();
@@ -1349,10 +1476,10 @@ $(document).ready(function() {
                     
                     $.each(linksArray, function(index, link) {
                         var linkElement = $('<a>', { href: link, text: link });
-                        var lineBreak = $('<br>');
-                        var linkWrapper = $('<div>').css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' });
+                        
+                        var linkWrapper = $('<div id="finehavethefuckingid">').css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' });
                         linkWrapper.append(linkElement);
-                        $('#link-con').append(linkWrapper, lineBreak);
+                        $('#link-con').append(linkWrapper);
                         linkUrls.push(link);
                     });
                 }
@@ -1363,14 +1490,6 @@ $(document).ready(function() {
             }
         });
 
-    function smoothReload(delay) {
-        $("body").fadeOut(delay, function() {
-        location.reload();
-        });
-    }
-
-
-
     $(document).on('dblclick', '#first-text-p, #second-text-p, #text-p-bob, #text-area-bob', function() {
             if (userStatus.isOwner && !isActive) {
                 isActive = true;
@@ -1378,12 +1497,28 @@ $(document).ready(function() {
                 var text = $(this).text();
 
                 originalValues[id] = text;
+                
                 $(this).replaceWith(function() {
-                    var newId = id === 'text-p-bob' ? 'text-area-bob' : id; 
-                    var textarea = $('<textarea>', { id: newId, text: text }); 
-                    textarea.addClass(newId + '-textarea');
+                    var id = $(this).attr('id'); 
+                    var text = $(this).text();  
+
+                    var newId;
+
+                    if (id === 'text-area-bob') {
+                        newId = 'text-area-bob'; 
+                    } else if (id === 'second-text-p' || id === 'first-text-p') {
+                        newId = id; 
+                    } else {
+                        newId = id; 
+                    }
+
+                    var textarea = $('<textarea>', { id: newId });
+                    textarea.text(text); 
+                    textarea.addClass(newId + '-textarea'); 
+
                     return textarea;
                 });
+
                 $('#doneiscool').show();
             }
     });
@@ -1397,6 +1532,8 @@ $(document).ready(function() {
 
         }
     });
+
+
 
     function addLinkInput() {
         var linkInput = $('<input>', { type: 'text', class: 'link-input', placeholder: 'Enter link URL' });
@@ -1420,7 +1557,9 @@ $(document).ready(function() {
                 }),
                 success: function(response) {
                     if (response.status === 'success') {
-                        smoothReload(500);
+                        $('.post-create').show();
+                        $('#youaredead').show();
+                        $('#joinusordie').hide();
                     } else {
                         console.log('Failed to join the community.');
                         alert('failed to join');
@@ -1449,7 +1588,9 @@ $(document).ready(function() {
                 }),
                 success: function(response) {
                     if (response.status === 'success') {
-                        smoothReload(500);
+                        $('.post-create').hide();
+                        $('#youaredead').hide();
+                        $('#joinusordie').show();
                     } else {
                         console.log('Failed to leaving the community.');
                         alert('failed to leave');
@@ -1461,21 +1602,54 @@ $(document).ready(function() {
             });
         });
 
-    
+        function escapeHtml(unsafe) {
+            return unsafe.replace(/[&<>"']/g, function (match) {
+                switch (match) {
+                    case '&': return '&amp;';
+                    case '<': return '&lt;';
+                    case '>': return '&gt;';
+                    case '"': return '&quot;';
+                    case "'": return '&#039;';
+                }
+            });
+        }
+
+        function updateLinks(linkArray) {
+
+        $('#link-con').empty();
+
+        linkArray.forEach(function(link) {
+            var div = $('<div id="finehavethefuckingid">', {
+                style: 'overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'
+            });
+
+            var a = $('<a>', {
+                href: link,
+                text: link
+            });
+
+            div.append(a);
+             $('#link-con').append(div);
+            });
+        }
+                    
         $('#doneiscool').click(function() {
             if (userStatus.isOwner && isActive) {
                 isActive = false;
+
+                addLinkToArray();              
+
                 var originalValues = {
                     'first-text-p': $('#first-text-p').text(),
                     'second-text-p': $('#second-text-p').text(),
-                    'text-p-bob': $('#text-p-bob').text()
+                    'text-area-bob': $('#text-area-bob').text()
                 };
 
                 var updateFields = {
                     'name': $('#first-text-p').val(),
                     'tagline': $('#second-text-p').val(),
                     'description': $('#text-area-bob').val(),
-                    'links': getLinkUrls().join(', ')
+                    'links': ogLinks.join(', ')
                 };
 
                 console.log('JSON Object:', {
@@ -1484,6 +1658,7 @@ $(document).ready(function() {
                     updateFields: updateFields
                 });
 
+            
                 $.ajax({
                     url: '<?php echo $siteurl; ?>/apiv1/update_community.php',
                     type: 'POST',
@@ -1495,11 +1670,32 @@ $(document).ready(function() {
                     }),
                     success: function(response) {
                         if (response.success) {
-                            $('#first-text-p').replaceWith($('<h3>', { id: 'first-text-p', text: originalValues['first-text-p'] }));
-                            $('#second-text-p').replaceWith($('<p>', { id: 'second-text-p', text: originalValues['second-text-p'] }));
-                            $('#text-p-bob').replaceWith($('<p>', { id: 'text-p-bob', text: originalValues['text-p-bob'] }));
-                            smoothReload(500);
-                            isActive = false;
+
+                            $('#first-text-p').replaceWith($('<h3>', {
+                                id: 'first-text-p',
+                                text: updateFields.name || originalValues['first-text-p']
+                            }));
+
+                            $('#second-text-p').replaceWith($('<p>', {
+                                id: 'second-text-p',
+                                text: updateFields.tagline || originalValues['second-text-p']
+                            }));
+
+                            $('#text-area-bob').replaceWith($('<p>', {
+                                id: 'text-area-bob',
+                                text: updateFields.description || originalValues['text-area-bob']
+                            }));
+
+                            updateLinks(ogLinks)
+
+                     
+
+                            console.log(ogLinks);
+        
+                            $('.link-input').hide();
+                            $('#doneiscool').hide();
+
+                          
                         } else {
                             console.log('Failed to update community information.');
                         }
@@ -1525,22 +1721,74 @@ $(document).ready(function() {
 
         });
 
-$(document).ready(function() {
-    $('#al1').on('input', function() {
-        var linkInput = $(this).val().trim();
-        if (!linkInput.startsWith('http://')) {
-            linkInput = 'http://' + linkInput;
-            $(this).val(linkInput);
-        }
-    });
-});
+        $(document).ready(function() {
+            $('#al1').on('input', function() {
+                var linkInput = $(this).val().trim();
+                if (!linkInput.startsWith('http://')) {
+                    linkInput = 'http://' + linkInput;
+                    $(this).val(linkInput);
+                }
+            });
+        });
 
+        $(document).on('dblclick', '#finehavethefuckingid', function() {
+            
+            var linkToRemove = $(this).find('a').attr('href').trim();
+
+            console.log(linkToRemove);
+
+            ogLinks = ogLinks.filter(function(link) {
+                return link.replace(/\s/g, '') !== linkToRemove.replace(/\s/g, '');
+            });
+
+            console.log(ogLinks)
+
+            var originalValues = {
+                    'first-text-p': $('#first-text-p').text(),
+                    'second-text-p': $('#second-text-p').text(),
+                    'text-p-bob': $('#text-p-bob').text()
+                };
+
+            var updateFields = {
+                'links': ogLinks.join(', ')
+            };
+
+            $.ajax({
+                    url: '<?php echo $siteurl; ?>/apiv1/update_community.php',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        community_id: <?php echo $comeget; ?>,
+                        username: '<?php echo $_SESSION['username'];?>',
+                        updateFields: updateFields
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                  
+                            updateLinks(ogLinks)
+
+                            console.log(ogLinks);
+
+                          
+                        } else {
+                            console.log('Failed to update community information.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error occurred while updating community information: ' + error);
+                    }
+                });
+
+            $(this).remove();
+        });
+     
 $(document).ready(function() {
     var selectedFileOther;
 
     function handleFileUpload(file) {
         var formData = new FormData();
-        formData.append('username', '<?php echo $comeget ?>');
+        formData.append('username', '<?php echo $person ?>');
+        formData.append('community-username', '<?php echo $comeget ?>');
         formData.append('banner', file);
         $.ajax({
             url: '<?php echo $siteurl ?>/apiv1-internal/upload_cover.php',
@@ -1550,7 +1798,12 @@ $(document).ready(function() {
             contentType: false,
             success: function(response) {
                 alert(response);
-                smoothReload(500);
+
+                // the timestamp is so the browser doesn't save it
+
+                var timestamp = new Date().getTime();
+                var newImageUrl = '<?php echo $siteurl ?>/apiv1/fetch_cover_api.php?cover=<?php echo $comeget ?>&_=' + timestamp;
+                $('#image-section').css('background-image', 'url(' + newImageUrl + ')');
             },
             error: function(xhr, status, error) {
                 alert("Failed to upload banner. Error: " + error);
@@ -1590,14 +1843,12 @@ $(document).ready(function() {
             $("#uploadbanner-com").css("display", "none");
     });
 
-    function smoothReload(delay) {
-        setTimeout(function() {
-            location.reload();
-        }, delay);
-    }
 </script>
 
 <script src="assets/js/sidebar.js"></script>
 
 </body>
+
+<!-- var lineBreak = $('<br>');
+
 </html>
