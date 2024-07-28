@@ -137,9 +137,10 @@ margin-top: 15px;
 
 #text-area-bob {
   width: 175px;
-  margin-left: 7.5%;
+  margin-left: 8.5%;
   height: 150px;
   resize: vertical;
+  word-wrap: break-word;
 }
 
 .first-text-p-textarea {
@@ -223,4 +224,15 @@ margin-top: 15px;
 #spacer {
   width: 200px;
   height: 5px;
+}
+
+#text-p-bob {
+  margin-left: 8.5%;
+  height: 150px;
+  word-wrap: break-word;
+}
+
+#wbush {
+  color: #337ab7;
+  text-decoration: none;
 }

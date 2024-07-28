@@ -103,3 +103,40 @@
         position: relative;
         top: 27%;
     }
+    .submit-button {
+        background: #55a644;
+        margin-top: 5px;
+        margin-right: 2px;
+        border: none;
+        color: #fff;
+        padding: 0;
+        cursor: pointer;
+        height: 30px;
+        border-radius: 2px;
+        text-align: center;
+        position: relative;
+        line-height: 33px;
+        width: 100px;
+        margin-bottom: 5px;
+        top: 3px;
+        right: 262px;
+      }
+
+      .cancel {
+        background: #fff;
+        margin-top: 5px;
+        margin-right: 2px;
+        border: none;
+        color: black;
+        padding: 0;
+        cursor: pointer;
+        height: 31px;
+        border-radius: 2px;
+        text-align: center;
+        position: relative;
+        line-height: 33px;
+        width: 100px;
+        border: 1px solid rgb(204, 204, 204);
+        top: 3px;
+        right: 262px;
+      }

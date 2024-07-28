@@ -34,6 +34,12 @@
       margin-right: 30%;
     }
   }
+
+  @media (max-width: 1300px) {
+    .main-header .search-bar {
+      margin-right: 30%;
+    }
+  }
   
   /* 720p 16:9 */
   @media (max-width: 1280px) {
@@ -41,6 +47,7 @@
         margin-left: 95px;
     }
   }
+
   
   /* 540p 16:9 */
   @media (max-width: 960px) {
