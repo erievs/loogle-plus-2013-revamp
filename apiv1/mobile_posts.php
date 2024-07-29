@@ -15,11 +15,11 @@ function getPostsAndComments($username = null) {
     }
 
     $postsQuery = "SELECT * FROM posts";
-    
+
     if ($username !== null) {
         $postsQuery .= " WHERE username = '" . $conn->real_escape_string($username) . "'";
     }
-    
+
     $postsQuery .= " ORDER BY created_at DESC";
 
     $postsResult = $conn->query($postsQuery);
@@ -43,33 +43,33 @@ function getPostsAndComments($username = null) {
                 }
             }
 
-            $post_url = isset($post['post_url']) ? $post['post_url'] : null;
-            $video_url = isset($post['video_url']) ? $post['video_url'] : null;
-            $plus_one = isset($post['plus_one']) ? (int)$post['plus_one'] : 0;
-            $plus_one_usernames = isset($post['plus_one_usernames']) ? $post['plus_one_usernames'] : '';
+            $postData = array(
+                'id' => $post['id'],
+                'username' => $post['username'],
+                'content' => $post['content'],
+                'image_url' => !empty($post['image_url']) ? $siteurl . "/" . $post['image_url'] : null,
+                'post_link' => $post['post_link'],
+                'created_at' => $post['created_at'],
+                'plus_one' => isset($post['plus_one']) ? (int)$post['plus_one'] : 0,
+                'plus_one_usernames' => isset($post['plus_one_usernames']) ? $post['plus_one_usernames'] : ''
+            );
 
-            $image_url = !empty($post['image_url']) ? $siteurl . "/" . $post['image_url'] : null;
+            if (!empty($post['post_url'])) {
+                $postData['post_link_url'] = $post['post_url'];
+            }
+            if (!empty($post['video_url'])) {
+                $postData['post_url'] = $post['video_url'];
+            }
 
             $data[] = array(
-                'post' => array(
-                    'id' => $post['id'],
-                    'username' => $post['username'],
-                    'content' => $post['content'],
-                    'image_url' => $image_url,
-                    'post_link' => $post['post_link'],
-                    'post_link_url' => $post_url,
-                    'post_url' => $video_url,
-                    'created_at' => $post['created_at'],
-                    'plus_one' => $plus_one,
-                    'plus_one_usernames' => $plus_one_usernames
-                ),
+                'post' => $postData,
                 'comments' => $comments
             );
         }
     }
 
     $conn->close();
-    
+
     return json_encode($data);
 }
 
