@@ -44,7 +44,7 @@ function getPostsAndComments($username = null) {
             }
 
             if (!empty($post['image_url'])) {
-                $image_url = 'http://kspc.serv00.net/' . $post['image_url'];
+                $image_url = $siteurl . "/" . $post['image_url'];
             } else {
                 $image_url = null;
             }
