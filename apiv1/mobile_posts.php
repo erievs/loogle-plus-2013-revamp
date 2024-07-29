@@ -53,10 +53,14 @@ function getPostsAndComments($username = null) {
                 'post' => array(
                     'id' => $post['id'],
                     'username' => $post['username'],
-                    'content' => htmlspecialchars($post['content']),
+                    'content' => $post['content'],
                     'image_url' => $image_url,
                     'post_link' => $post['post_link'],
-                    'created_at' => $post['created_at']
+                    'post_link_url' => $post_url,
+                    'post_url' => $video_url,
+                    'created_at' => $post['created_at'],
+                    'plus_one' => $plus_one,
+                    'plus_one_usernames' => $post['plus_one_usernames']
                 ),
                 'comments' => $comments
             );
