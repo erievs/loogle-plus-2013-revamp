@@ -69,8 +69,7 @@ function getPostsAndComments($username = null) {
     }
 
     $conn->close();
-
-    // Encode JSON without additional special character handling
+    
     return json_encode($data);
 }
 
