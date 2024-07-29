@@ -11,7 +11,7 @@ function getPostsAndComments($username = null) {
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
     if ($conn->connect_error) {
-        die(json_encode(array('status' => 'error', 'message' => "Connection failed: " . $conn->connect_error)));
+        die("Connection failed: " . $conn->connect_error);
     }
 
     $postsQuery = "SELECT * FROM posts";
@@ -29,7 +29,7 @@ function getPostsAndComments($username = null) {
     if ($postsResult->num_rows > 0) {
         while ($post = $postsResult->fetch_assoc()) {
             $postId = $post['id'];
-            $commentsQuery = "SELECT * FROM comments WHERE post_id = $postId";
+            $commentsQuery = "SELECT * FROM comments WHERE post_id = " . intval($postId);
             $commentsResult = $conn->query($commentsQuery);
 
             $comments = array();
@@ -37,32 +37,26 @@ function getPostsAndComments($username = null) {
             if ($commentsResult->num_rows > 0) {
                 while ($comment = $commentsResult->fetch_assoc()) {
                     $comments[] = array(
-                        'username' => $comment['username'],
-                        'comment_content' => $comment['comment_content']
+                        'username' => htmlspecialchars($comment['username']),
+                        'comment_content' => htmlspecialchars($comment['comment_content'])
                     );
                 }
             }
 
-            $postData = array(
-                'id' => $post['id'],
-                'username' => $post['username'],
-                'content' => $post['content'],
-                'image_url' => !empty($post['image_url']) ? $siteurl . "/" . $post['image_url'] : null,
-                'post_link' => $post['post_link'],
-                'created_at' => $post['created_at'],
-                'plus_one' => isset($post['plus_one']) ? (int)$post['plus_one'] : 0,
-                'plus_one_usernames' => isset($post['plus_one_usernames']) ? $post['plus_one_usernames'] : ''
-            );
-
-            if (!empty($post['post_url'])) {
-                $postData['post_link_url'] = $post['post_url'];
-            }
-            if (!empty($post['video_url'])) {
-                $postData['post_url'] = $post['video_url'];
-            }
+            $image_url = !empty($post['image_url']) ? $siteurl . "/" . htmlspecialchars($post['image_url']) : null;
 
             $data[] = array(
-                'post' => $postData,
+                'post' => array(
+                    'id' => intval($post['id']),
+                    'username' => htmlspecialchars($post['username']),
+                    'content' => htmlspecialchars($post['content']),
+                    'image_url' => $image_url,
+                    'post_link' => htmlspecialchars($post['post_link']),
+                    'post_link_url' => htmlspecialchars($post['post_link_url']), 
+                    'created_at' => $post['created_at'],
+                    'plus_one' => intval($post['plus_one']), 
+                    'plus_one_usernames' => htmlspecialchars($post['plus_one_usernames'])
+                ),
                 'comments' => $comments
             );
         }
@@ -70,11 +64,11 @@ function getPostsAndComments($username = null) {
 
     $conn->close();
 
-    return json_encode($data);
+    return $data;
 }
 
 $username = isset($_GET['username']) ? $_GET['username'] : null;
 $data = getPostsAndComments($username);
 
-echo $data;
+echo json_encode($data, JSON_PRETTY_PRINT); 
 ?>
