@@ -52,9 +52,9 @@ function getPostsAndComments($username = null) {
                     'content' => htmlspecialchars($post['content']),
                     'image_url' => $image_url,
                     'post_link' => htmlspecialchars($post['post_link']),
-                    'post_link_url' => htmlspecialchars($post['post_link_url']), 
+                    'post_link_url' => htmlspecialchars($post['post_link_url']),
                     'created_at' => $post['created_at'],
-                    'plus_one' => intval($post['plus_one']), 
+                    'plus_one' => intval($post['plus_one']),
                     'plus_one_usernames' => htmlspecialchars($post['plus_one_usernames'])
                 ),
                 'comments' => $comments
@@ -70,5 +70,5 @@ function getPostsAndComments($username = null) {
 $username = isset($_GET['username']) ? $_GET['username'] : null;
 $data = getPostsAndComments($username);
 
-echo json_encode($data, JSON_PRETTY_PRINT); 
+echo json_encode($data, JSON_PRETTY_PRINT | JSON_HEX_QUOT | JSON_HEX_APOS);
 ?>
