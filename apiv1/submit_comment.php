@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $query = "SELECT * FROM users WHERE username = ? AND password = ?";
+    $query = "SELECT * FROM user WHERE username = ? AND password = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ss", $username, $password);
     $stmt->execute();
