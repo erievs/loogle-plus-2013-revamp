@@ -23,11 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commentContent = $_POST['commentContent'] ?? '';
     $postID = $_POST['postID'] ?? '';
     $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
 
-    if (empty($commentContent) || empty($postID) || empty($username) || empty($password)) {
+    if (empty($commentContent) || empty($postID) || empty($username)) {
         $response['status'] = 'error';
         $response['message'] = 'All fields are required';
+        logResponse($response);
         echo json_encode($response);
         exit();
     }
@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (trim($commentContent) === '') {
         $response['status'] = 'error';
         $response['message'] = 'Comment cannot consist only of spaces';
+        logResponse($response);
         echo json_encode($response);
         exit();
     }
@@ -46,21 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($conn->connect_error) {
         $response['status'] = 'error';
         $response['message'] = "Connection failed: " . $conn->connect_error;
+        logResponse($response);
         echo json_encode($response);
         exit();
     }
 
-    $query = "SELECT * FROM user WHERE username = ? AND password = ?";
+    $query = "SELECT * FROM user WHERE username = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows === 0) {
         $response['status'] = 'error';
-        $response['message'] = 'Invalid username or password';
+        $response['message'] = 'Invalid username';
         $stmt->close();
         $conn->close();
+        logResponse($response);
         echo json_encode($response);
         exit();
     }
@@ -88,3 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response['status'] = 'error';
     $response['message'] = 'Invalid request method';
 }
+
+logResponse($response);
+echo json_encode($response);
+
+function logResponse($response) {
+    $logFile = 'response_log.txt';
+    $logEntry = "[" . date('Y-m-d H:i:s') . "] " . json_encode($response) . PHP_EOL;
+    file_put_contents($logFile, $logEntry, FILE_APPEND);
+}
+?>
