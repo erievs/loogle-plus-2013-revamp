@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (!isset($_SESSION["username"])) {
@@ -35,13 +34,13 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moderator Panel</title>
-    <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/writepost.css" />
-    <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/headerfix.css" />
-    <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/univesalcoolstuff.css" />
-    <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/2013notes.css" />
-    <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/2013indexres.css" />
-    <link rel="stylesheet" href="https://kspc.serv00.net/assets/css/2013isamess.css" />
+    <link rel="stylesheet" href="<?php echo $siteurl;?>/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?php echo $siteurl;?>/assets/css/writepost.css" />
+    <link rel="stylesheet" href="<?php echo $siteurl;?>/assets/css/headerfix.css" />
+    <link rel="stylesheet" href="<?php echo $siteurl;?>/assets/css/univesalcoolstuff.css" />
+    <link rel="stylesheet" href="<?php echo $siteurl;?>/assets/css/2013notes.css" />
+    <link rel="stylesheet" href="<?php echo $siteurl;?>/assets/css/2013indexres.css" />
+    <link rel="stylesheet" href="<?php echo $siteurl;?>/assets/css/2013isamess.css" />
     <style>
         .content {
             display: flex;
