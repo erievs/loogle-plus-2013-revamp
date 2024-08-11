@@ -1,6 +1,10 @@
 
 ![alt text](https://github.com/erievs/loogle-plus-2013-revamp/blob/main/loogle%20ss.png?raw=true)
 
+** LOOGLE PLUS DOES NOT SUPPORT ANY PUBLIC INSTANCES RAN BY OTHER PEOPLE WE 
+WOULD PREFER PEOPLE TO KEEP THEM PRIVATE OF COURSE THAT WILL CHANGE IF LOOGLE
+PLUS EVER GETS SHUT DOWN**
+
 About Loogle Plus:
 
 Loogle+ is a recreation/revival of the lost Google+, love it or hate it Loogle+ is here to stay.
