@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
-function getPostsFromDatabase($username = null) {
+function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 15) {
     include("../important/db.php");
     global $siteurl;
 
@@ -17,12 +17,15 @@ function getPostsFromDatabase($username = null) {
 
     $conn->set_charset("utf8");
 
-    $query = "SELECT * FROM posts WHERE visibility = 'v'";
+    $offset = ($page - 1) * $postsPerPage;
+
+    $query = "SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC LIMIT ?, ?";
     if ($username !== null) {
-        $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC");
-        $stmt->bind_param("s", $username);
+        $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC LIMIT ?, ?");
+        $stmt->bind_param("sii", $username, $offset, $postsPerPage);
     } else {
-        $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC");
+        $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC LIMIT ?, ?");
+        $stmt->bind_param("ii", $offset, $postsPerPage);
     }
 
     $stmt->execute();
@@ -55,11 +58,14 @@ function getPostsFromDatabase($username = null) {
     return $posts;
 }
 
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+$postsPerPage = 15; 
+
 if (isset($_GET['username'])) {
     $username = $_GET['username'];
-    $postsData = getPostsFromDatabase($username);
+    $postsData = getPostsFromDatabase($username, $page, $postsPerPage);
 } else {
-    $postsData = getPostsFromDatabase();
+    $postsData = getPostsFromDatabase(null, $page, $postsPerPage);
 }
 
 echo json_encode($postsData, JSON_UNESCAPED_UNICODE);
