@@ -115,7 +115,7 @@ if(isset($_GET['trump'])) {
     </div>
     <div class="row">
       <div class="modal-bottom">
-        <button class="ifyouwalkandiwasgone" id="banner-upload">Set as profile photo</button>
+        <button class="ifyouwalkandiwasgone" id="banner-upload">Set as banner</button>
         <button class="close-banner" id="donotaskwhatwedidtojapaninthe40s">Cancel</button>
       </div>
     </div>
@@ -185,7 +185,11 @@ function formatTime(timestamp) {
 }
 
     function fetchPosts() {
-    fetch('<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?username=<?php echo $profileget; ?>')
+
+    const apiUrl = `<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?username=<?php echo $profileget; ?>&disable_pagination=true`;
+
+    
+    fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
