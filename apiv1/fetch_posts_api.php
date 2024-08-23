@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
-function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 15) {
+function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $disablePagination = false) {
     include("../important/db.php");
     global $siteurl;
 
@@ -17,15 +17,26 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 15) {
 
     $conn->set_charset("utf8");
 
-    $offset = ($page - 1) * $postsPerPage;
+    if ($disablePagination) {
 
-    $query = "SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC LIMIT ?, ?";
-    if ($username !== null) {
-        $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC LIMIT ?, ?");
-        $stmt->bind_param("sii", $username, $offset, $postsPerPage);
+        $query = "SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC";
+        if ($username !== null) {
+            $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC");
+            $stmt->bind_param("s", $username);
+        } else {
+            $stmt = $conn->prepare($query);
+        }
     } else {
-        $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC LIMIT ?, ?");
-        $stmt->bind_param("ii", $offset, $postsPerPage);
+
+        $offset = ($page - 1) * $postsPerPage;
+
+        if ($username !== null) {
+            $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC LIMIT ?, ?");
+            $stmt->bind_param("sii", $username, $offset, $postsPerPage);
+        } else {
+            $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC LIMIT ?, ?");
+            $stmt->bind_param("ii", $offset, $postsPerPage);
+        }
     }
 
     $stmt->execute();
@@ -61,12 +72,14 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 15) {
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
 $postsPerPage = 15; 
 
+$disablePagination = isset($_GET['disable_pagination']) && $_GET['disable_pagination'] === 'true';
+
 if (isset($_GET['username'])) {
     $username = $_GET['username'];
-    $postsData = getPostsFromDatabase($username, $page, $postsPerPage);
+    $postsData = getPostsFromDatabase($username, $page, $postsPerPage, $disablePagination);
 } else {
-    $postsData = getPostsFromDatabase(null, $page, $postsPerPage);
+    $postsData = getPostsFromDatabase(null, $page, $postsPerPage, $disablePagination);
 }
 
 echo json_encode($postsData, JSON_UNESCAPED_UNICODE);
-?>
+?>  
