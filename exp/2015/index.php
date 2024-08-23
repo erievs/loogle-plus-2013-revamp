@@ -59,55 +59,92 @@ $icon = "home";
 
 <script>
     $(document).ready(function() {
+        let currentPage = 1;
+        let isLoading = false;
 
         function getRelativeTime(date) {
-                    const now = new Date();
-                    const diff = now - new Date(date);
-                    const seconds = Math.floor(diff / 1000);
-                    const minutes = Math.floor(seconds / 60);
-                    const hours = Math.floor(minutes / 60);
-                    const days = Math.floor(hours / 24);
-                    const months = Math.floor(days / 30);
-                    const years = Math.floor(months / 12);
+            const now = new Date();
+            const diff = now - new Date(date);
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            const months = Math.floor(days / 30);
+            const years = Math.floor(months / 12);
 
-                    if (years > 0) return years + 'y';
-                    if (months > 0) return months + 'm';
-                    if (days > 0) return days + 'd';
-                    if (hours > 0) return hours + 'h';
-                    if (minutes > 0) return minutes + 'm';
-                    return seconds + 's';
+            if (years > 0) return years + 'y';
+            if (months > 0) return months + 'm';
+            if (days > 0) return days + 'd';
+            if (hours > 0) return hours + 'h';
+            if (minutes > 0) return minutes + 'm';
+            return seconds + 's';
         }
 
-        $.ajax({
-            url: '<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php', 
-            method: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                var postsContainer = $('#posts-container');
-                
-                data.forEach(function(post) {
+        function fetchPosts(page) {
+            if (isLoading) return; 
+            isLoading = true;
 
-                    var relativeTime = getRelativeTime(post.created_at);
+            $.ajax({
+                url: `<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?page=${page}`, 
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var postsContainer = $('#posts-container');
 
-                    var postTemplate = `
-                        <div class="post">
-                            <div class="post-header">
-                                <img id="thekhive" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${post.username}" class="profile-picture">
-                                <span id="post-username">${post.username}</span>
-                                <span class="created-at">${relativeTime}</span>
-                            </div>
-                            <p>${post.content}</p>
-                            ${post.image_url ? `<img id="post-image" src="${post.image_url}" alt="Image">` : ''}
-                            ${post.post_link ? `<a href="${post.post_link_url}" target="_blank">${post.post_link}</a>` : ''}
-                            ${post.post_url ? `<a href="${post.post_url}" target="_blank">Watch Video</a>` : ''}                          
-                        </div>`;
-                    postsContainer.append(postTemplate);
-                });
-            },
-            error: function() {
-                $('#posts-container').html('<p>Failed to load posts.</p>');
+                    if (data.length > 0) {
+                        data.forEach(function(post) {
+                            var relativeTime = getRelativeTime(post.created_at);
+                            var postTemplate = `
+                                <div class="post">
+                                    <div class="post-header">
+                                        <img id="thekhive" src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${post.username}" class="profile-picture">
+                                        <span id="post-username">${post.username}</span>
+                                        <span class="created-at">${relativeTime}</span>
+                                    </div>
+                                    <p>${post.content}</p>
+                                    ${post.image_url ? `<img id="post-image" src="${post.image_url}" alt="Image">` : ''}
+                                    ${post.post_link ? `<a href="${post.post_link_url}" target="_blank">${post.post_link}</a>` : ''}
+                                    ${post.post_url ? `<a href="${post.post_url}" target="_blank">Watch Video</a>` : ''}                          
+                                </div>`;
+                            postsContainer.append(postTemplate);
+                        });
+
+                        $('#loading').hide();
+                    } else {
+
+                        $(window).off('scroll', onScroll);
+                        $('#loading').hide();
+                    }
+
+                    isLoading = false;
+                },
+                error: function() {
+                    $('#posts-container').html('<p>Failed to load posts.</p>');
+                }
+            });
+        }
+
+        function onScroll() {
+            const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+
+            console.log('Window Height:', window.innerHeight);
+            console.log('Scroll Y:', window.scrollY);
+            console.log('Document Height:', document.body.offsetHeight);
+            console.log('Near Bottom:', nearBottom);
+
+            if (nearBottom && !isLoading) {
+                console.log('Current Page:', currentPage);
+                console.log('Triggering fetch for page:', currentPage + 1);
+
+                $('#loading').show();
+                currentPage++;
+                fetchPosts(currentPage);
             }
-        });
+        }
+
+        fetchPosts(currentPage);
+
+        $(window).on('scroll', onScroll);
     });
 </script>
 
