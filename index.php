@@ -168,8 +168,38 @@ function increasePostLimit() {
     fetchPosts();
 }
 
-function fetchPosts() {
-fetch('<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php')
+let currentPage = 1;
+
+window.addEventListener('scroll', onScroll);
+
+function onScroll() {
+
+const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+
+console.log('Window Height:', window.innerHeight);
+console.log('Scroll Y:', window.scrollY);
+console.log('Document Height:', document.body.offsetHeight);
+console.log('Near Bottom:', nearBottom);
+
+if (nearBottom) {
+
+    console.log('Current Page:', currentPage);
+
+    console.log('Triggering fetch for page:', currentPage + 1);
+
+    currentPage++;
+
+    fetchPosts(currentPage);
+}
+}
+
+function fetchPosts(currentPage) {
+
+const apiUrl = `<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?page=${currentPage}`;
+
+console.log('Fetching URL:', apiUrl);
+
+fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
@@ -1552,7 +1582,7 @@ $('#cancelButton').click(function() {
 
 const commentMain = $('.comment-main');
 
-fetchPosts();
+fetchPosts(currentPage);
 
 function smoothReload(delay) {
     $("body").fadeOut(delay, function() {
