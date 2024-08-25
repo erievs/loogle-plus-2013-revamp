@@ -182,7 +182,7 @@ function onScroll() {
         console.log('Column Bottom:', columnBottom);
         console.log('Viewport Bottom:', viewportBottom);
 
-        if (columnBottom <= viewportBottom + 500) { 
+        if (columnBottom <= viewportBottom + 200) { 
             nearBottom = true;
         }
     });
