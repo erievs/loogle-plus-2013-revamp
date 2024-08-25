@@ -220,14 +220,25 @@ if (forceColParam && !isNaN(forceColParam)) {
     }
 }
 
-const columns = [];
-for (let i = 0; i < numColumns; i++) {
-    const column = document.createElement('div');
-    column.className = 'column';
-    columns.push(column);
-    postsContainer.appendChild(column);
+const existingColumns = postsContainer.getElementsByClassName('column');
+const currentColumnCount = existingColumns.length;
+
+if (currentColumnCount < numColumns) {
+    for (let i = currentColumnCount; i < numColumns; i++) {
+        const column = document.createElement('div');
+        column.className = 'column';
+        postsContainer.appendChild(column);
+    }
 }
 
+const columns = [];
+for (let i = 0; i < numColumns; i++) {
+    columns.push(existingColumns[i]);
+}
+
+let existingPostCreate = postsContainer.querySelector('.post-create');
+
+if (!existingPostCreate) {
 const postCreate = document.createElement('div');
 postCreate.className = 'post-create';
 
@@ -464,6 +475,7 @@ level4.appendChild(cancelButton);
 postCreate.appendChild(level4);
 
 columns[0].appendChild(postCreate);
+}
 
 $(document).ready(function () {
 let postCreateMoved = false; 
