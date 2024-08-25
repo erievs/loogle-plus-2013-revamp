@@ -171,26 +171,31 @@ function increasePostLimit() {
 let currentPage = 1;
 
 window.addEventListener('scroll', onScroll);
-
 function onScroll() {
+    const columns = document.querySelectorAll('.column'); 
+    let nearBottom = false;
 
-const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+    columns.forEach(column => {
+        const columnBottom = column.getBoundingClientRect().bottom;
+        const viewportBottom = window.innerHeight + window.scrollY;
 
-console.log('Window Height:', window.innerHeight);
-console.log('Scroll Y:', window.scrollY);
-console.log('Document Height:', document.body.offsetHeight);
-console.log('Near Bottom:', nearBottom);
+        console.log('Column Bottom:', columnBottom);
+        console.log('Viewport Bottom:', viewportBottom);
 
-if (nearBottom) {
+        if (columnBottom <= viewportBottom + 500) { 
+            nearBottom = true;
+        }
+    });
 
-    console.log('Current Page:', currentPage);
+    console.log('Near Bottom:', nearBottom);
 
-    console.log('Triggering fetch for page:', currentPage + 1);
+    if (nearBottom) {
+        console.log('Current Page:', currentPage);
+        console.log('Triggering fetch for page:', currentPage + 1);
 
-    currentPage++;
-
-    fetchPosts(currentPage);
-}
+        currentPage++;
+        fetchPosts(currentPage);
+    }
 }
 
 function fetchPosts(currentPage) {
