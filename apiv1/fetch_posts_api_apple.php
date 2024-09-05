@@ -17,7 +17,6 @@ function getPostsFromDatabase($username = null) {
 
     $conn->set_charset("utf8");
 
-    $query = "SELECT * FROM posts WHERE visibility = 'v'";
     if ($username !== null) {
         $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC");
         $stmt->bind_param("s", $username);
@@ -30,10 +29,11 @@ function getPostsFromDatabase($username = null) {
     $posts = array();
 
     while ($post = $result->fetch_assoc()) {
-        $image_url = !empty($post['image_url']) ? str_replace('..', '', $siteurl) . str_replace('..', '', $post['image_url']) : null;
+
+        $image_url = !empty($post['image_url']) ? $siteurl . str_replace('..', '', $post['image_url']) : null;
         $post_url = !empty($post['post_link_url']) ? $post['post_link_url'] : null;
         $video_url = !empty($post['post_url']) ? $post['post_url'] : null;
-        $plus_one = $post['plus_one'] + 1;
+        $plus_one = isset($post['plus_one']) ? $post['plus_one'] + 1 : 1; 
 
         $posts[] = array(
             'id' => $post['id'],
