@@ -9,7 +9,9 @@ if (!isset($_SESSION["username"])) {
 include("important/db.php");
 
 $profileget = htmlspecialchars($_GET['profile']);
+
 $icon = "profile";
+
 ?>
 
 <?php
@@ -175,8 +177,47 @@ if(isset($_GET['trump'])) {
 
 <script>
 
+let postCreateMoved = false; 
+let selectedFile = null;
 
+const urlParams = new URLSearchParams(window.location.search);
+var limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) 
+    ? Math.max(1, parseInt(urlParams.get('postlimit'), 10)) 
+    : 35; 
 
+$(document).ready(function () {
+    var mainHeader = $(".main-header");
+    var subHeader = $(".sub-header");
+    var stickyHeader = $(".sticky-header");
+    var sidebar = $(".sidebar");
+    var offset = mainHeader.offset().top;
+    var sidebarTopPosition = 60; 
+
+    $(window).scroll(function () {
+        var scrollTop = $(window).scrollTop();
+        var mainHeaderHeight = mainHeader.height();
+        var subHeaderHeight = subHeader.height();
+        var totalHeaderHeight = mainHeaderHeight + subHeaderHeight;
+
+        if (scrollTop >= offset + totalHeaderHeight) {
+            stickyHeader.css('display', 'block');
+            sidebarTopPosition = 40; 
+        } else {
+            stickyHeader.css('display', 'none');
+            sidebarTopPosition = 60; 
+        }
+
+        sidebar.css('top', sidebarTopPosition + 'px');
+    });
+});
+</script>
+
+<script>
+
+function decodeHTMLEntities(text) {
+    var tempElement = $('<textarea>').html(text);
+    return tempElement.val();
+}
 
 function formatTime(timestamp) {
     const date = new Date(timestamp);
@@ -184,394 +225,448 @@ function formatTime(timestamp) {
     return date.toLocaleString('en-US', options);
 }
 
-    function fetchPosts() {
+function increasePostLimit() {
+    limit += 10; 
+    fetchPosts();
+}
 
-    const apiUrl = `<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?username=<?php echo $profileget; ?>&disable_pagination=true`;
+let currentPage = 1;
 
-    
-    fetch(apiUrl)
+window.addEventListener('scroll', onScroll);
+function onScroll() {
+    const columns = document.querySelectorAll('.column'); 
+    let nearBottom = false;
+
+    columns.forEach(column => {
+        const columnBottom = column.getBoundingClientRect().bottom;
+        const viewportBottom = window.innerHeight + window.scrollY;
+
+        console.log('Column Bottom:', columnBottom);
+        console.log('Viewport Bottom:', viewportBottom);
+
+        if (columnBottom <= viewportBottom + 200) { 
+            nearBottom = true;
+        }
+    });
+
+    console.log('Near Bottom:', nearBottom);
+
+    if (nearBottom) {
+        console.log('Current Page:', currentPage);
+        console.log('Triggering fetch for page:', currentPage + 1);
+
+        currentPage++;
+        fetchPosts(currentPage);
+    }
+}
+
+function fetchPosts(currentPage) {
+
+const apiUrl = `<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?page=${currentPage}&username=<?php echo $profileget;?>`;
+
+console.log('Fetching URL:', apiUrl);
+
+fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('posts-container');
 
-            postsContainer.innerHTML = '';
+let numColumns = 3; 
+const screenWidth = window.innerWidth;
 
-        let numColumns = 3; 
-        const screenWidth = window.innerWidth;
+const urlParams = new URLSearchParams(window.location.search);
+const forceColParam = urlParams.get('forcecol');
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const forceColParam = urlParams.get('forcecol');
+if (forceColParam && !isNaN(forceColParam)) {
+    numColumns = parseInt(forceColParam);
+} else {
+    if (screenWidth <= 1599) {
+        numColumns = 2; 
+    } else if (screenWidth <= 720) {
+        numColumns = 1; 
+    }
+}
 
-        if (forceColParam && !isNaN(forceColParam)) {
-            numColumns = parseInt(forceColParam);
-        } else {
-            if (screenWidth <= 1599) {
-                numColumns = 2; 
-            } else if (screenWidth <= 720) {
-                numColumns = 1; 
-            }
-        }
+const existingColumns = postsContainer.getElementsByClassName('column');
+const currentColumnCount = existingColumns.length;
+
+if (currentColumnCount < numColumns) {
+    for (let i = currentColumnCount; i < numColumns; i++) {
+        const column = document.createElement('div');
+        column.className = 'column';
+        postsContainer.appendChild(column);
+    }
+}
 
 const columns = [];
 for (let i = 0; i < numColumns; i++) {
-    const column = document.createElement('div');
-    column.className = 'column';
-    columns.push(column);
-    postsContainer.appendChild(column);
+    columns.push(existingColumns[i]);
 }
 
-            const postCreate = document.createElement('div');
-postCreate.className = 'post-create';
-postCreate.innerHTML = `
-    <div class="write-post">
+let existingPostCreate = postsContainer.querySelector('.post-create');
 
-    <div class="level-1">
-
-    <div class="pfp-write-post" style="display: none;">
-    <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=<?php echo $_SESSION["username"];?>" alt="" class="round-image">
-    </div>
-
-    <textarea id="postTextArea" placeholder="Share what's new..."></textarea>
-        <div id="triangle" class="triangle"></div>
-    </div>
-
-    </div>
-
-    <div id="fileDrop" class="file-drop"">
-
-</div>
-
-    <div class="level-2">
-
-    <div class="attach-photos-row">
-            <div class="attach">
-                Attach:
+if (!existingPostCreate) {
+    const postCreateHTML = `
+        <div class="post-create">
+            <div class="write-post">
+                <div class="level-1">
+                    <div class="pfp-write-post" style="display: none;">
+                        <img src="<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>" alt="" class="round-image">
+                    </div>
+                    <textarea class="postTextAreaClass" id="postTextArea" placeholder="Share what's new..."></textarea>
+                    <div id="triangle" class="triangle"></div>
+                </div>
             </div>
-
-            <div id="mymotherquestionmark" class="photo-icon" >
-            <p style="position: relative; top: -7px; left: 15px;">
-            Photos</p>
+            <div id="fileDrop" class="file-drop"></div>
+            <div class="level-2">
+                <div class="attach-photos-row">
+                    <div class="attach">Attach:</div>
+                    <div id="mymotherquestionmark" class="photo-icon">
+                        <p style="position: relative; top: -7px; left: 15px;">Photos</p>
+                    </div>
+                    <div id="bobisbackbutfuckhim" class="photo-icon">
+                        <p style="position: relative; top: -7px; left: 15px;">Link</p>
+                    </div>
+                    <div id="videosarebackbaby" class="photo-icon">
+                        <p style="position: relative; top: -8px; left: 15px;">Video</p>
+                    </div>
+                </div>
+                <div class="level-3" style="display: none;">
+                    <div class="add-photos">Add Photos:</div>
+                    <input type="file" id="fileUploadInput1" accept="image/*" style="display: none;">
+                    <input type="file" id="fileUploadInput2" accept="image/*" style="display: none;">
+                    <button class="upload-button" id="openFileDialog">Upload from computer</button>
+                </div>
+                <div class="add-link" style="display: none;">
+                    <p id="pthingy1">Add Link:</p>
+                    <textarea class="add-link1" id="al1" style="height: 46px; width: 79%; margin-left: 120px; margin-top: 8px; position: relative; top: 20px; overflow: hidden; border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold; font-size: 14px;" placeholder="Insert your link here, it must start with http/https or it wont send."></textarea>
+                </div>
+                <div class="add-video" style="display: none;">
+                    <p id="pthingy1">Add Video:</p>
+                    <textarea class="add-link1" id="al2" style="height: 46px; width: 79%; margin-left: 120px; margin-top: 8px; position: relative; top: 20px; overflow: hidden; border: 1px solid rgba(10, 10, 10, 0.1); font-size: 14px;" placeholder="Insert your youtube video here, it must be a standard youtube url or it wont send."></textarea>
+                </div>
             </div>
-
-            <div class="photo-icon" id="bobisbackbutfuckhim">
-            <p style="position: relative; top: -7px; left: 15px;">
-            Link</p>
+            <div class="post-create-icons">
+                <div class="iconstuff">
+                    <div class="image-write"></div>
+                    <br><br>
+                    <span style="color: black; font-weight: bold;">Text</span>
+                </div>
+                <div class="iconstuff">
+                    <div class="image-photo"></div>
+                    <br><br>
+                    <span>Photos</span>
+                </div>
             </div>
-
-            <div class="photo-icon" id="videosarebackbaby">
-            <p style="position: relative; top: -8px; left: 15px;">
-            Video</p>
+            <div class="level-4" style="background: #fff;">
+                <button id="shareButton" class="share-button" style="background: #55a644;">Share</button>
+                <button class="cancel-button" id="cancelButton" style="background: #fbfbfb; color: black;">Cancel</button>
             </div>
-    </div>
-
-    <div class="level-3" style="display: none;">
-
-    <div class="add-photos">
-            Add Photos:
         </div>
+    `;
 
-        <input type="file" id="fileUploadInput" accept="image/*" style="display: none;">
+    let postCreate = document.createElement('div');
+    postCreate.id = 'bobissomeonesuncle';
 
-        <input type="file" id="fileUploadInput" accept="image/*" style="display: none">
-        <button class="upload-button" id="openFileDialog">Upload from computer</button>
-        
+    postCreate.innerHTML = postCreateHTML;
 
-    </div>
-    
+    columns[0].appendChild(postCreate);
+}
 
-    <div class="add-link" style="display: none;">
-    
-    <p id="pthingy1">
-    Add Link:
-    </p>
+$(document).ready(function () {
 
-    <textarea class="add-link1" id="al1" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold;
-    font-size: 14px;" placeholder="Insert your link here, it must start with http/https or it wont send."></textarea>
+function getQueryParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has(name);
+}
 
-    </div>
+function getQueryParameter(name) {
+const urlParams = new URLSearchParams(window.location.search);
+return urlParams.has(name);
+}
+
+$('#openFileDialog').click(function () {
+    const fileInput = $('#fileUploadInput1')[0]; // Select the file input
+
+    // Trigger the file input dialog
+    fileInput.click(); 
+
+    // Handle the file selection once a file is chosen
+    fileInput.onchange = function () {
+        selectedFile = fileInput.files[0]; // Store the selected file in a global variable
+        if (selectedFile) {
+            console.log('Selected file:', selectedFile.name);
+        } else {
+            console.log('No file selected');
+        }
+    };
+});
 
 
-    <div class="add-video" style="display: none;">
-    
-    <p id="pthingy1">
-    Add Video:
-    </p>
+function addPostCreateToBobissomeonesuncle() {
+    let bobissomeonesuncle = document.getElementById('bobissomeonesuncle');
+    let writePostExpanded = document.querySelector('.write-post-expanded');
 
-     <textarea class="add-link1" id="al2" style="height: 46px; width: 79%;margin-left: 120px;margin-top: 8px;position: relative;top: 20px;overflow: hidden;border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold;
-    font-size: 14px;" placeholder="Insert your youtube video here, it must be a standerd youtube url or it wont send."></textarea>
+    // Hide the expanded post div
+    const $writePostDiv = $('.write-post-expanded'); 
+    $writePostDiv.hide();
 
-    </div>
+    if (!bobissomeonesuncle) return;
 
-    </div>
-    <div class="post-create-icons">
-        <div class="iconstuff">
-            <div class="image-write"></div>
-            <br>
-            <br>
-            <span style="color: black; font-weight: bold;">Text</span>
+    // Remove existing post-create if it exists
+    let existingPostCreate = document.querySelector('.post-create');
+    if (existingPostCreate) {
+        existingPostCreate.remove();
+    }
+
+    // Create a new post-create element
+    let postCreate = document.createElement('div');
+    postCreate.className = 'post-create';
+
+    const postCreateHTML = `
+        <div class="write-post">
+            <div class="level-1">
+                <div class="pfp-write-post" style="display: none;">
+                    <img src="<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>" alt="" class="round-image">
+                </div>
+                <textarea id="postTextArea" placeholder="Share what's new..."></textarea>
+                <div id="triangle" class="triangle"></div>
+            </div>
         </div>
-        
-        <div class="iconstuff">
-            <div class="image-photo"></div>
-            <br>
-            <br>
-            <span>Photos</span>
+        <div id="fileDrop" class="file-drop"></div>
+        <div class="level-2">
+            <div class="attach-photos-row">
+                <div class="attach">Attach:</div>
+                <div id="mymotherquestionmark" class="photo-icon">
+                    <p style="position: relative; top: -7px; left: 15px;">Photos</p>
+                </div>
+                <div id="bobisbackbutfuckhim" class="photo-icon">
+                    <p style="position: relative; top: -7px; left: 15px;">Link</p>
+                </div>
+                <div id="videosarebackbaby" class="photo-icon">
+                    <p style="position: relative; top: -8px; left: 15px;">Video</p>
+                </div>
+            </div>
+            <div class="level-3" style="display: none;">
+                <div class="add-photos">Add Photos:</div>
+                <input type="file" id="fileUploadInput1" accept="image/*" style="display: none;">
+                <input type="file" id="fileUploadInput2" accept="image/*" style="display: none;">
+                <button class="upload-button" id="openFileDialog">Upload from computer</button>
+            </div>
+            <div class="add-link" style="display: none;">
+                <p id="pthingy1">Add Link:</p>
+                <textarea class="add-link1" id="al1" style="height: 46px; width: 79%; margin-left: 120px; margin-top: 8px; position: relative; top: 20px; overflow: hidden; border: 1px solid rgba(10, 10, 10, 0.1); font-weight: bold; font-size: 14px;" placeholder="Insert your link here, it must start with http/https or it wont send."></textarea>
+            </div>
+            <div class="add-video" style="display: none;">
+                <p id="pthingy1">Add Video:</p>
+                <textarea class="add-link1" id="al2" style="height: 46px; width: 79%; margin-left: 120px; margin-top: 8px; position: relative; top: 20px; overflow: hidden; border: 1px solid rgba(10, 10, 10, 0.1); font-size: 14px;" placeholder="Insert your youtube video here, it must be a standard youtube url or it wont send."></textarea>
+            </div>
         </div>
+        <div class="post-create-icons">
+            <div class="iconstuff">
+                <div class="image-write"></div>
+                <br><br>
+                <span style="color: black; font-weight: bold;">Text</span>
+            </div>
+            <div class="iconstuff">
+                <div class="image-photo"></div>
+                <br><br>
+                <span>Photos</span>
+            </div>
+        </div>
+        <div class="level-4" style="background: #fff;">
+            <button class="share-button" style="background: #55a644;">Share</button>
+            <button class="cancel-button" id="cancelButton" style="background: #fbfbfb; color: black;">Cancel</button>
+        </div>
+    `;
 
-    </div>
+    // Set the inner HTML of the new postCreate div
+    postCreate.innerHTML = postCreateHTML;
 
-    <div class="level-4" style="background: #fff;">
-    <button class="share-button" style="background: #55a644;">Share</button>
-    <button class="cancel-button"  id="cancelButton" style="background: #fbfbfb; color: black;">Cancel</button>
-    </div>
-`;
+    // Append the new postCreate div to bobissomeonesuncle container
+    bobissomeonesuncle.appendChild(postCreate);
 
-columns[0].appendChild(postCreate);
+    // Re-add event listeners for the new element
+    $('#cancelButton').on('click', function() {
+        postCreateMoved = false;
+        addPostCreateToBobissomeonesuncle(); // Reset the post-create when canceled
+    });
 
-        $(document).ready(function () {
-        let postCreateMoved = false; 
+    $('#fileUploadInput').change(function () {
+        const selectedFile = $(this)[0].files[0];
+        if (selectedFile) {
+            console.log('Selected file:', selectedFile.name);
+        }
+    });
 
-        function getQueryParameter(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.has(name);
+
+    $('.share-button').click(function () {
+        const postContent = $('#postTextArea').val();
+        const postLink = $('#al1').val();
+        const postVideo = $('#al2').val();
+        const username = '<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : ""; ?>';
+
+        console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
+
+        // Check if any content has been entered or selected
+        if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
+            console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
+            return;
+        }
+
+        // Create FormData object to hold form data
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('postContent', postContent);
+
+        // Append link and video if provided
+        if (postLink) {
+            formData.append('post_link_url', postLink);
+        }
+
+        if (postVideo) {
+            formData.append('post_video_url', postVideo); // Assuming post_video_url is the correct field
+        }
+
+        if (selectedFile) {
+            formData.append('postImage', selectedFile); // Use the stored file
         }
 
 
-        function getQueryParameter(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.has(name);
-        }
+        // Append file upload if available
 
-        function getQueryParameterValue(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-        }
+        // Make the AJAX POST request to submit the post
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function (response) {
 
-        if (getQueryParameter('linkopen') || getQueryParameter('write_post_link_open')) {
-                console.log('Link open query parameter is present');
-        
-                const urlParam = getQueryParameterValue('url');
-            if (urlParam) {
-                $('#al1').val(urlParam);
+                addPostCreateToBobissomeonesuncle();
+
+                if (response.status === 'success') {
+                    console.log('Post shared successfully:', response.message);
+
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            selectedFile = null;
+                            $(this).fadeIn(500);
+                        });
+                    });
+
+
+                } else {
+                    console.log('Failed to share post:', response.message);
+                    
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            selectedFile = null;
+                            $(this).fadeIn(500);
+                        });
+                    });
+
+
+                }
+            },
+            error: function (error) {
+                console.log('Error submitting post:', error);
             }
-
-
-        if (!postCreateMoved) {
-        const $postCreate = $('.post-create'); 
-        const $writePostDiv = $('.write-post-expanded'); 
-        const $writePostImage = $('.pfp-write-post');
-        const $writePostLevel2 = $('.level-2');
-        const $writePostLevel2p5 = $('.level-2.5');
-        const $writePostLeve3 = $('.level-3');
-        const $writePostPhotoIcon = $('.photo-icon');
-        const $writePostLinkIcon = $('#bobisbackbutfuckhim');
-        const $writePostPhotoRealIcon = $('#mymotherquestionmark ');
-        const $addPhotostext = $('.add-photos');
-        const $addLinktext = $('.add-link'); 
-        const $addVideotext = $('.add-video');
-        const $uploadButton = $('.upload-button');
-        const $attach = $('.attach');
-        const $photo = $('.photo-icon');
-        const $level4 = $('.level-4');
-        const $box = $('.fileDrop');
-
-        const destination = $writePostDiv.position();
-
-
-        $postCreate.animate({
-            left: destination.left,
-            top: destination.top,
-            opacity: 0
-        }, 300, function () {
-
-            $writePostDiv.append($postCreate);
-
-            $addLinktext.show();
-
-
-            $postCreate.css({
-                background: '#f6f6f6',
-                padding: '10px',
-                width: '650px',
-                height: '350px',
-                border: '1px solid rgba(10, 10, 10, 0.1)',
-                position: 'relative',
-                margin: '0 auto',
-                marginTop: '40px',
-                left: '0',
-                top: '0',
-                opacity: '1',
-                'box-shadow': '3px 0 33px 0px #000',
-            });
-
-            $('.post-create-icons').hide();
-      
-            $writePostDiv.show();
-            $level4.show();
         });
-
-        $('#postTextArea').css({
-            width: '75%',
-            left: '22%',
-            position: 'relative',
-            border: '1px solid rgba(10, 10, 10, 0.1)',
-        });
-
-        $('.triangle').css({
-            transform: 'rotate(45deg)',
-            width: '28px',
-            height: '28px',
-            zIndex: '1',
-            left: '144px',
-            top: '23px',
-        });
+    });
 
 
-        $level4.css({
-            top: '90px'
-        });
+    // Reset the postCreateMoved flag
+    postCreateMoved = false;
+    console.log('Post-create has been re-added:', postCreateMoved);
+}
 
-        $writePostImage.show();
-        $writePostLevel2.show();
-        $level4.show();
-        $box.hide();
+$('.share-button').click(function () {
+        const postContent = $('#postTextArea').val();
+        const postLink = $('#al1').val();
+        const postVideo = $('#al2').val();
+        const username = '<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : ""; ?>';
 
-        postCreateMoved = true;
+        console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
-         $writePostLinkIcon.click(function () {
-         $postCreate.css({
-           height: '350px'
-         });
+        // Check if any content has been entered or selected
+        if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
+            console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
+            return;
+        }
 
-         
+        // Create FormData object to hold form data
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('postContent', postContent);
 
-        $level4.css({
-        top: '80px'
-         });
-       });
+        if (postLink) {
+            formData.append('post_link_url', postLink);
+        }
 
-       
-    }
- }
+        if (postVideo) {
+            formData.append('post_video_url', postVideo); 
+        }
 
+        if (selectedFile) {
+            formData.append('postImage', selectedFile); 
+        }
 
- if (getQueryParameter('videoopen') || getQueryParameter('write_post_video_open')) {
-        console.log('Link open query parameter is present');
-   
-        const urlParam = getQueryParameterValue('url');
-    if (urlParam) {
-        $('#al2').val(urlParam);
-    }
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function (response) {
+    
+                fetchPosts(currentPage);
+                addPostCreateToBobissomeonesuncle();
 
-        if (!postCreateMoved) {
-        const $postCreate = $('.post-create'); 
-        const $writePostDiv = $('.write-post-expanded'); 
-        const $writePostImage = $('.pfp-write-post');
-        const $writePostLevel2 = $('.level-2');
-        const $writePostLevel2p5 = $('.level-2.5');
-        const $writePostLeve3 = $('.level-3');
-        const $writePostPhotoIcon = $('.photo-icon');
-        const $writePostLinkIcon = $('#bobisbackbutfuckhim');
-        const $writePostPhotoRealIcon = $('#mymotherquestionmark ');
-        const $addPhotostext = $('.add-photos');
-        const $addLinktext = $('.add-link'); 
-        const $addVideotext = $('.add-video');
-        const $uploadButton = $('.upload-button');
-        const $attach = $('.attach');
-        const $photo = $('.photo-icon');
-        const $level4 = $('.level-4');
-        const $box = $('.fileDrop');
-        const $attachRow = $('.attach-photos-row');
+                if (response.status === 'success') {
+                    console.log('Post shared successfully:', response.message);
 
-        const destination = $writePostDiv.position();
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            selectedFile = null;
+                            $(this).fadeIn(500);
+                        });
+                    });
 
+                } else {
+                    console.log('Failed to share post:', response.message);
 
-        $postCreate.animate({
-            left: destination.left,
-            top: destination.top,
-            opacity: 0
-        }, 300, function () {
-
-            $writePostDiv.append($postCreate);
-
-            $addVideotext.show();
-
-
-            $postCreate.css({
-                background: '#f6f6f6',
-                padding: '10px',
-                width: '650px',
-                height: '350px',
-                border: '1px solid rgba(10, 10, 10, 0.1)',
-                position: 'relative',
-                margin: '0 auto',
-                marginTop: '40px',
-                left: '0',
-                top: '0',
-                opacity: '1',
-                'box-shadow': '3px 0 33px 0px #000',
-            });
-
-            $('.post-create-icons').hide();
-         
-
-            $writePostDiv.show();
-            $level4.show();
-        });
-
-        $('#postTextArea').css({
-            width: '75%',
-            left: '22%',
-            position: 'relative',
-            border: '1px solid rgba(10, 10, 10, 0.1)',
-        });
-
-        $('.triangle').css({
-            transform: 'rotate(45deg)',
-            width: '28px',
-            height: '28px',
-            zIndex: '1',
-            left: '144px',
-            top: '23px',
-        });
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            selectedFile = null;
+                            $(this).fadeIn(500);
+                        });
+                    });
 
 
-        $level4.css({
-            top: '90px'
-        });
+                }
+            },
+            error: function (error) {
+                console.log('Error submitting post:', error);
+            }
+    });
+});
 
-        $writePostImage.show();
-        $writePostLevel2.show();
-        $level4.show();
-        $box.hide();
-
-        postCreateMoved = true;
-
-         $writePostLinkIcon.click(function () {
-         $postCreate.css({
-           height: '350px'
-         });
-
-         
-
-        $level4.css({
-        top: '80px'
-         });
-       });
-
-       
-    }
- }
-
-$('#postTextArea').click(function () {
-
+$(document).on('click', '#postTextArea', function () {
     if (!postCreateMoved) {
         const $postCreate = $('.post-create'); 
-        const $writePostDiv = $('.write-post-expanded'); 
+        const $writePostDiv = $('.write-post-expanded');
         const $writePostImage = $('.pfp-write-post');
         const $writePostLevel2 = $('.level-2');
         const $writePostLevel2p5 = $('.level-2.5');
-        const $writePostLeve3 = $('.level-3');
+        const $writePostLevel3 = $('.level-3');
         const $writePostPhotoIcon = $('.photo-icon');
         const $writePostLinkIcon = $('#bobisbackbutfuckhim');
         const $writePostPhotoRealIcon = $('#mymotherquestionmark');
@@ -583,19 +678,21 @@ $('#postTextArea').click(function () {
         const $attach = $('.attach');
         const $photo = $('.photo-icon');
         const $level4 = $('.level-4');
-        const $box = $('.fileDrop');
+        const $box = $('#fileDrop');
         const $attachRow = $('.attach-photos-row');
 
         const destination = $writePostDiv.position();
+
+        $writePostDiv.show();
 
         $postCreate.animate({
             left: destination.left,
             top: destination.top,
             opacity: 0
         }, 300, function () {
-
             $writePostDiv.append($postCreate);
 
+            // Apply styles to post-create
             $postCreate.css({
                 background: '#f6f6f6',
                 padding: '10px',
@@ -612,7 +709,150 @@ $('#postTextArea').click(function () {
             });
 
             $('.post-create-icons').hide();
+            $writePostDiv.show();
+            $level4.show();
+        });
 
+        // Apply the CSS to postTextArea
+        $('#postTextArea').css({
+            width: '75%',
+            left: '22%',
+            position: 'relative',
+            border: '1px solid rgba(10, 10, 10, 0.1)',
+            zIndex: '2',
+        });
+
+        // Apply CSS to triangle
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
+        });
+
+        // Adjust level 4 and other elements
+        $level4.css({
+            top: '90px'
+        });
+
+        $writePostLevel3.css({
+            top: '20px'
+        })
+
+        $writePostImage.show();
+        $writePostLevel2.show();
+        $level4.show();
+        $box.hide();
+
+        // Link Icon click - Show link input
+        $writePostLinkIcon.one('click', function () {
+            $attachRow.hide();
+            $addLinktext.show();
+            $postCreate.css({ height: '350px' });
+            $level4.css({ top: '80px' });
+        });
+
+        // Video Icon click - Show video input
+        $writePostVideoIcon.one('click', function () {
+            $attachRow.hide();
+            $addVideotext.show();
+            $postCreate.css({ height: '350px' });
+            $level4.css({ top: '118px' });
+        });
+
+        // Photo Icon click - Show photo upload section
+        $writePostPhotoRealIcon.one('click', function () {
+            $("#fileDrop").toggle(function () {
+                if ($(this).is(":visible")) {
+                    $postCreate.css({ height: '350px' });
+                    $addPhotostext.show();
+                    $writePostLevel3.show();
+                    $uploadButton.show();
+                    $attachRow.hide();
+                    $level4.show();
+                    $box.hide();
+                    $photo.css({ display: 'none' });
+                    $attach.css({ display: 'none' });
+                    $level4.css({ top: '120px' });
+                } else {
+                    $addPhotostext.hide();
+                    $writePostLevel2p5.show();
+                    $writePostLevel2.show();
+                    $writePostLevel3.hide();
+                    $level4.css({ top: '90px' });
+                }
+            });
+        });
+
+        // Allow triggering this functionality only once until reset
+        postCreateMoved = true;
+    }
+});
+
+
+
+function getQueryParameterValue(name) {
+const urlParams = new URLSearchParams(window.location.search);
+return urlParams.get(name);
+}
+
+ if (getQueryParameter('linkopen') || getQueryParameter('write_post_link_open')) {
+        console.log('Link open query parameter is present');
+
+        const urlParam = getQueryParameterValue('url');
+    if (urlParam) {
+        $('#al1').val(urlParam);
+    }
+    
+        if (!postCreateMoved) {
+        const $postCreate = $('.post-create'); 
+        const $writePostDiv = $('.write-post-expanded'); 
+        const $writePostImage = $('.pfp-write-post');
+        const $writePostLevel2 = $('.level-2');
+        const $writePostLevel2p5 = $('.level-2.5');
+        const $writePostLeve3 = $('.level-3');
+        const $writePostPhotoIcon = $('.photo-icon');
+        const $writePostLinkIcon = $('#bobisbackbutfuckhim');
+        const $writePostPhotoRealIcon = $('#mymotherquestionmark ');
+        const $addPhotostext = $('.add-photos');
+        const $addLinktext = $('.add-link'); 
+        const $addVideotext = $('.add-video');
+        const $uploadButton = $('.upload-button');
+        const $attach = $('.attach');
+        const $photo = $('.photo-icon');
+        const $level4 = $('.level-4');
+        const $box = $('.fileDrop');
+
+        const destination = $writePostDiv.position();
+
+        $postCreate.animate({
+            left: destination.left,
+            top: destination.top,
+            opacity: 0
+        }, 300, function () {
+
+            $writePostDiv.append($postCreate);
+
+            $addLinktext.show();
+
+            $postCreate.css({
+                background: '#f6f6f6',
+                padding: '10px',
+                width: '650px',
+                height: '350px',
+                border: '1px solid rgba(10, 10, 10, 0.1)',
+                position: 'relative',
+                margin: '0 auto',
+                marginTop: '40px',
+                left: '0',
+                top: '0',
+                opacity: '1',
+                'box-shadow': '3px 0 33px 0px #000',
+            });
+
+            $('.post-create-icons').hide();
 
             $writePostDiv.show();
             $level4.show();
@@ -645,97 +885,122 @@ $('#postTextArea').click(function () {
 
         postCreateMoved = true;
 
-        // THIS IS THE WRITE POST LINK NOT PHOTO, NCP - THE DUMB NUTS
-
-        $writePostLinkIcon.click(function () {
-
-
-            $('.attach-photos-row').hide();
-
-        $addLinktext.show();
-  
-
-            $postCreate.css({
-                        height: '350px'
-                    });
-
-
-            $level4.css({
-                        top: '80px'
-            });
-            
-        })
-
-        $writePostVideoIcon.click(function () {
-
-            $attachRow.hide();
-
-        $addVideotext.show();
-
- 
-
-        $postCreate.css({
-            height: '350px'
-        });
-        $level4.css({
-            top: '80px'
+         $writePostLinkIcon.click(function () {
+         $postCreate.css({
+           height: '350px'
          });
 
-        })
-
-        $writePostPhotoRealIcon.click(function () {
-
-            $("#fileDrop").toggle(function () {
-                if ($(this).is(":visible")) {
-                    $postCreate.css({
-                        height: '350px'
-                    });
-
-                    $addPhotostext.show();
-
-                    $writePostLeve3.show();
-                    $uploadButton.show();
-
-                    $attachRow.hide();
-
-                    $level4.show();
-                    $box.hide();
-                    $photo.css({
-                        display: 'none'
-                    });
-                    $attach.css({
-                        display: 'none'
-                    });
-                    $level4.css({
-                        top: '80px'
-                    });
-
-                } else {
-                    $addPhotostext.css({
-                        display: 'none'
-                    });
-                    $writePostLevel2p5.css({
-                        display: 'block'
-                    });
-                    $writePostLevel2.css({
-                        height: '300px',
-                        display: 'block'
-                    });
-                    $writePostLevel3.css({
-                        display: 'none'
-                    });
-                    $level4.css({
-                    top: '90px'
-                });
-                }
-            });
-        });
-        
+        $level4.css({
+        top: '80px'
+         });
+       });
     }
-});
+ }
+
+ if (getQueryParameter('videoopen') || getQueryParameter('write_post_video_open')) {
+        console.log('Link open query parameter is present');
+
+        const urlParam = getQueryParameterValue('url');
+        if (urlParam) {
+            $('#al2').val(urlParam);
+        }
+
+        if (!postCreateMoved) {
+        const $postCreate = $('.post-create'); 
+        const $writePostDiv = $('.write-post-expanded'); 
+        const $writePostImage = $('.pfp-write-post');
+        const $writePostLevel2 = $('.level-2');
+        const $writePostLevel2p5 = $('.level-2.5');
+        const $writePostLeve3 = $('.level-3');
+        const $writePostPhotoIcon = $('.photo-icon');
+        const $writePostLinkIcon = $('#bobisbackbutfuckhim');
+        const $writePostPhotoRealIcon = $('#mymotherquestionmark ');
+        const $addPhotostext = $('.add-photos');
+        const $addLinktext = $('.add-link'); 
+        const $addVideotext = $('.add-video');
+        const $uploadButton = $('.upload-button');
+        const $attach = $('.attach');
+        const $photo = $('.photo-icon');
+        const $level4 = $('.level-4');
+        const $box = $('.fileDrop');
+        const $attachRow = $('.attach-photos-row');
+
+        const destination = $writePostDiv.position();
+
+        $postCreate.animate({
+            left: destination.left,
+            top: destination.top,
+            opacity: 0
+        }, 300, function () {
+
+            $writePostDiv.append($postCreate);
+            i
+            $addVideotext.show();
+
+            $postCreate.css({
+                background: '#f6f6f6',
+                padding: '10px',
+                width: '650px',
+                height: '350px',
+                border: '1px solid rgba(10, 10, 10, 0.1)',
+                position: 'relative',
+                margin: '0 auto',
+                marginTop: '40px',
+                left: '0',
+                top: '0',
+                opacity: '1',
+                'box-shadow': '3px 0 33px 0px #000',
+            });
+
+            $('.post-create-icons').hide();
+
+            $writePostDiv.show();
+            $level4.show();
+        });
+
+        $('.triangle').css({
+            transform: 'rotate(45deg)',
+            width: '28px',
+            height: '28px',
+            zIndex: '1',
+            left: '144px',
+            top: '23px',
+        });
+
+        $('#postTextArea').css({
+            width: '75%',
+            left: '22%',
+            position: 'relative',
+            border: '1px solid rgba(10, 10, 10, 0.1)',
+        });
+
+        $level4.css({
+            top: '90px'
+        });
+
+        $writePostImage.show();
+        $writePostLevel2.show();
+        $level4.show();
+        $box.hide();
+
+        postCreateMoved = true;
+
+         $writePostLinkIcon.click(function () {
+         $postCreate.css({
+           height: '350px'
+         });
+
+        $level4.css({
+        top: '80px'
+         });
+       });
+
+    }
+ }
 
 $('#cancelButton').click(function () {
-    smoothReload(500);
+    console.log('vov is unce');
+    addPostCreateToBobissomeonesuncle();
 });
 
 $('#fileDrop').on('dragover', function (e) {
@@ -759,6 +1024,7 @@ $('#fileDrop').on('drop', function (e) {
     }
 });
 
+
 function handleFiles(files) {
     for (const file of files) {
         const reader = new FileReader();
@@ -770,600 +1036,648 @@ function handleFiles(files) {
     }
 }
 
-$('#openFileDialog').click(function () {
-const fileInput = document.getElementById('fileUploadInput');
-fileInput.click(); 
+
+
+$('#shareButton').click(function () {
+
+
+    });
 });
-
-$('#fileUploadInput').change(function () {
-
-const selectedFile = $(this)[0].files[0];
-if (selectedFile) {
-    console.log('Selected file:', selectedFile.name);
-}
-});
-
-$('.share-button').click(function () {
-const postContent = $('#postTextArea').val();
-const postLink = $('#al1').val(); 
-const postVideo = $('#al2').val(); 
-
-
-const username = '<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : ""; ?>';
-
-if (!postContent && $('#fileUploadInput')[0].files.length === 0 && !postLink && !postVideo) {
-console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
-return;
-}
-
-
-const formData = new FormData();
-formData.append('username', username);
-formData.append('postContent', postContent);
-
-if (postLink) { 
-    formData.append('post_link_url', postLink);
-}
-
-
-if (postVideo) { 
-    formData.append('post_link', postVideo);
-}
-
-if ($('#fileUploadInput')[0].files.length > 0) {
-    formData.append('postImage', $('#fileUploadInput')[0].files[0]);
-}
-
-$.ajax({
-    type: 'POST',
-    url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
-    data: formData,
-    processData: false,
-    contentType: false,
-    dataType: 'json',
-    success: function (response) {
-        smoothReload(500);
-
-        if (response.status === 'success') {
-            smoothReload(500);
-            location.reload();
-            console.log(response.message);
-        } else {
-            smoothReload(500);
-            console.log(response.message);
-        }
-    },
-    error: function (error) {
-        smoothReload(500);
-        console.log('Error:', error);
-    }
-});
-    }); 
-});
-
-<?php if (isset($_SESSION["username"]) && $_SESSION["username"] !== $profileget): ?>
-
-$('.post-create').hide();
-$('.post-create').remove();
-
-
-$('.post-create').css({
-    'display': 'none'
-});
-
-
-console.log('kill a commie')
-<?php endif; ?>
 
 const apiEndpoint = '<?php echo $siteurl; ?>/apiv1/fetch_comments.php?id=';
 
 let currentColumnIndex = 0;
 
-for (let i = 0; i < data.length; i++) {
+const loadMoreText = $('#load-more');
+var isExperimentalLoading = urlParams.has('experimental_loading');
+
+$(document).on('click', '#loadmore', function() {
+    increasePostLimit();
+});
+
+for (let i = 0; i < Math.min(data.length); i++) {
+
     const post = data[i];
-    
+
     const postElement = document.createElement('div');
     postElement.className = 'post';
     const formattedTime = formatTime(post.created_at);
 
     const plusOneUsernamesString = post.plus_one_usernames || '';
     const isLikedByCurrentUser = plusOneUsernamesString.includes('<?php echo $_SESSION["username"];?>');
+
+    const postMain = document.createElement('div');
+    postMain.className = 'post-main';
+
+    const hackyFix = document.createElement('div');
+    hackyFix.className = 'hacky-fix';
+
+    const postFilePicture = document.createElement('img');
+    postFilePicture.className = 'post-file-picture';
+    postFilePicture.src = `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(post.username)}`;
+
+    const aaaa = document.createElement('div');
+    aaaa.className = 'aaaaaa';
+
+    const postTop = document.createElement('div');
+    postTop.className = 'post-top';
+
+    const usernameLink = document.createElement('a');
+    usernameLink.href = `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/profile.php?profile=${encodeURIComponent(post.username)}`;
+
+    const username = document.createElement('p');
+    username.className = 'username';
+    username.textContent = post.username;
+
+    usernameLink.appendChild(username);
+
+    const clickableCircle = document.createElement('span');
+    clickableCircle.className = 'clickable-circle';
+
+    const unicodeCharacter = document.createTextNode('˅');
+    clickableCircle.appendChild(unicodeCharacter);
+
+    postTop.appendChild(usernameLink);
+    postTop.appendChild(clickableCircle);
+
+    const dropdownMenuDel = document.createElement('div');
+    dropdownMenuDel.className = 'dropdown-menu-del';
+    dropdownMenuDel.style.display = 'none';
+
+    const deletePostLink = document.createElement('a');
+    deletePostLink.href = '#';
+    deletePostLink.className = 'delete-post-link';
+    deletePostLink.textContent = 'Delete post';
+
+    dropdownMenuDel.appendChild(deletePostLink);
+
+    postTop.appendChild(dropdownMenuDel);
+
+    const postMeta = document.createElement('div');
+    postMeta.className = 'post-meta';
+
+    const sharingPublicly = document.createElement('span');
+    sharingPublicly.textContent = 'Sharing Publicly ';
+
+    const viewPostLink = document.createElement('a');
+    viewPostLink.href = `view_post.php?id=${encodeURIComponent(post.id)}`;
+    viewPostLink.style.color = 'inherit';
+    viewPostLink.style.textDecoration = 'none';
+
+    const uploadTime = document.createElement('span');
+    uploadTime.className = 'upload-time';
+    uploadTime.textContent = `- ${formattedTime}`;
+
+    viewPostLink.appendChild(uploadTime);
+
+    postMeta.appendChild(sharingPublicly);
+    postMeta.appendChild(viewPostLink);
+
+    aaaa.appendChild(postTop);
+    aaaa.appendChild(postMeta);
+
+    hackyFix.appendChild(postFilePicture);
+    hackyFix.appendChild(aaaa);
+
+    postMain.appendChild(hackyFix);
+
+    const postContentContainer = document.createElement('div');
+    postContentContainer.className = 'post-content-container';
+
+    const decodedContent = decodeHTMLEntities(post.content);
+    const postContent = document.createElement('p');
+    postContent.className = 'post-content';
+    postContent.textContent = decodedContent;
+
+
+    const postImage = document.createElement('img');
+    postImage.className = 'post-image';
+    postImage.src = post.image_url;
+    postImage.alt = '';
+
+    const linkPreview = document.createElement('div');
+    linkPreview.className = 'link-preview';
+
+    const youtubeEmbed = document.createElement('div');
+    youtubeEmbed.className = 'youtube-emded';
+
+    postContentContainer.appendChild(postContent);
+    postContentContainer.appendChild(postImage);
+    postContentContainer.appendChild(linkPreview);
+    postContentContainer.appendChild(youtubeEmbed);
+
+    postMain.appendChild(postContentContainer);
+
+    postElement.appendChild(postMain);
+
+    columns[0].appendChild(postElement);
+
+    const sessionUsername = '<?php echo $_SESSION["username"]; ?>';
+    var isMod = <?php echo json_encode($isMod); ?>;
     
+    console.log(post.username);
 
+    $('.dropdown-menu-del').hide();
 
-    postElement.innerHTML = `
-    <div class="post-main">  
-     <div class="hacky-fix">
-     <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${post.username}" class="post-file-picture">
-      <div class="aaaaaa">
-       <div class="post-top">
-       <a href="<?php echo $siteurl; ?>/profile.php?profile=${post.username}">
-        <p class="username">${post.username}</p>
-       </a>
-        </div>
-       <div class="post-meta">
-        <span>Sharing Publicly &nbsp;</span>
-        <a style="color: inherit; text-decoration: none;" href="view_post.php?id=${post.id}">
-         <span class="upload-time">- ${formattedTime}</span>
-        </a>
-      </div>
-      </div>
-     </div>
-        <div class="post-content-container">
-            <p class="post-content">${post.content}</p>
-            <img class="post-image" src="${post.image_url}" alt="">
+    if (post.username !== sessionUsername && !isMod) {
+            $(postElement).find('.clickable-circle').hide();
+    }
 
-            <div class="link-preview">
-            </div>
-         
-            <div class="youtube-emded">
-            </div>
+    $(document).on('click', '.delete-post-link', function(event) {
+    event.preventDefault();
 
-        </div>
+    var $post = $(this).closest('.post');
+    var postId = $post.data('post-id');
 
-    </div>
-
-    </div>
-    
-  `;
-
-if (post.post_link && post.post_link.includes("youtube.com/embed")) {
-const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
-$(postElement).find('.youtube-emded').html(iframeHTML);
-
-const protocol = window.location.protocol;
-if (protocol === 'https:' && !post.post_link.startsWith('https:')) {
-    post.post_link = post.post_link.replace(/^http:/, 'https:');
-}
-
-$(postElement).find('.youtube-emded iframe').attr('src', post.post_link);
-}
-
-if (post.post_link_url) {
-    $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(post.post_link_url) + '&format=json', function(metadata) {
-        const linkPreviewContainer = $('<div>', { class: 'link-preview' });
-        const faviconContainer = $('<div>', { class: 'favicon-container' });
-        const faviconImg = $('<img>', { 
-            src: metadata.image, 
-            alt: 'Favicon', 
-            class: 'favicon-img'
-        });
-        faviconContainer.append(faviconImg);
-        const contentContainer = $('<div>', { class: 'content-container' });
-        const title = $('<h2>');
-        const titleLink = $('<a>', { 
-            href: post.post_link_url, 
-            text: metadata.title, 
-            target: '_blank' 
-        });
-        title.append(titleLink);
-        const linkText = $('<p>', { 
-            text: post.post_link_url,
-            class: 'link-text' 
-        });
-        contentContainer.append(title, linkText);
-        linkPreviewContainer.append(faviconContainer, contentContainer);
-        $(postElement).find('.link-preview').append(linkPreviewContainer);
-        const containerWidth = linkPreviewContainer.width();
-        const faviconWidth = containerWidth * 0.3;
-        const contentWidth = containerWidth * 0.8; 
-        faviconContainer.width(faviconWidth);
-        contentContainer.width(contentWidth);
-        const maxFaviconHeight = 50;
-        const maxFaviconWidth = containerWidth * 0.3; 
-        faviconImg.css({
-            'max-width': maxFaviconWidth + 'px',
-        });
-        if (contentContainer.height() > 200) {
-            contentContainer.css('height', '200px');
-            contentContainer.css('overflow', 'hidden');
+    $.ajax({
+        url: '<?php echo $siteurl; ?>/apiv1-internal/delete_post.php?id=' + postId, 
+        type: 'DELETE',
+        success: function(response) {
+            $post.remove();
+        },
+        error: function() {
+            alert('An error occurred while trying to delete the post.');
         }
-    })
-    .fail(function(jqxhr, textStatus, error) {
-        const err = textStatus + ", " + error;
-        console.log("Request Failed: " + err);
+        });
     });
-}
 
+    $(document).on('click', '.clickable-circle', function(event) {
+        $('.dropdown-menu-del').not($(this).siblings('.dropdown-menu-del')).hide();
+        $(this).siblings('.dropdown-menu-del').show();
+    });
 
-postElement.dataset.postId = post.id;
-postElement.dataset.plusOne = post.plus_one;
-postElement.dataset.isLikedByCurrentUser = isLikedByCurrentUser;
-
-columns[currentColumnIndex].appendChild(postElement);
-
-const commentArea = document.createElement('div');
-commentArea.className = 'comment-main';
-
-const hideShowCommentsLink = document.createElement('a');
-
-hideShowCommentsLink.addEventListener('click', function (e) {
-    e.preventDefault();
-    const comments = commentArea.querySelector('.comments');
-    if (comments.style.display === 'none') {
-        comments.style.display = 'block';
-
-    } else {
-        comments.style.display = 'none';
-
-    }
-});
-
-commentArea.appendChild(hideShowCommentsLink);
-
-postElement.appendChild(commentArea);
-
-$.ajax({
-    url: apiEndpoint + post.id,
-    dataType: 'json',
-    success: function (commentsData) {
-        if (commentsData.status === 'success') {
-
-            $.each(commentsData.comments, function (index, comment) {
-                const commentElement = document.createElement('div');
-
-                commentElement.className = 'comment';
-                
-                commentElement.innerHTML = `
-                <div class="hacky-fix">
-                 <img src="<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${comment.username}" class="comment-picture">
-                 <div class="agony">
-                  <div class="hacky-fix">
-                  <a href="<?php echo $siteurl; ?>/profile.php?profile=${comment.username}"  <p class="username">${comment.username}</p></a>
-                   <p class="time">${comment.comment_time}</p>
-                  </div>
-                  <p class="comment-content">${comment.comment_content}</p>
-                 </div>
-                </div> 
-                `;
-
-                commentArea.appendChild(commentElement);
-            });
-        } else {
-
-            console.log('No comments found for the post with ID ' + post.id);
-        }
-    },
-    error: function (error) {
-
-        console.log('Error:', error);
-    }
-});
-
-$(document).ready(function() {
-
-$('.comment-main').each(function() {
-
-    if ($(this).next('.comment-input-container').length === 0) {
-
-        const postElement = $(this).closest('.post');
-        const postID = postElement.data('post-id');
-        const plusOneIs = postElement.data('plus-one');
-        const isLikedByCurrentUser = Boolean(postElement.data('is-liked-by-current-user'));
-
-        console.log(postID);
-
-        const commentInputContainer = $('<div>').addClass('comment-input-container');
-        commentInputContainer.css({
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            height: '50px',
-            position: 'relative',
-            paddingTop: '3px'
-        });
-
-        const plusOneContainer = $('<div>').addClass('plus-one-container');
-        plusOneContainer.css({
-            position: 'absolute',
-            top: '5px',
-            right: '5px'
-        });
-
-        const plusOneIcon = $('<div>').addClass('plus-one-icon').attr('id', isLikedByCurrentUser ? 'liked-icon' : '');
-
-        const plusOneSpan = $('<span>').attr('id', 'georgewallace').text(`+${plusOneIs}`);
+    $(document).on('dblclick', '.clickable-circle', function(event) {
+        $('.dropdown-menu-del').not($(this).siblings('.dropdown-menu-del')).hide();
+        $(this).siblings('.dropdown-menu-del').hide();
+    });
 
         
-        plusOneIcon.append(plusOneSpan);
-        plusOneContainer.append(plusOneIcon);
 
-       
-        $(plusOneContainer).find('.plus-one-icon').click(function() {
-            var username = '<?php echo $_SESSION["username"];?>';
+    if (post.post_link && post.post_link.includes("youtube.com/embed")) {
+        const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
+        $(postElement).find('.youtube-emded').html(iframeHTML);
 
-            $('#georgewallace').css('color', 'white');
+        const protocol = window.location.protocol;
+        if (protocol === 'https:' && !post.post_link.startsWith('https:')) {
+            post.post_link = post.post_link.replace(/^http:/, 'https:');
+        }
 
-            var $closestPlusOneIcon = $(this).closest('.plus-one-icon');
-            var $closestGeorgeWallace = $closestPlusOneIcon.find('#georgewallace');
-            var currentValue = parseInt($closestGeorgeWallace.text().replace('+', '')) || 0;
-            
+        $(postElement).find('.youtube-emded iframe').attr('src', post.post_link);
+    }
 
-            $.ajax({
-                url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
-                type: 'POST',
-                data: {
-                    add_plus_one: true,
-                    id: postID,
-                    username: username
-                },
-                success: function(response) {
-
-                    var responseData = JSON.parse(response);
-
-                    if (responseData.action === 'added') {
-                        console.log("Plus one added.");
-                        $closestGeorgeWallace.text(`+${currentValue + 1}`);
-                        $closestPlusOneIcon.css('color', '#ffff'); 
-                        $closestPlusOneIcon.css('background-color', '#cc4331'); 
-                        $closestGeorgeWallace.css('color', '#ffff'); 
-                    }  
-                    
-                    if (responseData.action === 'subtracted') {
-                        console.log("Plus one subtracted.");
-                        $closestGeorgeWallace.text(`+${currentValue - 1}`);
-                        $closestPlusOneIcon.css('background-color', 'white'); 
-                        $closestPlusOneIcon.css('color', '#333'); 
-                        $closestGeorgeWallace.css('color', '#333'); 
-                        
-                    }
-                    
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
+    if (post.post_link_url) {
+        $.getJSON('<?php echo $siteurl; ?>/apiv1/fetch_metadata.php?url=' + encodeURIComponent(post.post_link_url) + '&format=json', function(metadata) {
+                const linkPreviewContainer = $('<div>', {
+                    class: 'link-preview'
+                });
+                const faviconContainer = $('<div>', {
+                    class: 'favicon-container'
+                });
+                const faviconImg = $('<img>', {
+                    src: metadata.image,
+                    alt: 'Favicon',
+                    class: 'favicon-img'
+                });
+                faviconContainer.append(faviconImg);
+                const contentContainer = $('<div>', {
+                    class: 'content-container'
+                });
+                const title = $('<h2>');
+                const titleLink = $('<a>', {
+                    href: post.post_link_url,
+                    text: metadata.title,
+                    target: '_blank'
+                });
+                title.append(titleLink);
+                const linkText = $('<p>', {
+                    text: post.post_link_url,
+                    class: 'link-text'
+                });
+                contentContainer.append(title, linkText);
+                linkPreviewContainer.append(faviconContainer, contentContainer);
+                $(postElement).find('.link-preview').append(linkPreviewContainer);
+                const containerWidth = linkPreviewContainer.width();
+                const faviconWidth = containerWidth * 0.3;
+                const contentWidth = containerWidth * 0.8;
+                faviconContainer.width(faviconWidth);
+                contentContainer.width(contentWidth);
+                const maxFaviconHeight = 50;
+                const maxFaviconWidth = containerWidth * 0.3;
+                faviconImg.css({
+                    'max-width': maxFaviconWidth + 'px',
+                });
+                if (contentContainer.height() > 200) {
+                    contentContainer.css('height', '200px');
+                    contentContainer.css('overflow', 'hidden');
                 }
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                const err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
             });
-        });
+    }
 
-        var $closestCommentMain = $(this).closest('.comment-main');
+    postElement.dataset.postId = post.id;
+    postElement.dataset.plusOne = post.plus_one;
+    postElement.dataset.isLikedByCurrentUser = isLikedByCurrentUser;
 
-        const commentInput = $('<textarea>').attr({
-            type: 'text',
-            id: 'comment-input-' + postID,
-            placeholder: 'Add a comment...'
-        }).addClass('comment-input');
-        commentInputContainer.append(commentInput);
-        commentInputContainer.append(plusOneContainer);
+    columns[currentColumnIndex].appendChild(postElement);
 
-        commentInput.css('height', '30px');
-        commentInput.css('width', '275px');
-        commentInput.css('background', '#fff');
-        commentInput.css('border', '1px solid #ccc');
-        commentInput.css('resize', 'none');
+    const commentArea = document.createElement('div');
+    commentArea.className = 'comment-main';
 
-        const buttonContainer = $('<div style="margin-right: 250px;">');
+    const hideShowCommentsLink = document.createElement('a');
 
-        const submitButton = $('<button>').text('Post comment').addClass('submit-button').css('display', 'none');
+    hideShowCommentsLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const comments = commentArea.querySelector('.comments');
+        if (comments.style.display === 'none') {
+            comments.style.display = 'block';
 
-        const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
+        } else {
+            comments.style.display = 'none';
 
-        buttonContainer.append(submitButton, cancelButton);
-
-        commentInputContainer.append(buttonContainer);
-
-        $(this).after(commentInputContainer);
-
-        commentInput.on('click', function() {
-            
-        submitButton.css('display', 'inline-block');
-        cancelButton.css('display', 'inline-block');
-
-        $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
-
-        commentInput.attr('placeholder', '');
-
-        commentInput.css({
-            'height': '60px',
-            'width': '440px',
-            'text-indent': '1ch',
-            'background': '#fff',
-            'border': '1px solid #ccc',
-            'padding': '0px',
-            'resize': 'none',
-            'overflowY': 'auto',
-            'padding-top': '3px',
-            'left': '23px'
-        });
-
-        commentInputContainer.css({
-            'background': '#f6f6f6',
-            'height': '125px',
-            'position': 'relative'
-        });
-
-        let newElement = $('<img id="khamlaharis">')
-        .attr('src', '<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>')
-        .css({
-            'width': '25px',
-            'height': '25px',
-            'position': 'absolute',
-            'top': '17px',
-            'left': '18px',
-            'border-radius': '5%'
-       });
-
-        commentInputContainer.prepend(newElement);
-    });
-
-        submitButton.on('click', function() {
-
-            const commentContent = $(this).closest('.comment-input-container').find('.comment-input').val();
-            console.log(commentContent);
-            const postID = $(this).closest('.post').data('postId');
-            const username = '<?php echo $_SESSION["username"]; ?>'; 
-
-            console.log("Data sent in AJAX request:", {
-            commentContent: commentContent,
-            postID: postID,
-            username: username
-        });
-
-
-
-       $.ajax({
-            
-            url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                commentContent: commentContent,
-                postID: postID,
-                username: username
-            },
-
-            success: function(response) {
-                console.log(response);
-
-            var commentContent = response.commentContent;
-            var postID = response.postID;
-            var username = response.username;
-
-            var newComment = $('<div>', { class: 'comment' }).append(
-                $('<div>', { class: 'hacky-fix' }).append(
-                    $('<img>', {
-                        class: 'comment-picture',
-                        src: `<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
-                    }),
-                    $('<div>', { class: 'agony' }).append(
-                        $('<div>', { class: 'hacky-fix' }).append(
-                            $('<a>', {
-                                href: `<?php echo $siteurl; ?>/profile.php?profile=${encodeURIComponent(username)}`
-                            }).append($('<p>', { class: 'username', text:  username })),
-                            $('<p>', { class: 'time', text: new Date().toISOString().slice(0, 19).replace('T', ' ') }) 
-                        ),
-                        $('<p>', { class: 'comment-content', text: commentContent })
-                    )
-                )
-            );
-
-            $closestCommentMain.append(newComment);
-
-            function scrollToBottom(element, duration = 400) {
-                $(element).animate({
-                    scrollTop: $(element)[0].scrollHeight
-                }, duration);
-            }
-
-            scrollToBottom($closestCommentMain);
-
-            submitButton.css('display', 'none');
-            cancelButton.css('display', 'none');
-            
-
-            commentInputContainer.css('background-color', '#fff');
-            $('.plus-one-icon').show();
-            $('#khamlaharis').hide();
-
-            commentInput.css({
-                height: '30px',
-                width: '275px',
-                left: '17%'
-            });
-
-            commentInputContainer.css('height', '50px');
-
-
-            commentInput.css({
-                background: '#fff',
-                border: '1px solid #ccc'
-
-            });
-
-            commentInput.attr('placeholder', 'Add a comment..');
-
-            commentInput.val('');
-
-            commentInput.trigger('blur');
-                
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-                }
-            });
-        });
-
-    cancelButton.on('click', function() {
-
-    submitButton.css('display', 'none');
-    cancelButton.css('display', 'none');
-
-    commentInputContainer.css('background-color', '#fff');
-    $('.plus-one-icon').show();
-
-
-   commentInput.css({
-      height: '30px',
-      width: '275px',
-      left: '17%'
-    });
-
-    $('#khamlaharis').hide();
-
-    commentInput.attr('placeholder', 'Add a comment..');
-
-    commentInput.val('');
-
-    commentInputContainer.css('height', '50px');
-
-      commentInput.css({
-      background: '#fff',
-      border: '1px solid #ccc'
-
-    });
-
-    commentInput.trigger('blur');
-    });
         }
     });
+
+    commentArea.appendChild(hideShowCommentsLink);
+
+    postElement.appendChild(commentArea);
+
+    $.ajax({
+        url: apiEndpoint + post.id,
+        dataType: 'json',
+        success: function(commentsData) {
+            if (commentsData.status === 'success') {
+
+                $.each(commentsData.comments, function(index, comment) {
+
+                    const commentElement = $('<div>', { class: 'comment' });
+
+                    const hackyFix = $('<div>', { class: 'hacky-fix' });
+
+                    const commentPicture = $('<img>', {
+                        class: 'comment-picture',
+                        src: `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(comment.username)}`
+                    });
+
+                    const agony = $('<div>', { class: 'agony' });
+
+                    const innerHackyFix = $('<div>', { class: 'hacky-fix' });
+
+                    const usernameLink = $('<a>', {
+                        href: `<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/profile.php?profile=${encodeURIComponent(comment.username)}`
+                    }).append($('<p>', { class: 'username', text: comment.username }));
+
+                    const commentTime = $('<p>', { class: 'time', text: comment.comment_time });
+
+                    innerHackyFix.append(usernameLink, commentTime);
+
+                    const decodedContent = decodeHTMLEntities(comment.comment_content);
+                    const commentContent = $('<p>', { class: 'comment-content' }).text(decodedContent);
+
+
+                    agony.append(innerHackyFix, commentContent);
+
+                    hackyFix.append(commentPicture, agony);
+
+                    commentElement.append(hackyFix);
+
+                    $(commentArea).append(commentElement);
+
+              
+                });
+
+            } else {
+
+                console.log('No comments found for the post with ID ' + post.id);
+            }
+        },
+        error: function(error) {
+
+            console.log('Error:', error);
+        }
+    });
+
+    $(document).ready(function() {
+
+        $('.comment-main').each(function() {
+
+            if ($(this).next('.comment-input-container').length === 0) {
+
+                const postElement = $(this).closest('.post');
+                const postID = postElement.data('post-id');
+                const plusOneIs = postElement.data('plus-one');
+                const isLikedByCurrentUser = Boolean(postElement.data('is-liked-by-current-user'));
+
+                console.log(postID);
+
+                const commentInputContainer = $('<div>').addClass('comment-input-container');
+                commentInputContainer.css({
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    height: '50px',
+                    position: 'relative',
+                    paddingTop: '3px'
+                });
+
+                const plusOneContainer = $('<div>').addClass('plus-one-container');
+                plusOneContainer.css({
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px'
+                });
+
+                const plusOneIcon = $('<div>').addClass('plus-one-icon').attr('id', isLikedByCurrentUser ? 'liked-icon' : '');
+
+                const plusOneSpan = $('<span>').attr('id', 'georgewallace').text(`+${plusOneIs}`);
+
+                plusOneIcon.append(plusOneSpan);
+                plusOneContainer.append(plusOneIcon);
+
+                $(plusOneContainer).find('.plus-one-icon').click(function() {
+                    var username = '<?php echo $_SESSION["username"];?>';
+
+                    var $closestPlusOneIcon = $(this).closest('.plus-one-icon');
+                    var $closestGeorgeWallace = $closestPlusOneIcon.find('#georgewallace');
+                    var currentValue = parseInt($closestGeorgeWallace.text().replace('+', '')) || 0;
+
+                    $.ajax({
+                        url: '<?php echo $siteurl; ?>/apiv1/add_plus_one.php',
+                        type: 'POST',
+                        data: {
+                            add_plus_one: true,
+                            id: postID,
+                            username: username
+                        },
+                        success: function(response) {
+
+                            var responseData = JSON.parse(response);
+
+                            if (responseData.action === 'added') {
+                                console.log("Plus one added.");
+                                $closestGeorgeWallace.text(`+${currentValue + 1}`);
+                                $closestPlusOneIcon.css('color', '#ffff'); 
+                                $closestPlusOneIcon.css('background-color', '#cc4331'); 
+                                $closestGeorgeWallace.css('color', '#ffff'); 
+                            }  
+                            
+                            if (responseData.action === 'subtracted') {
+                                console.log("Plus one subtracted.");
+                                $closestGeorgeWallace.text(`+${currentValue - 1}`);
+                                $closestPlusOneIcon.css('background-color', 'white'); 
+                                $closestPlusOneIcon.css('color', '#333'); 
+                                $closestGeorgeWallace.css('color', '#333'); 
+                                
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+
+        const commentInput = $('<textarea>').attr({
+                    type: 'text',
+                    id: 'comment-input-' + postID,
+                    placeholder: 'Add a comment...'
+                }).addClass('comment-input');
+                commentInputContainer.append(commentInput);
+                commentInputContainer.append(plusOneContainer);
+
+                commentInput.css('height', '30px');
+                commentInput.css('width', '275px');
+                commentInput.css('background', '#fff');
+                commentInput.css('border', '1px solid #ccc');
+                commentInput.css('resize', 'none');
+
+                const buttonContainer = $('<div style="margin-right: 250px;">');
+
+                const submitButton = $('<button>').text('Post comment').addClass('submit-button').css('display', 'none');
+
+                const cancelButton = $('<button>').text('Cancel').addClass('cancel').css('display', 'none');
+
+                buttonContainer.append(submitButton, cancelButton);
+
+                commentInputContainer.append(buttonContainer);
+
+                $(this).after(commentInputContainer);
+
+                commentInput.on('click', function() {
+                    
+                submitButton.css('display', 'inline-block');
+                cancelButton.css('display', 'inline-block');
+
+                $(this).closest('.comment-input-container').find('.plus-one-icon').hide();
+
+                commentInput.attr('placeholder', '');
+
+                commentInput.css({
+                    'height': '60px',
+                    'width': '440px',
+                    'text-indent': '1ch',
+                    'background': '#fff',
+                    'border': '1px solid #ccc',
+                    'padding': '0px',
+                    'resize': 'none',
+                    'overflowY': 'auto',
+                    'padding-top': '3px',
+                    'left': '23px'
+                });
+
+                commentInputContainer.css({
+                    'background': '#f6f6f6',
+                    'height': '125px',
+                    'position': 'relative'
+                });
+
+                let newElement = $('<img id="khamlaharis">')
+                .attr('src', '<?php echo htmlspecialchars($siteurl, ENT_QUOTES, 'UTF-8'); ?>/apiv1/fetch_pfp_api.php?name=<?php echo htmlspecialchars($_SESSION["username"], ENT_QUOTES, 'UTF-8'); ?>')
+                .css({
+                    'width': '25px',
+                    'height': '25px',
+                    'position': 'absolute',
+                    'top': '17px',
+                    'left': '18px',
+                    'border-radius': '5%'
+               });
+
+                commentInputContainer.prepend(newElement);
+            });
+
+            var $closestCommentMain = $(this).closest('.comment-main');
+
+                submitButton.on('click', function() {
+
+                    const commentContent = $(this).closest('.comment-input-container').find('.comment-input').val();
+                    console.log(commentContent);
+                    const postID = $(this).closest('.post').data('postId');
+                    const username = '<?php echo $_SESSION["username"]; ?>';
+
+                    console.log("Data sent in AJAX request:", {
+                        commentContent: commentContent,
+                        postID: postID,
+                        username: username
+                    });
+
+                    $.ajax({
+
+                        url: '<?php echo $siteurl; ?>/apiv1-internal/submit_comment.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            commentContent: commentContent,
+                            postID: postID,
+                            username: username
+                        },
+                        success: function(response) {
+                            console.log(response);
+
+                            var commentContent = response.commentContent;
+                            var postID = response.postID;
+                            var username = response.username;
+
+                            var newComment = $('<div>', { class: 'comment' }).append(
+                                $('<div>', { class: 'hacky-fix' }).append(
+                                    $('<img>', {
+                                        class: 'comment-picture',
+                                        src: `<?php echo $siteurl; ?>/apiv1/fetch_pfp_api.php?name=${encodeURIComponent(username)}`
+                                    }),
+                                    $('<div>', { class: 'agony' }).append(
+                                        $('<div>', { class: 'hacky-fix' }).append(
+                                            $('<a>', {
+                                                href: `<?php echo $siteurl; ?>/profile.php?profile=${encodeURIComponent(username)}`
+                                            }).append($('<p>', { class: 'username', text:  username })),
+                                            $('<p>', { class: 'time', text: new Date().toISOString().slice(0, 19).replace('T', ' ') }) 
+                                        ),
+                                        $('<p>', { class: 'comment-content', text: commentContent })
+                                    )
+                                )
+                            );
+
+                            $closestCommentMain.append(newComment);
+
+                            function scrollToBottom(element, duration = 400) {
+                                $(element).animate({
+                                    scrollTop: $(element)[0].scrollHeight
+                                }, duration);
+                            }
+
+                            scrollToBottom($closestCommentMain);
+
+                            submitButton.css('display', 'none');
+                            cancelButton.css('display', 'none');
+                            
+
+                            commentInputContainer.css('background-color', '#fff');
+                            $('.plus-one-icon').show();
+                            $('#khamlaharis').hide();
+
+                            commentInput.css({
+                                height: '30px',
+                                width: '275px',
+                                left: '17%'
+                            });
+
+                            commentInputContainer.css('height', '50px');
+
+                   
+                            commentInput.css({
+                                background: '#fff',
+                                border: '1px solid #ccc'
+
+                            });
+
+                            commentInput.attr('placeholder', 'Add a comment..');
+
+                            commentInput.val('');
+
+                            commentInput.trigger('blur');
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+
+                cancelButton.on('click', function() {
+
+                    submitButton.css('display', 'none');
+                    cancelButton.css('display', 'none');
+                    
+
+                    commentInputContainer.css('background-color', '#fff');
+                    $('.plus-one-icon').show();
+                    $('#khamlaharis').hide();
+
+                    commentInput.css({
+                        height: '30px',
+                        width: '275px',
+                        left: '17%'
+                    });
+
+
+                    commentInput.val('');
+
+                    commentInputContainer.css('height', '50px');
+
+                    commentInput.css({
+                        background: '#fff',
+                        border: '1px solid #ccc'
+
+                    });
+
+                    commentInput.attr('placeholder', 'Add a comment..');
+
+                    commentInput.trigger('blur');
+                });
+            }
+        });
     });
 
     currentColumnIndex = (currentColumnIndex + 1) % numColumns;
-    }
+}
 
-    })
-    .catch(error => {
-        console.error('Error fetching posts:', error);
-    });
+})
+.catch(error => {
+    console.error('Error fetching posts:', error);
+});
 
-    $(document).on('click', function (event) {
-            if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoRealIcon) && !$(event.target).is($uploadButton) ) {
-                $("#fileDrop").hide();
-                $postCreate.css({
-                    height: '300px' 
-                });
-                $writePostLevel2.css({
-                    height: 'auto',
-                    display: 'block'
-                });
-                $photo.show();
-                $attach.show();
-                $addPhotostext.hide();
-                $uploadButton.hide();
-                $box.hide();
-                $level4.css({
-                    top: '90px'
-                });
-            }
+$(document).on('click', function(event) {
+
+    if (!$(event.target).closest('#fileDrop').length && !$(event.target).is($writePostPhotoRealIcon) && !$(event.target).is($uploadButton)) {
+        $("#fileDrop").hide();
+        $postCreate.css({
+            height: '300px'
+        });
+        $writePostLevel2.css({
+            height: 'auto',
+            display: 'block'
+        });
+        $photo.show();
+        $attach.show();
+        $addPhotostext.hide();
+        $uploadButton.hide();
+        $box.hide();
+        $level4.css({
+            top: '90px'
         });
     }
-
-$('#cancelButton').click(function () {
-
-    smoothReload(1000);
-
 });
+}
 
 const commentMain = $('.comment-main');
 
-fetchPosts();
-setInterval(fetchPosts, 600000);
+fetchPosts(currentPage);
 
 function smoothReload(delay) {
-$("body").fadeOut(delay, function() {
-    history.replaceState({}, document.title, window.location.pathname);
-    location.reload();
-});
+    $("body").fadeOut(delay, function() {
+        history.replaceState({}, document.title, window.location.pathname);
+        location.reload();
+    });
 }
 </script>
 

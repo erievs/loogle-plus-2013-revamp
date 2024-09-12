@@ -119,6 +119,7 @@ textarea {
 <script>
 
 let postCreateMoved = false; 
+let selectedFile = null;
 
 const urlParams = new URLSearchParams(window.location.search);
 var limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit')) 
@@ -325,6 +326,24 @@ const urlParams = new URLSearchParams(window.location.search);
 return urlParams.has(name);
 }
 
+$('#openFileDialog').click(function () {
+    const fileInput = $('#fileUploadInput1')[0]; // Select the file input
+
+    // Trigger the file input dialog
+    fileInput.click(); 
+
+    // Handle the file selection once a file is chosen
+    fileInput.onchange = function () {
+        selectedFile = fileInput.files[0]; // Store the selected file in a global variable
+        if (selectedFile) {
+            console.log('Selected file:', selectedFile.name);
+        } else {
+            console.log('No file selected');
+        }
+    };
+});
+
+
 function addPostCreateToBobissomeonesuncle() {
     let bobissomeonesuncle = document.getElementById('bobissomeonesuncle');
     let writePostExpanded = document.querySelector('.write-post-expanded');
@@ -414,6 +433,14 @@ function addPostCreateToBobissomeonesuncle() {
         addPostCreateToBobissomeonesuncle(); // Reset the post-create when canceled
     });
 
+    $('#fileUploadInput').change(function () {
+        const selectedFile = $(this)[0].files[0];
+        if (selectedFile) {
+            console.log('Selected file:', selectedFile.name);
+        }
+    });
+
+
     $('.share-button').click(function () {
         const postContent = $('#postTextArea').val();
         const postLink = $('#al1').val();
@@ -442,11 +469,12 @@ function addPostCreateToBobissomeonesuncle() {
             formData.append('post_video_url', postVideo); // Assuming post_video_url is the correct field
         }
 
-        // Append file upload if available
-        const fileInput = $('#fileUploadInput1')[0];
-        if (fileInput.files.length > 0) {
-            formData.append('file', fileInput.files[0]);
+        if (selectedFile) {
+            formData.append('postImage', selectedFile); // Use the stored file
         }
+
+
+        // Append file upload if available
 
         // Make the AJAX POST request to submit the post
         $.ajax({
@@ -463,20 +491,29 @@ function addPostCreateToBobissomeonesuncle() {
                 if (response.status === 'success') {
                     console.log('Post shared successfully:', response.message);
 
-                    $("#posts-container").load(location.href + " #posts-container");
+                    selectedFile = null;
 
-                    setTimeout(function() {
-                        fetchPosts(currentPage);
-                    }, 3000); 
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            $(this).fadeIn(500);
+                        });
+                    });
+
 
                 } else {
                     console.log('Failed to share post:', response.message);
                     
-                    $("#posts-container").load(location.href + " #posts-container");
+                    selectedFile = null;
 
-                    setTimeout(function() {
-                        fetchPosts(currentPage);
-                    }, 3000); 
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            $(this).fadeIn(500);
+                        });
+                    });
+
+
                 }
             },
             error: function (error) {
@@ -510,22 +547,18 @@ $('.share-button').click(function () {
         formData.append('username', username);
         formData.append('postContent', postContent);
 
-        // Append link and video if provided
         if (postLink) {
             formData.append('post_link_url', postLink);
         }
 
         if (postVideo) {
-            formData.append('post_video_url', postVideo); // Assuming post_video_url is the correct field
+            formData.append('post_video_url', postVideo); 
         }
 
-        // Append file upload if available
-        const fileInput = $('#fileUploadInput1')[0];
-        if (fileInput.files.length > 0) {
-            formData.append('file', fileInput.files[0]);
+        if (selectedFile) {
+            formData.append('postImage', selectedFile); 
         }
 
-        // Make the AJAX POST request to submit the post
         $.ajax({
             type: 'POST',
             url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
@@ -541,20 +574,27 @@ $('.share-button').click(function () {
                 if (response.status === 'success') {
                     console.log('Post shared successfully:', response.message);
 
-                    $("#posts-container").load(location.href + " #posts-container");
+                    selectedFile = null;
 
-                    setTimeout(function() {
-                        fetchPosts(currentPage);
-                    }, 250); 
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            $(this).fadeIn(500);
+                        });
+                    });
 
                 } else {
                     console.log('Failed to share post:', response.message);
 
-                    $("#posts-container").load(location.href + " #posts-container");
+                    selectedFile = null;
 
-                    setTimeout(function() {
-                        fetchPosts(currentPage);
-                    }, 250); 
+                    $("#posts-container").fadeOut(500, function() {
+                        $(this).load(location.href + " #posts-container", function() {
+                            fetchPosts(currentPage);
+                            $(this).fadeIn(500);
+                        });
+                    });
+
 
                 }
             },
@@ -642,6 +682,10 @@ $(document).on('click', '#postTextArea', function () {
             top: '90px'
         });
 
+        $writePostLevel3.css({
+            top: '20px'
+        })
+
         $writePostImage.show();
         $writePostLevel2.show();
         $level4.show();
@@ -660,7 +704,7 @@ $(document).on('click', '#postTextArea', function () {
             $attachRow.hide();
             $addVideotext.show();
             $postCreate.css({ height: '350px' });
-            $level4.css({ top: '80px' });
+            $level4.css({ top: '118px' });
         });
 
         // Photo Icon click - Show photo upload section
@@ -676,7 +720,7 @@ $(document).on('click', '#postTextArea', function () {
                     $box.hide();
                     $photo.css({ display: 'none' });
                     $attach.css({ display: 'none' });
-                    $level4.css({ top: '80px' });
+                    $level4.css({ top: '120px' });
                 } else {
                     $addPhotostext.hide();
                     $writePostLevel2p5.show();
@@ -937,18 +981,7 @@ function handleFiles(files) {
     }
 }
 
-$('#openFileDialog').click(function () {
-    const fileInput = document.getElementById('fileUploadInput1');
-    fileInput.click(); 
-});
 
-$('#fileUploadInput').change(function () {
-
-const selectedFile = $(this)[0].files[0];
-if (selectedFile) {
-    console.log('Selected file:', selectedFile.name);
-}
-});
 
 $('#shareButton').click(function () {
 
