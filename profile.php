@@ -9,6 +9,7 @@ if (!isset($_SESSION["username"])) {
 include("important/db.php");
 
 $profileget = htmlspecialchars($_GET['profile']);
+$username = $_GET['username'];
 
 $icon = "profile";
 

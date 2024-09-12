@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+
+include("important/db.php");
+
+$profileget = htmlspecialchars($_GET['profile']);
+
+$username = $_GET['username'];
+
+?>
+
 <ul class="nav nav-tabs" style="margin: 0 auto;">
     <?php if ($icon == 'home') { ?>
         <li role="presentation" class="active"><a href="#">All</a></li>
@@ -25,7 +37,7 @@
             <li role="presentation"><a href="#">Your Communities</a></li>
         <?php } elseif ($icon == 'photos') { ?>
             <li role="presentation"><a href="#">About</a></li>
-            <li role="presentation"><a href="profile.php?profile=<?php echo $photoget?>">Posts</a></li>
-            <li role="presentation"><a href="#" class="active">Photos</a></li>
+            <li role="presentation"><a href="profile.php?profile=<?php echo $username?>">Posts</a></li>
+            <li role="presentation" ><a id="bobuncleyour" href="#" class="active">Photos</a></li>
         <?php } ?>
     </ul>

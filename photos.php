@@ -7,7 +7,7 @@ if (!isset($_SESSION["username"])) {
   exit();
 }
 
-$username = $_SESSION["username"];
+$username = $_GET['username'];
 
 $icon = "photos";
 ?>
