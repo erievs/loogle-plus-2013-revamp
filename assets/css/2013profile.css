@@ -468,3 +468,23 @@ top: 46px;
 } 
 }
 
+
+.sticky-header .nav-tabs>li.active>a {
+  background: none;
+  border: none;
+  border-bottom: 3px solid #007bff;
+  color: #007bff;
+}
+
+.sub-header .nav-tabs > li.active > a {
+  font-weight: bold;
+  border-bottom: 3px solid #007bff;
+  color: #007bff;
+  padding-bottom: 7px;
+}
+
+.sub-header .nav-tabs > li.active > a {
+  color: #007bff;
+  font-weight: bold;
+  z-index: 999;
+}

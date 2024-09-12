@@ -1,73 +1,26 @@
-/* Welcome to hacky fix land */
 
-  .fromthehousewemadeourhome {
-    background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -110px;
+/* Base */
+#ronnieisnum1 {
+  position: relative;
+  top: 3px;
+  height: 38px;
+  right: 14px;
+  left: -20px;
+  width: 100px;
+}
+
+.fromthehousewemadeourhome {
+  background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -110px;
+  left: 11.5px;
+  position: relative;
+}
+
+@media (min-width: 900px) and (max-width: 1100px) {
+  .main-header .search-bar {
+    width: 420px;
   }
 
   #ronnieisnum1 {
-    height: 38px;
-    position: relative;
-    left: -18px;
-    width: 84px;
+    top: 4px;
   }
-
-  #ronnieisnum1 {
-    position: relative;
-    top: 1.25px;
-    height: 38px;
-    right: 14px;
-  }
-
-  /* Default */
-
-  .main-header .search-container {
-    margin-right: 43%;
-  }
-
-  
-  /* Higher Res -> Higher Up, The lower the style, the lower it is loaded! */
-  
-  
-  /* 900p 16:9 */
-  @media (max-width: 1600px) {
-    .main-header .search-container {
-      margin-right: 30%;
-    }
-  }
-
-  @media (max-width: 1300px) {
-    .main-header .search-bar {
-      margin-right: 30%;
-    }
-  }
-  
-  /* 720p 16:9 */
-  @media (max-width: 1280px) {
-    .main-header .search-bar {
-        margin-left: 95px;
-    }
-  }
-
-  
-  /* 540p 16:9 */
-  @media (max-width: 960px) {
-    .main-header .search-bar {
-      margin-left: -40px;
-      position: relative;
-      left: 160px;
-    }
-    #ronnieisnum1 {
-      position: relative;
-      top: 3.25px;
-      height: 30px;
-      left: 141px;
-      height: 38px;
-    }
-    #notfication-header {
-      margin-left: -12%;
-    }
-    .sb-card-body-arrow {
-      margin-left: 60px;
-    }
-  }
-  
+}
