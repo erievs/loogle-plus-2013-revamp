@@ -299,9 +299,6 @@ if(isset($_GET['trump'])) {
 
     $(document).ready(function() {
 
-
-
-
         let singlePostData;
 
         function getParameterByName(name, url) {

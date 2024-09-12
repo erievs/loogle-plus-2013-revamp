@@ -19,7 +19,6 @@ if(isset($_GET['trump'])) {
     echo '<link rel="stylesheet" href="assets/css/trump.css">';
 }
 
-
 ?>
 
 
@@ -731,7 +730,11 @@ $('#postTextArea').click(function () {
 });
 
 $('#cancelButton').click(function () {
-    smoothReload(500);
+
+$("body").fadeOut(500, function() {
+    location.reload();
+});
+
 });
 
 $('#fileDrop').on('dragover', function (e) {
@@ -1066,29 +1069,33 @@ $(document).ready(function() {
                     username: username
                 },
                 success: function(response) {
+                    console.log("Raw Response:", response);
 
-                    var responseData = JSON.parse(response);
-
-                    if (responseData.action === 'added') {
-                        console.log("Plus one added.");
-                        $closestGeorgeWallace.text(`+${currentValue + 1}`);
-                        $closestPlusOneIcon.css('color', '#ffff'); 
-                        $closestPlusOneIcon.css('background-color', '#cc4331'); 
-                        $closestGeorgeWallace.css('color', '#ffff'); 
-                    }  
-                    
-                    if (responseData.action === 'subtracted') {
-                        console.log("Plus one subtracted.");
-                        $closestGeorgeWallace.text(`+${currentValue - 1}`);
-                        $closestPlusOneIcon.css('background-color', 'white'); 
-                        $closestPlusOneIcon.css('color', '#333'); 
-                        $closestGeorgeWallace.css('color', '#333'); 
+                    if (typeof response === 'object') {
+                        if (response.action === 'added') {
+                            console.log("Plus one added.");
+                            $closestGeorgeWallace.text(`+${currentValue + 1}`);
+                            $closestPlusOneIcon.css('color', '#ffff'); 
+                            $closestPlusOneIcon.css('background-color', '#cc4331'); 
+                            $closestGeorgeWallace.css('color', '#ffff'); 
+                        } else if (response.action === 'subtracted') {
+                            console.log("Plus one subtracted.");
+                            $closestGeorgeWallace.text(`+${currentValue - 1}`);
+                            $closestPlusOneIcon.css('background-color', 'white'); 
+                            $closestPlusOneIcon.css('color', '#333'); 
+                            $closestGeorgeWallace.css('color', '#333'); 
+                        } else {
+                            console.error("Unexpected response:", response);
+                        }
+                    } else {
+                        console.error("Response is not an object:", response);
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
+                    console.error("AJAX Error:", xhr.responseText);
                 }
             });
+
         });
 
         var $closestCommentMain = $(this).closest('.comment-main');

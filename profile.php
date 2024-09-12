@@ -186,6 +186,7 @@ var limit = urlParams.has('postlimit') && !isNaN(urlParams.get('postlimit'))
     : 35; 
 
 $(document).ready(function () {
+
     var mainHeader = $(".main-header");
     var subHeader = $(".sub-header");
     var stickyHeader = $(".sticky-header");
@@ -386,14 +387,11 @@ return urlParams.has(name);
 }
 
 $('#openFileDialog').click(function () {
-    const fileInput = $('#fileUploadInput1')[0]; // Select the file input
-
-    // Trigger the file input dialog
+    const fileInput = $('#fileUploadInput1')[0];
     fileInput.click(); 
 
-    // Handle the file selection once a file is chosen
     fileInput.onchange = function () {
-        selectedFile = fileInput.files[0]; // Store the selected file in a global variable
+        selectedFile = fileInput.files[0];
         if (selectedFile) {
             console.log('Selected file:', selectedFile.name);
         } else {
@@ -407,19 +405,16 @@ function addPostCreateToBobissomeonesuncle() {
     let bobissomeonesuncle = document.getElementById('bobissomeonesuncle');
     let writePostExpanded = document.querySelector('.write-post-expanded');
 
-    // Hide the expanded post div
     const $writePostDiv = $('.write-post-expanded'); 
     $writePostDiv.hide();
 
     if (!bobissomeonesuncle) return;
 
-    // Remove existing post-create if it exists
     let existingPostCreate = document.querySelector('.post-create');
     if (existingPostCreate) {
         existingPostCreate.remove();
     }
 
-    // Create a new post-create element
     let postCreate = document.createElement('div');
     postCreate.className = 'post-create';
 
@@ -480,16 +475,13 @@ function addPostCreateToBobissomeonesuncle() {
         </div>
     `;
 
-    // Set the inner HTML of the new postCreate div
     postCreate.innerHTML = postCreateHTML;
 
-    // Append the new postCreate div to bobissomeonesuncle container
     bobissomeonesuncle.appendChild(postCreate);
 
-    // Re-add event listeners for the new element
     $('#cancelButton').on('click', function() {
         postCreateMoved = false;
-        addPostCreateToBobissomeonesuncle(); // Reset the post-create when canceled
+        addPostCreateToBobissomeonesuncle();
     });
 
     $('#fileUploadInput').change(function () {
@@ -499,7 +491,6 @@ function addPostCreateToBobissomeonesuncle() {
         }
     });
 
-
     $('.share-button').click(function () {
         const postContent = $('#postTextArea').val();
         const postLink = $('#al1').val();
@@ -508,34 +499,27 @@ function addPostCreateToBobissomeonesuncle() {
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
-        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
-        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
 
-        // Append link and video if provided
         if (postLink) {
             formData.append('post_link_url', postLink);
         }
 
         if (postVideo) {
-            formData.append('post_video_url', postVideo); // Assuming post_video_url is the correct field
+            formData.append('post_video_url', postVideo);
         }
 
         if (selectedFile) {
-            formData.append('postImage', selectedFile); // Use the stored file
+            formData.append('postImage', selectedFile);
         }
 
-
-        // Append file upload if available
-
-        // Make the AJAX POST request to submit the post
         $.ajax({
             type: 'POST',
             url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
@@ -558,7 +542,6 @@ function addPostCreateToBobissomeonesuncle() {
                         });
                     });
 
-
                 } else {
                     console.log('Failed to share post:', response.message);
                     
@@ -570,7 +553,6 @@ function addPostCreateToBobissomeonesuncle() {
                         });
                     });
 
-
                 }
             },
             error: function (error) {
@@ -579,10 +561,15 @@ function addPostCreateToBobissomeonesuncle() {
         });
     });
 
-
-    // Reset the postCreateMoved flag
     postCreateMoved = false;
     console.log('Post-create has been re-added:', postCreateMoved);
+}
+
+var profileget = <?php echo json_encode($profileget); ?>;
+var currentUser = <?php echo json_encode($_SESSION["username"]); ?>;
+
+if (profileget !== currentUser) {
+    $(".post-create").hide();
 }
 
 $('.share-button').click(function () {
@@ -593,13 +580,11 @@ $('.share-button').click(function () {
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
-        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
-        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
@@ -1860,12 +1845,7 @@ $(document).ready(function() {
 }
 </script>
 
-
-
 <!-- END SCRIPTS -->
-
-
-
 
 <script>
 $(document).ready(function() {
@@ -1920,6 +1900,18 @@ $('.pfp-picture').mouseleave(function() {
 });
 
 
+</script>
+
+<script>
+        $(document).ready(function() {
+            setInterval(function() {
+
+                var width = $(window).width();
+                var height = $(window).height();
+                
+                console.log("Screen Resolution: " + width + "x" + height);
+            }, 2500);
+        });
 </script>
 
 <script src="assets/js/sidebar.js"></script>
