@@ -8,10 +8,14 @@ if (strpos($current_url, 'whats_hot.php') !== false) {
     $icon = "whats_hot";
 } elseif (strpos($current_url, 'profile.php') !== false) {
     $icon = "profile";
-} elseif (strpos($current_url, 'communties.php') !== false) {
-    $icon = "communties";
-}  elseif (strpos($current_url, 'photos.php') !== false) {
+} elseif (strpos($current_url, 'communities.php') !== false) { // Fixed typo
+    $icon = "communities";
+} elseif (strpos($current_url, 'photos.php') !== false) {
     $icon = "photos";
+} elseif (strpos($current_url, 'about.php') !== false) {
+    $icon = "about";
+} else {
+    $icon = "about"; // Optional: handle cases where URL does not match any condition
 }
 
 
@@ -174,20 +178,23 @@ $(document).ready(function() {
 
 <div class="sticky-header" style="display: none;">
     <div class="menu">
-    <span id="loogle-logo" class="loogle-logo"></span>
-    <span class="<?php 
+        <span id="loogle-logo" class="loogle-logo"></span>
+        <span class="<?php 
             if ($icon == "whats_hot") {
                 echo 'home-h-icon';
             } elseif ($icon == "profile") {
                 echo 'profile-p-icon';
             } elseif ($icon == "home") {
                 echo 'home-h-icon';
-            }  elseif ($icon == "communties") {
+            } elseif ($icon == "communities") {
                 echo 'com-c-icon';
-            } elseif ($icon == "photos") {
+            } elseif ($icon == "photos" || $icon == "about") {
                 echo 'photo-p-icon';
+            } else {
+                echo 'default-icon'; 
             }
-	?>" id="open-sidebar-1"></span>  <p style="font-size: 16px;top: 2px;position: relative;"> > </p>
+        ?>" id="open-sidebar-1"></span>
+        <p style="font-size: 16px; top: 2px; position: relative;"> > </p>
 
         <span class="divider"></span>
         <?php include("navtabs.php"); ?>
@@ -244,7 +251,7 @@ $(document).ready(function() {
 		   <p><?php 
 
 	if ($icon == "profile") {
-		echo 'Home';
+		echo 'Profile';
 	}
 	
 	if ($icon == "whats_hot") {
@@ -261,6 +268,10 @@ $(document).ready(function() {
 
     if ($icon == "photos") {
 		echo 'Photos';
+	}
+
+    if ($icon == "about") {
+		echo 'Profile';
 	}
 
 	?></p>
@@ -313,10 +324,14 @@ $(document).ready(function() {
             echo 'home-h-icon';
         } elseif ($icon == "whats_hot") {
             echo 'hot-h-icon';
-        } elseif ($icon == "communties") {
+        } elseif ($icon == "communities") { // Fixed typo
             echo 'com-c-icon';
         } elseif ($icon == "photos") {
             echo 'photo-p-icon';
+        } elseif ($icon == "about") {
+            echo 'photo-p-icon';
+        } else {
+            echo 'default-icon'; 
         }
     ?> home-icon"></span>
     <span class="home-icon"><?php 
@@ -327,9 +342,11 @@ $(document).ready(function() {
         }  elseif ($icon == "whats_hot") {
             echo 'Whats Hot';
         } elseif ($icon == "communties") {
-            echo 'Communties';
+            echo 'Communties'; 
         } elseif ($icon == "photos") {
             echo 'Photos';
+        } elseif ($icon == "about") {
+            echo 'Profile';
         }
     ?> </span>
     <span class="arrow-icon"> > </span>

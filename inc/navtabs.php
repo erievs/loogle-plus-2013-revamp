@@ -8,9 +8,12 @@ $profileget = htmlspecialchars($_GET['profile']);
 
 $username = $_GET['username'];
 
+
+
 ?>
 
 <ul class="nav nav-tabs" style="margin: 0 auto;">
+    
     <?php if ($icon == 'home') { ?>
         <li role="presentation" class="active"><a href="#">All</a></li>
         <li role="presentation"><a href="#">Family</a></li>
@@ -27,8 +30,9 @@ $username = $_GET['username'];
                 <li><a href="#">Geroge W. Bush</a></li>
             </ul>
         </li>
+
         <?php } elseif ($icon == 'profile') { ?>
-            <li role="presentation"><a href="#">About</a></li>
+            <li role="presentation"><a href="about.php?profile=<?php echo $profileget ?>&icon=about">About</a></li>
             <li role="presentation" class="active"><a href="#">Posts</a></li>
             <li role="presentation"><a href="photos.php?username=<?php echo $profileget?>">Photos</a></li>
         <?php } elseif ($icon == 'communities') { ?>
@@ -36,8 +40,12 @@ $username = $_GET['username'];
             <li role="presentation"><a href="#">Recommended for you</a></li>
             <li role="presentation"><a href="#">Your Communities</a></li>
         <?php } elseif ($icon == 'photos') { ?>
-            <li role="presentation"><a href="#">About</a></li>
+            <li role="presentation"><a href="about.php?profile=<?php echo $username?>&icon=about">About</a></li>
             <li role="presentation"><a href="profile.php?profile=<?php echo $username?>">Posts</a></li>
-            <li role="presentation" ><a id="bobuncleyour" href="#" class="active">Photos</a></li>
+            <li role="presentation" class="active"><a id="bobuncleyour" href="#" class="active">Photos</a></li>
+        <?php }  elseif ($icon == 'about') { ?>
+            <li role="presentation" class="active"><a href="#">About</a></li>
+            <li role="presentation"><a href="profile.php?profile=<?php echo $profileget?>">Posts</a></li>
+            <li role="presentation" ><a id="bobuncleyour" href="photos.php?username=<?php echo $profileget?>" class="active">Photos</a></li>
         <?php } ?>
     </ul>
