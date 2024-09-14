@@ -474,6 +474,7 @@ top: 46px;
   border: none;
   border-bottom: 3px solid #007bff;
   color: #007bff;
+  padding-bottom: 8px;
 }
 
 .sub-header .nav-tabs > li.active > a {

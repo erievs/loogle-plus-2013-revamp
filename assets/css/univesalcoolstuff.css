@@ -229,7 +229,7 @@ img.pfp-picture {
 }
 .profilestuff {
   display: flex;
-  margin: 7% 6% 6% 19%;
+  margin: 8% 6% 10% 19%;
   position: absolute;
   width: -moz-available;
   height: 7%;
@@ -376,4 +376,8 @@ img.pfp-picture {
 
 img [src="null"] {
   display: none;
+}
+
+#colour-title-thingy-info {
+  
 }

@@ -1,0 +1,489 @@
+.box {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 15px 0;
+  background-color: #ffff;
+  width: 500px;
+  height: 300px;
+}
+
+#about-box {
+    border-top: 6px solid #dc8e78;
+}
+
+#info-box {
+    border-top: 6px solid #92b979;
+}
+
+.fuckjohnhinckleyjunior {
+    margin-top: 3.3%;
+}
+
+.sticky-header .nav-tabs > li.active > a {
+    padding-bottom: 7px;
+}
+
+a {
+    cursor: grab;
+}
+
+.editbox {
+    z-index: 10000;
+    height: 500px;
+    width: 250px;
+    background-color: #ffff;
+    box-shadow: 1px 1px 5px #F3F3F3;
+    position: relative;
+    margin: 15% auto;
+    top: 1000px;
+}
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 10000; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.modal-content-story {
+  background-color: #fff;
+  margin: 15% auto; 
+  width: 600px; 
+  height: 500px; 
+  box-shadow: 1px 1px 5px #F3F3F3;
+  position: relative;
+  bottom: 25%;
+}
+
+.modal-content-intro {
+  background-color: #fff;
+  margin: 15% auto; 
+  width: 600px; 
+  height: 500px; 
+  box-shadow: 1px 1px 5px #F3F3F3;
+  position: relative;
+  bottom: 25%;
+}
+
+.close {
+  color: grey;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 20px;
+}
+
+.close:hover, .close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 20px;
+}
+
+#colour-title-thingy-info {
+  width: 100%;
+  height: 50px;
+  background-color: #dc8e78;
+}
+
+#colour-title-thingy-intro {
+  width: 100%;
+  height: 50px;
+  background-color: #92b979;
+}
+
+#bih3 {
+  padding-top: 15px;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+}
+
+#tagline-story {
+  height: 24px;
+  width: 454px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 49px;
+  resize: none;
+}
+
+#gender-intro {
+  height: 24px;
+  width: 454px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 49px;
+  resize: none;
+}
+
+#networkingintro {
+  height: 24px;
+  width: 454px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 49px;
+  resize: none;
+}
+
+#networkingintro {
+  height: 24px;
+  width: 456px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 75px;
+  resize: none;
+}
+
+#bday-intro {
+  height: 24px;
+  width: 460px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 58px;
+  resize: none;
+}
+
+#othernames-intro {
+  height: 24px;
+  width: 464px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 85px;
+  resize: none;
+}
+
+#real-intro {
+  height: 24px;
+  width: 459px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 81px;
+  resize: none;
+}
+
+#storystory {
+  overflow: scroll;
+  height: 150px;
+  width: 454px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 38px;
+  resize: none;
+}
+
+#brag-story {
+  height: 24px;
+  width: 454px;
+  position: relative;
+  top: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  font-size: 10x;
+  background: #fff;
+  right: 96px;
+  resize: none;
+  margin-top: 10px;
+}
+
+#tagline-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+#gender-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+#networking-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+#baday-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+#real-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+#othernames-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+#intro-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+#brag-con {
+  padding: 20px;
+  padding-right: 10px;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+
+#taglinebob {
+  font-size: 13px;
+}
+
+#btagbob {
+  font-size: 13px;
+}
+
+#realgbob {
+  font-size: 13px;
+}
+
+#othernamesgbob {
+  font-size: 13px;
+}
+
+#bdaytagbob {
+  font-size: 13px;
+}
+
+#networkingbob {
+  font-size: 13px;
+}
+
+/* WOKE */
+
+#genderbob {
+  font-size: 13px;
+}
+
+#storybob {
+  font-size: 13px;
+  margin-bottom: 21px;
+  top: -115px;
+  position: relative;
+}
+
+#save-button-story {
+  color: #fff;
+  position: relative;
+  left: -88px;
+  top: 3px;
+}
+
+#save-button-intro {
+  color: #fff;
+  position: relative;
+  left: -88px;
+  top: 3px;
+}
+
+
+.close-banner {
+  background-color: #ffff;
+  color: #3E3E3E;
+  border: black;
+  border-block-color: #6a6a6a;
+  border: 0.01px solid #6a6a6a;
+  margin-left: 41px;
+  margin-top: -1px;
+  scale: 0.8;
+  border-block-color: rgba(106, 106, 106, 0.5);
+  border: 0.01px solid rgba(106, 106, 106, 0.5);
+  left: 3px;
+  top: 3px;
+  font-weight: 550;
+}
+
+
+.modal-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 419px;
+  height: 40px;
+  background-color: transparent;
+  border-top: none;
+  padding: 0px;
+  margin-left: 1px;
+  margin-left: 371px;
+}
+
+.close-banner {
+  background-color: #FFFF;
+  color: #000;
+  border: black;
+  border-block-color: black;
+  border: 0.15px solid gray;
+  margin-left: 85px;
+  margin-top: -1px;
+}
+
+
+.close-banner-intro {
+  background-color: #FFFF;
+  color: #000;
+  border: black;
+  border-block-color: black;
+  border: 0.15px solid gray;
+  margin-left: 85px;
+  margin-top: -1px;
+}
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+  margin-right: 10px;
+}
+
+.close-banner {
+  background-color: #ffff;
+  color: #272727;
+  border: black;
+  border-block-color: #6a6a6a;
+  border: 0.01px solid #6a6a6a;
+  margin-left: 42px;
+  margin-top: -1px;
+  scale: 0.8;
+  border-block-color: rgba(106, 106, 106, 0.5);
+  border: 0.01px solid rgba(106, 106, 106, 0.5);
+  font-weight: bold;
+  left: 6px;
+  top: 3px;
+  position: relative;
+  border-radius: 0px;
+  height: 34px;
+  width: 90px;
+}
+
+.close-banner-intro {
+  background-color: #ffff;
+  color: #272727;
+  border: black;
+  border-block-color: #6a6a6a;
+  border: 0.01px solid #6a6a6a;
+  margin-left: 42px;
+  margin-top: -1px;
+  scale: 0.8;
+  border-block-color: rgba(106, 106, 106, 0.5);
+  border: 0.01px solid rgba(106, 106, 106, 0.5);
+  font-weight: bold;
+  left: 6px;
+  top: 3px;
+  position: relative;
+  border-radius: 0px;
+  height: 34px;
+  width: 90px;
+}
+
+.ifyouwalkandiwasgone {
+  background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+  padding: 3px 26px;
+  border: 3px solid #3079ed;
+  border-radius: 2px;
+  background-color: #4d90fe;
+  height: 34px;
+}
+
+.sticky-header .nav-tabs>li.active>a {
+  background: none;
+  border: none;
+  border-bottom: 3px solid #007bff;
+  color: #007bff;
+  padding-bottom: 8px;
+}
+
+
+.sub-header .nav-tabs > li.active > a {
+  font-weight: bold;
+  border-bottom: 3px solid #007bff;
+  padding-bottom: 7px;
+}
+
+.profile-p-icon {
+  background-position: -18.6px 364px;
+  background-image: url('assets/icons/astlas2.png');
+  width: 22px;
+  height: 19px;
+  display: inline-block;
+  vertical-align: middle;
+  scale: 0.85;
+  margin-right: 5px;
+}
+
+.photo-p-icon.home-icon {
+  background-position: -18.6px 364px;
+  background-image: url('assets/icons/astlas2.png');
+  width: 22px;
+  height: 19px;
+  display: inline-block;
+  vertical-align: middle;
+  scale: 0.85;
+  margin-right: 5px;
+}
+
+.photo-p-icon.home-icon {
+  background-position: -18.6px 364px;
+  background-image: url('assets/icons/astlas2.png');
+  width: 22px;
+  height: 19px;
+  display: inline-block;
+  vertical-align: middle;
+  scale: 0.85;
+  margin-right: 5px;
+}
+
+.photo-p-icon {
+  background-position: -18.6px 364px;
+  background-image: url('assets/icons/astlas2.png');
+  width: 22px;
+  height: 19px;
+  display: inline-block;
+  vertical-align: middle;
+  scale: 0.85;
+  margin-right: 5px;
+  top: -1px;
+  position: relative;
+}
