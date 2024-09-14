@@ -43,7 +43,8 @@ if(isset($_GET['trump'])) {
     <link rel="stylesheet" href="assets/css/2013notes.css">
 	<link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
     <link rel="stylesheet" href="assets/css/writespost.css">
-   
+
+    
 </head>
 <body>
 
@@ -134,7 +135,7 @@ if(isset($_GET['trump'])) {
           <span id="pleasefuckingcheckinwithmebefordoinganythingmorethancss"></span>
           <ul class="top-submenus">
             <b id="select-text">Select profile picture</b>
-            <br><br> <!-- Hacky fix  -->
+            <br><br>
             <li class="highlighted"><a href="#">Upload</a></li>
             <li><a href="#">Your Photos</a></li>
             <li><a href="#">Photos of you</a></li>

@@ -39,6 +39,33 @@ if (isset($_GET['trump'])) {
 
     <?php require_once("inc/topstuffs.php") ?>
 
+
+    <!-- External CSS was not working for some reason on this one -->
+
+    <style>
+        #ronnieisnum1 {
+            position: relative;
+            top: 3px;
+            height: 37px;
+            right: 0px;
+            margin: auto;
+        } 
+
+        .fromthehousewemadeourhome {
+            background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -110px;
+            left: 0px;
+            position: relative;
+            margin: auto;
+        }
+
+        .sub-header .nav-tabs > li.active > a {
+            font-weight: bold;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 7px;
+            color: #000;
+        }
+    </style>
+
     <div class="container" id="imagesContainer"></div>
 
     <script>
