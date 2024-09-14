@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
 include("../important/db.php");
 
-$rateLimit = 2.5;
+$rateLimit = 0;
 $response = array();
 
 if (isset($_SESSION['username'])) {
@@ -33,7 +33,7 @@ if (isset($_SESSION['username'])) {
             $plusOneCount = $row['plus_one'];
 
             $response['status'] = 'success';
-            $response['plus_one_text'] = "+($plusOneCount)";
+            $response['plus_one_text'] = "+$plusOneCount";
         } else {
             http_response_code(404);
             $response['status'] = 'error';
@@ -48,7 +48,7 @@ if (isset($_SESSION['username'])) {
         $postId = $_POST['id'];
         $username = $_POST['username'];
 
-        $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit_' . $username . '.txt';
+        $rateLimitFile = sys_get_temp_dir() . '/ratelimit_' . $username . '.txt';
         if (!isRateLimited($rateLimitFile, $rateLimit)) {
             $sqlCheck = "SELECT plus_one, plus_one_usernames FROM posts WHERE id = ?";
             $stmtCheck = $conn->prepare($sqlCheck);
@@ -78,16 +78,27 @@ if (isset($_SESSION['username'])) {
                 $stmtUpdate = $conn->prepare($sqlUpdate);
                 $plusOneUsernamesJson = json_encode(array_values($plusOneUsernames));
                 $stmtUpdate->bind_param("si", $plusOneUsernamesJson, $postId);
-                if ($stmtUpdate->execute() === TRUE) {
+                if ($stmtUpdate->execute()) {
+                    // Fetch the updated plus_one count
+                    $sqlUpdatedCount = "SELECT plus_one FROM posts WHERE id = ?";
+                    $stmtUpdatedCount = $conn->prepare($sqlUpdatedCount);
+                    $stmtUpdatedCount->bind_param("i", $postId);
+                    $stmtUpdatedCount->execute();
+                    $resultUpdatedCount = $stmtUpdatedCount->get_result();
+                    $rowUpdatedCount = $resultUpdatedCount->fetch_assoc();
+                    $plusOneCount = $rowUpdatedCount['plus_one'];
+
                     $response['status'] = 'success';
                     $response['message'] = "Plus one updated successfully";
                     $response['action'] = $action;
+                    $response['plus_one_count'] = $plusOneCount; // Add the updated count to the response
                 } else {
                     http_response_code(500);
                     $response['status'] = 'error';
                     $response['message'] = "Error updating plus one count: " . $conn->error;
                 }
                 $stmtUpdate->close();
+                $stmtUpdatedCount->close();
             } else {
                 http_response_code(404);
                 $response['status'] = 'error';
@@ -96,7 +107,7 @@ if (isset($_SESSION['username'])) {
             $stmtCheck->close();
         } else {
             $response['status'] = 'error';
-            $response['message'] = "Error: You can only post once every $rateLimit second(s).";
+            $response['message'] = "Rate limit exceeded. You can only post once every $rateLimit second(s).";
         }
         echo json_encode($response);
         exit;
