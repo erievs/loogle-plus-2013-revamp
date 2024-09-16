@@ -14,8 +14,10 @@ if (strpos($current_url, 'whats_hot.php') !== false) {
     $icon = "photos";
 } elseif (strpos($current_url, 'about.php') !== false) {
     $icon = "about";
+} elseif (strpos($current_url, 'index.php') !== false) {
+    $icon = "home";
 } else {
-    $icon = "about"; // Optional: handle cases where URL does not match any condition
+    $icon = "home"; // Optional: handle cases where URL does not match any condition
 }
 
 
