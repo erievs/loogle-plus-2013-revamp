@@ -351,7 +351,7 @@ $(document).ready(function() {
                     // WARNING GENDER OPTION ILLEGAL IN FLORDIA, IDAHO, TEXAS, AND MORE
                     $('#gender-value').text(data.gender || 'Unset');
 
-                    $('#lookingforalaska-value').text(data.relationship || 'Unset');
+                    $('#lookingforalaska-value').text(data.networking || 'Unset');
                     
                     $('#birthday-value').text(data.birthday || 'Unset');
                        
