@@ -1152,15 +1152,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
         });
     });
 
-    $(document).on('click', '.post-content', function() {
-    var $postContent = $(this);
-    var originalContent = $postContent.text();
-
-    var $textarea = $('<textarea>').val(originalContent).addClass('edit-textarea');
-    $postContent.replaceWith($textarea);
-
-    $textarea.focus();
-});
 
     $(document).on('click', '.edit-post-link', function(event) {
         event.preventDefault();
