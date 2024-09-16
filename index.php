@@ -61,10 +61,8 @@ textarea {
 .content {
     background-size: contain;
     background-position: center;
-    transition: background-image 1s ease-in-out; /* Adjust duration and easing as needed */
+    transition: background-image 1s ease-in-out; 
 }
-
-
 
 </style>
 
@@ -327,14 +325,12 @@ return urlParams.has(name);
 }
 
 $('#openFileDialog').click(function () {
-    const fileInput = $('#fileUploadInput1')[0]; // Select the file input
+    const fileInput = $('#fileUploadInput1')[0]; 
 
-    // Trigger the file input dialog
     fileInput.click(); 
 
-    // Handle the file selection once a file is chosen
     fileInput.onchange = function () {
-        selectedFile = fileInput.files[0]; // Store the selected file in a global variable
+        selectedFile = fileInput.files[0]; 
         if (selectedFile) {
             console.log('Selected file:', selectedFile.name);
         } else {
@@ -348,19 +344,16 @@ function addPostCreateToBobissomeonesuncle() {
     let bobissomeonesuncle = document.getElementById('bobissomeonesuncle');
     let writePostExpanded = document.querySelector('.write-post-expanded');
 
-    // Hide the expanded post div
     const $writePostDiv = $('.write-post-expanded'); 
     $writePostDiv.hide();
 
     if (!bobissomeonesuncle) return;
 
-    // Remove existing post-create if it exists
     let existingPostCreate = document.querySelector('.post-create');
     if (existingPostCreate) {
         existingPostCreate.remove();
     }
 
-    // Create a new post-create element
     let postCreate = document.createElement('div');
     postCreate.className = 'post-create';
 
@@ -421,16 +414,13 @@ function addPostCreateToBobissomeonesuncle() {
         </div>
     `;
 
-    // Set the inner HTML of the new postCreate div
     postCreate.innerHTML = postCreateHTML;
 
-    // Append the new postCreate div to bobissomeonesuncle container
     bobissomeonesuncle.appendChild(postCreate);
 
-    // Re-add event listeners for the new element
     $('#cancelButton').on('click', function() {
         postCreateMoved = false;
-        addPostCreateToBobissomeonesuncle(); // Reset the post-create when canceled
+        addPostCreateToBobissomeonesuncle(); 
     });
 
     $('#fileUploadInput').change(function () {
@@ -449,34 +439,28 @@ function addPostCreateToBobissomeonesuncle() {
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
-        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
-        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
 
-        // Append link and video if provided
+     
         if (postLink) {
             formData.append('post_link_url', postLink);
         }
 
         if (postVideo) {
-            formData.append('post_video_url', postVideo); // Assuming post_video_url is the correct field
+            formData.append('post_link', postVideo);
         }
 
         if (selectedFile) {
-            formData.append('postImage', selectedFile); // Use the stored file
+            formData.append('postImage', selectedFile); 
         }
 
-
-        // Append file upload if available
-
-        // Make the AJAX POST request to submit the post
         $.ajax({
             type: 'POST',
             url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
@@ -523,7 +507,6 @@ function addPostCreateToBobissomeonesuncle() {
     });
 
 
-    // Reset the postCreateMoved flag
     postCreateMoved = false;
     console.log('Post-create has been re-added:', postCreateMoved);
 }
@@ -536,13 +519,11 @@ $('.share-button').click(function () {
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
-        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
-        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
@@ -552,7 +533,7 @@ $('.share-button').click(function () {
         }
 
         if (postVideo) {
-            formData.append('post_video_url', postVideo); 
+            formData.append('post_link', postVideo); 
         }
 
         if (selectedFile) {
@@ -637,7 +618,6 @@ $(document).on('click', '#postTextArea', function () {
         }, 300, function () {
             $writePostDiv.append($postCreate);
 
-            // Apply styles to post-create
             $postCreate.css({
                 background: '#f6f6f6',
                 padding: '10px',
