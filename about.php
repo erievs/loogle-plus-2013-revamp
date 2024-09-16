@@ -351,7 +351,7 @@ $(document).ready(function() {
                     // WARNING GENDER OPTION ILLEGAL IN FLORDIA, IDAHO, TEXAS, AND MORE
                     $('#gender-value').text(data.gender || 'Unset');
 
-                    $('#lookingforalaska-value').text(data.networking || 'Unset');
+                    $('#lookingforalaska-value').text(data.relationship || 'Unset');
                     
                     $('#birthday-value').text(data.birthday || 'Unset');
                        
@@ -575,11 +575,11 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     const sidebar = $('.sidebar');
-    const openSidebarButton = $('#open-sidebar-1');
+    const openSidebarButton = $('#open-sidebar- 1');
     let sidebarOpen = false;  // Set to false by default since the sidebar is likely closed initially
 
     openSidebarButton.on('click', function(event) {
-        event.stopPropagation();  // Prevent the click from bubbling up to the document-level handler
+        event.stopPropagation();  
         if (sidebarOpen) {
             sidebar.css('transform', 'translateX(-100%)');
         } else {

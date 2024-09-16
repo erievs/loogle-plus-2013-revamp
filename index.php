@@ -61,8 +61,10 @@ textarea {
 .content {
     background-size: contain;
     background-position: center;
-    transition: background-image 1s ease-in-out; 
+    transition: background-image 1s ease-in-out; /* Adjust duration and easing as needed */
 }
+
+
 
 </style>
 
@@ -325,12 +327,14 @@ return urlParams.has(name);
 }
 
 $('#openFileDialog').click(function () {
-    const fileInput = $('#fileUploadInput1')[0]; 
+    const fileInput = $('#fileUploadInput1')[0]; // Select the file input
 
+    // Trigger the file input dialog
     fileInput.click(); 
 
+    // Handle the file selection once a file is chosen
     fileInput.onchange = function () {
-        selectedFile = fileInput.files[0]; 
+        selectedFile = fileInput.files[0]; // Store the selected file in a global variable
         if (selectedFile) {
             console.log('Selected file:', selectedFile.name);
         } else {
@@ -344,16 +348,19 @@ function addPostCreateToBobissomeonesuncle() {
     let bobissomeonesuncle = document.getElementById('bobissomeonesuncle');
     let writePostExpanded = document.querySelector('.write-post-expanded');
 
+    // Hide the expanded post div
     const $writePostDiv = $('.write-post-expanded'); 
     $writePostDiv.hide();
 
     if (!bobissomeonesuncle) return;
 
+    // Remove existing post-create if it exists
     let existingPostCreate = document.querySelector('.post-create');
     if (existingPostCreate) {
         existingPostCreate.remove();
     }
 
+    // Create a new post-create element
     let postCreate = document.createElement('div');
     postCreate.className = 'post-create';
 
@@ -414,13 +421,16 @@ function addPostCreateToBobissomeonesuncle() {
         </div>
     `;
 
+    // Set the inner HTML of the new postCreate div
     postCreate.innerHTML = postCreateHTML;
 
+    // Append the new postCreate div to bobissomeonesuncle container
     bobissomeonesuncle.appendChild(postCreate);
 
+    // Re-add event listeners for the new element
     $('#cancelButton').on('click', function() {
         postCreateMoved = false;
-        addPostCreateToBobissomeonesuncle(); 
+        addPostCreateToBobissomeonesuncle(); // Reset the post-create when canceled
     });
 
     $('#fileUploadInput').change(function () {
@@ -439,28 +449,34 @@ function addPostCreateToBobissomeonesuncle() {
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
+        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
+        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
 
-     
+        // Append link and video if provided
         if (postLink) {
             formData.append('post_link_url', postLink);
         }
 
         if (postVideo) {
-            formData.append('post_link', postVideo);
+            formData.append('post_video_url', postVideo); // Assuming post_video_url is the correct field
         }
 
         if (selectedFile) {
-            formData.append('postImage', selectedFile); 
+            formData.append('postImage', selectedFile); // Use the stored file
         }
 
+
+        // Append file upload if available
+
+        // Make the AJAX POST request to submit the post
         $.ajax({
             type: 'POST',
             url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
@@ -507,6 +523,7 @@ function addPostCreateToBobissomeonesuncle() {
     });
 
 
+    // Reset the postCreateMoved flag
     postCreateMoved = false;
     console.log('Post-create has been re-added:', postCreateMoved);
 }
@@ -519,11 +536,13 @@ $('.share-button').click(function () {
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
+        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
+        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
@@ -533,7 +552,7 @@ $('.share-button').click(function () {
         }
 
         if (postVideo) {
-            formData.append('post_link', postVideo); 
+            formData.append('post_video_url', postVideo); 
         }
 
         if (selectedFile) {
@@ -618,6 +637,7 @@ $(document).on('click', '#postTextArea', function () {
         }, 300, function () {
             $writePostDiv.append($postCreate);
 
+            // Apply styles to post-create
             $postCreate.css({
                 background: '#f6f6f6',
                 padding: '10px',
@@ -1034,7 +1054,13 @@ for (let i = 0; i < Math.min(data.length); i++) {
     deletePostLink.className = 'delete-post-link';
     deletePostLink.textContent = 'Delete post';
 
+    const editPostLink = document.createElement('a');
+    editPostLink.href = '#';
+    editPostLink.className = 'edit-post-link';
+    editPostLink.textContent = 'Edit post';
+
     dropdownMenuDel.appendChild(deletePostLink);
+    dropdownMenuDel.appendChild(editPostLink);
 
     postTop.appendChild(dropdownMenuDel);
 
@@ -1125,6 +1151,76 @@ for (let i = 0; i < Math.min(data.length); i++) {
         }
         });
     });
+
+    $(document).on('click', '.post-content', function() {
+    var $postContent = $(this);
+    var originalContent = $postContent.text();
+
+    var $textarea = $('<textarea>').val(originalContent).addClass('edit-textarea');
+    $postContent.replaceWith($textarea);
+
+    $textarea.focus();
+});
+
+    $(document).on('click', '.edit-post-link', function(event) {
+        event.preventDefault();
+
+        // Find the closest post container and post content
+        var $post = $(this).closest('.post');
+        var $postContent = $post.find('.post-content');
+        var originalContent = $postContent.text().trim(); // Get and trim the original content
+
+        console.log('Original post content:', originalContent); // Log the original content
+
+        // Replace post content with a textarea for editing
+        var $textarea = $('<textarea>').addClass('edit-textarea').val(originalContent);
+        $postContent.replaceWith($textarea);
+
+        // Focus the textarea to encourage user input
+        $textarea.focus();
+
+        // Handle double-click to submit the edit
+        $textarea.on('dblclick', function() {
+            var updatedContent = $textarea.val().trim();
+
+            // Extract post ID from data attribute
+            var postId = $post.data('post-id');
+            console.log('Updated content:', updatedContent); // Log the updated content
+            console.log('Post ID:', postId); // Log the post ID
+
+            if (postId && updatedContent) {
+                $.ajax({
+                    url: '<?php echo $siteurl; ?>/apiv1-internal/edit_post.php',
+                    type: 'POST',
+                    data: {
+                        id: postId,
+                        postContent: updatedContent
+                    },
+                    success: function(response) {
+                        console.log('Response:', response); // Log the response from the server
+                        if (response.status === 'success') {
+                            // Replace textarea with updated post content
+                            var $newPostContent = $('<p>').addClass('post-content').text(updatedContent);
+                            $textarea.replaceWith($newPostContent);
+                        } else {
+                            alert(response.message || 'An error occurred while trying to update the post.');
+                            // Restore original content if the update fails
+                            $textarea.replaceWith($('<p>').addClass('post-content').text(originalContent));
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred while trying to update the post.');
+                        // Restore original content in case of an error
+                        $textarea.replaceWith($('<p>').addClass('post-content').text(originalContent));
+                    }
+                });
+            } else {
+                alert('Invalid post ID or content.');
+                console.log('Invalid post ID or content.'); // Log error case
+            }
+        });
+    });
+
 
     $(document).on('click', '.clickable-circle', function(event) {
         $('.dropdown-menu-del').not($(this).siblings('.dropdown-menu-del')).hide();
