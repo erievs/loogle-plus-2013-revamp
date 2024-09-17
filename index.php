@@ -10,7 +10,6 @@ if (!isset($_SESSION["username"])) {
 
 $username = $_SESSION["username"];
 
-
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
 if ($conn->connect_error) {
@@ -61,14 +60,10 @@ textarea {
 .content {
     background-size: contain;
     background-position: center;
-    transition: background-image 1s ease-in-out; /* Adjust duration and easing as needed */
+    transition: background-image 1s ease-in-out; 
 }
 
-
-
 </style>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,8 +74,6 @@ textarea {
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="assets/js/purify.min.js"></script>
-
-
 
     <title>Loogle+</title>
 	<link rel="stylesheet" href="assets/css/2013isamess.css">
@@ -327,14 +320,12 @@ return urlParams.has(name);
 }
 
 $('#openFileDialog').click(function () {
-    const fileInput = $('#fileUploadInput1')[0]; // Select the file input
+    const fileInput = $('#fileUploadInput1')[0]; 
 
-    // Trigger the file input dialog
     fileInput.click(); 
 
-    // Handle the file selection once a file is chosen
     fileInput.onchange = function () {
-        selectedFile = fileInput.files[0]; // Store the selected file in a global variable
+        selectedFile = fileInput.files[0]; 
         if (selectedFile) {
             console.log('Selected file:', selectedFile.name);
         } else {
@@ -343,24 +334,20 @@ $('#openFileDialog').click(function () {
     };
 });
 
-
 function addPostCreateToBobissomeonesuncle() {
     let bobissomeonesuncle = document.getElementById('bobissomeonesuncle');
     let writePostExpanded = document.querySelector('.write-post-expanded');
 
-    // Hide the expanded post div
     const $writePostDiv = $('.write-post-expanded'); 
     $writePostDiv.hide();
 
     if (!bobissomeonesuncle) return;
 
-    // Remove existing post-create if it exists
     let existingPostCreate = document.querySelector('.post-create');
     if (existingPostCreate) {
         existingPostCreate.remove();
     }
 
-    // Create a new post-create element
     let postCreate = document.createElement('div');
     postCreate.className = 'post-create';
 
@@ -421,16 +408,13 @@ function addPostCreateToBobissomeonesuncle() {
         </div>
     `;
 
-    // Set the inner HTML of the new postCreate div
     postCreate.innerHTML = postCreateHTML;
 
-    // Append the new postCreate div to bobissomeonesuncle container
     bobissomeonesuncle.appendChild(postCreate);
 
-    // Re-add event listeners for the new element
     $('#cancelButton').on('click', function() {
         postCreateMoved = false;
-        addPostCreateToBobissomeonesuncle(); // Reset the post-create when canceled
+        addPostCreateToBobissomeonesuncle(); 
     });
 
     $('#fileUploadInput').change(function () {
@@ -440,43 +424,37 @@ function addPostCreateToBobissomeonesuncle() {
         }
     });
 
-
     $('.share-button').click(function () {
         const postContent = $('#postTextArea').val();
         const postLink = $('#al1').val();
+
         const postVideo = $('#al2').val();
+
         const username = '<?php echo isset($_SESSION["username"]) ? $_SESSION["username"] : ""; ?>';
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
-        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
-        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
 
-        // Append link and video if provided
         if (postLink) {
             formData.append('post_link_url', postLink);
         }
 
         if (postVideo) {
-            formData.append('post_video_url', postVideo); // Assuming post_video_url is the correct field
+            formData.append('post_link', postVideo); 
         }
 
         if (selectedFile) {
-            formData.append('postImage', selectedFile); // Use the stored file
+            formData.append('postImage', selectedFile); 
         }
 
-
-        // Append file upload if available
-
-        // Make the AJAX POST request to submit the post
         $.ajax({
             type: 'POST',
             url: '<?php echo $siteurl; ?>/apiv1-internal/submit_post_api.php',
@@ -500,10 +478,9 @@ function addPostCreateToBobissomeonesuncle() {
                         });
                     });
 
-
                 } else {
                     console.log('Failed to share post:', response.message);
-                    
+
                     selectedFile = null;
 
                     $("#posts-container").fadeOut(500, function() {
@@ -513,7 +490,6 @@ function addPostCreateToBobissomeonesuncle() {
                         });
                     });
 
-
                 }
             },
             error: function (error) {
@@ -522,8 +498,6 @@ function addPostCreateToBobissomeonesuncle() {
         });
     });
 
-
-    // Reset the postCreateMoved flag
     postCreateMoved = false;
     console.log('Post-create has been re-added:', postCreateMoved);
 }
@@ -536,13 +510,11 @@ $('.share-button').click(function () {
 
         console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
 
-        // Check if any content has been entered or selected
         if (!postContent && $('#fileUploadInput1')[0].files.length === 0 && !postLink && !postVideo) {
             console.log('Please enter text, select an image, add a link, or upload a video before sharing.');
             return;
         }
 
-        // Create FormData object to hold form data
         const formData = new FormData();
         formData.append('username', username);
         formData.append('postContent', postContent);
@@ -552,7 +524,7 @@ $('.share-button').click(function () {
         }
 
         if (postVideo) {
-            formData.append('post_video_url', postVideo); 
+            formData.append('post_link', postVideo); 
         }
 
         if (selectedFile) {
@@ -567,7 +539,7 @@ $('.share-button').click(function () {
             contentType: false,
             dataType: 'json',
             success: function (response) {
-    
+
                 fetchPosts(currentPage);
                 addPostCreateToBobissomeonesuncle();
 
@@ -594,7 +566,6 @@ $('.share-button').click(function () {
                             $(this).fadeIn(500);
                         });
                     });
-
 
                 }
             },
@@ -637,7 +608,6 @@ $(document).on('click', '#postTextArea', function () {
         }, 300, function () {
             $writePostDiv.append($postCreate);
 
-            // Apply styles to post-create
             $postCreate.css({
                 background: '#f6f6f6',
                 padding: '10px',
@@ -658,7 +628,6 @@ $(document).on('click', '#postTextArea', function () {
             $level4.show();
         });
 
-        // Apply the CSS to postTextArea
         $('#postTextArea').css({
             width: '75%',
             left: '22%',
@@ -667,7 +636,6 @@ $(document).on('click', '#postTextArea', function () {
             zIndex: '2',
         });
 
-        // Apply CSS to triangle
         $('.triangle').css({
             transform: 'rotate(45deg)',
             width: '28px',
@@ -677,7 +645,6 @@ $(document).on('click', '#postTextArea', function () {
             top: '23px',
         });
 
-        // Adjust level 4 and other elements
         $level4.css({
             top: '90px'
         });
@@ -691,7 +658,6 @@ $(document).on('click', '#postTextArea', function () {
         $level4.show();
         $box.hide();
 
-        // Link Icon click - Show link input
         $writePostLinkIcon.one('click', function () {
             $attachRow.hide();
             $addLinktext.show();
@@ -699,7 +665,6 @@ $(document).on('click', '#postTextArea', function () {
             $level4.css({ top: '80px' });
         });
 
-        // Video Icon click - Show video input
         $writePostVideoIcon.one('click', function () {
             $attachRow.hide();
             $addVideotext.show();
@@ -707,7 +672,6 @@ $(document).on('click', '#postTextArea', function () {
             $level4.css({ top: '118px' });
         });
 
-        // Photo Icon click - Show photo upload section
         $writePostPhotoRealIcon.one('click', function () {
             $("#fileDrop").toggle(function () {
                 if ($(this).is(":visible")) {
@@ -731,12 +695,9 @@ $(document).on('click', '#postTextArea', function () {
             });
         });
 
-        // Allow triggering this functionality only once until reset
         postCreateMoved = true;
     }
 });
-
-
 
 function getQueryParameterValue(name) {
 const urlParams = new URLSearchParams(window.location.search);
@@ -750,7 +711,7 @@ return urlParams.get(name);
     if (urlParam) {
         $('#al1').val(urlParam);
     }
-    
+
         if (!postCreateMoved) {
         const $postCreate = $('.post-create'); 
         const $writePostDiv = $('.write-post-expanded'); 
@@ -969,7 +930,6 @@ $('#fileDrop').on('drop', function (e) {
     }
 });
 
-
 function handleFiles(files) {
     for (const file of files) {
         const reader = new FileReader();
@@ -981,10 +941,7 @@ function handleFiles(files) {
     }
 }
 
-
-
 $('#shareButton').click(function () {
-
 
     });
 });
@@ -1100,7 +1057,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
     postContent.className = 'post-content';
     postContent.textContent = decodedContent;
 
-
     const postImage = document.createElement('img');
     postImage.className = 'post-image';
     postImage.src = post.image_url;
@@ -1125,7 +1081,7 @@ for (let i = 0; i < Math.min(data.length); i++) {
 
     const sessionUsername = '<?php echo $_SESSION["username"]; ?>';
     var isMod = <?php echo json_encode($isMod); ?>;
-    
+
     console.log(post.username);
 
     $('.dropdown-menu-del').hide();
@@ -1152,32 +1108,26 @@ for (let i = 0; i < Math.min(data.length); i++) {
         });
     });
 
-
     $(document).on('click', '.edit-post-link', function(event) {
         event.preventDefault();
 
-        // Find the closest post container and post content
         var $post = $(this).closest('.post');
         var $postContent = $post.find('.post-content');
-        var originalContent = $postContent.text().trim(); // Get and trim the original content
+        var originalContent = $postContent.text().trim(); 
 
-        console.log('Original post content:', originalContent); // Log the original content
+        console.log('Original post content:', originalContent); 
 
-        // Replace post content with a textarea for editing
         var $textarea = $('<textarea>').addClass('edit-textarea').val(originalContent);
         $postContent.replaceWith($textarea);
 
-        // Focus the textarea to encourage user input
         $textarea.focus();
 
-        // Handle double-click to submit the edit
         $textarea.on('dblclick', function() {
             var updatedContent = $textarea.val().trim();
 
-            // Extract post ID from data attribute
             var postId = $post.data('post-id');
-            console.log('Updated content:', updatedContent); // Log the updated content
-            console.log('Post ID:', postId); // Log the post ID
+            console.log('Updated content:', updatedContent); 
+            console.log('Post ID:', postId); 
 
             if (postId && updatedContent) {
                 $.ajax({
@@ -1188,30 +1138,29 @@ for (let i = 0; i < Math.min(data.length); i++) {
                         postContent: updatedContent
                     },
                     success: function(response) {
-                        console.log('Response:', response); // Log the response from the server
+                        console.log('Response:', response); 
                         if (response.status === 'success') {
-                            // Replace textarea with updated post content
+
                             var $newPostContent = $('<p>').addClass('post-content').text(updatedContent);
                             $textarea.replaceWith($newPostContent);
                         } else {
                             alert(response.message || 'An error occurred while trying to update the post.');
-                            // Restore original content if the update fails
+
                             $textarea.replaceWith($('<p>').addClass('post-content').text(originalContent));
                         }
                     },
                     error: function() {
                         alert('An error occurred while trying to update the post.');
-                        // Restore original content in case of an error
+
                         $textarea.replaceWith($('<p>').addClass('post-content').text(originalContent));
                     }
                 });
             } else {
                 alert('Invalid post ID or content.');
-                console.log('Invalid post ID or content.'); // Log error case
+                console.log('Invalid post ID or content.'); 
             }
         });
     });
-
 
     $(document).on('click', '.clickable-circle', function(event) {
         $('.dropdown-menu-del').not($(this).siblings('.dropdown-menu-del')).hide();
@@ -1222,8 +1171,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
         $('.dropdown-menu-del').not($(this).siblings('.dropdown-menu-del')).hide();
         $(this).siblings('.dropdown-menu-del').hide();
     });
-
-        
 
     if (post.post_link && post.post_link.includes("youtube.com/embed")) {
         const iframeHTML = '<iframe width="99.75%" height="315" frameborder="0" allowfullscreen></iframe>';
@@ -1348,7 +1295,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
                     const decodedContent = decodeHTMLEntities(comment.comment_content);
                     const commentContent = $('<p>', { class: 'comment-content' }).text(decodedContent);
 
-
                     agony.append(innerHackyFix, commentContent);
 
                     hackyFix.append(commentPicture, agony);
@@ -1357,7 +1303,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
 
                     $(commentArea).append(commentElement);
 
-              
                 });
 
             } else {
@@ -1435,14 +1380,14 @@ for (let i = 0; i < Math.min(data.length); i++) {
                                 $closestPlusOneIcon.css('background-color', '#cc4331'); 
                                 $closestGeorgeWallace.css('color', '#ffff'); 
                             }  
-                            
+
                             if (responseData.action === 'subtracted') {
                                 console.log("Plus one subtracted.");
                                 $closestGeorgeWallace.text(`+${currentValue - 1}`);
                                 $closestPlusOneIcon.css('background-color', 'white'); 
                                 $closestPlusOneIcon.css('color', '#333'); 
                                 $closestGeorgeWallace.css('color', '#333'); 
-                                
+
                             }
                         },
                         error: function(xhr, status, error) {
@@ -1478,7 +1423,7 @@ for (let i = 0; i < Math.min(data.length); i++) {
                 $(this).after(commentInputContainer);
 
                 commentInput.on('click', function() {
-                    
+
                 submitButton.css('display', 'inline-block');
                 cancelButton.css('display', 'inline-block');
 
@@ -1581,7 +1526,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
 
                             submitButton.css('display', 'none');
                             cancelButton.css('display', 'none');
-                            
 
                             commentInputContainer.css('background-color', '#fff');
                             $('.plus-one-icon').show();
@@ -1595,7 +1539,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
 
                             commentInputContainer.css('height', '50px');
 
-                   
                             commentInput.css({
                                 background: '#fff',
                                 border: '1px solid #ccc'
@@ -1619,7 +1562,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
 
                     submitButton.css('display', 'none');
                     cancelButton.css('display', 'none');
-                    
 
                     commentInputContainer.css('background-color', '#fff');
                     $('.plus-one-icon').show();
@@ -1630,7 +1572,6 @@ for (let i = 0; i < Math.min(data.length); i++) {
                         width: '275px',
                         left: '17%'
                     });
-
 
                     commentInput.val('');
 
@@ -1693,8 +1634,6 @@ function smoothReload(delay) {
 }
 
 </script>
-
-
 
 <script src="assets/js/sidebar.js"></script>
 <script src="assets/js/funshit.js"></script>
