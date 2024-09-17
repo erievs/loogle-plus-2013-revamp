@@ -106,13 +106,15 @@ p.time {
   margin: 4% 0 0 0;
 }
 .notif-icon {
-  width: 25px;
-  height: 25px;
-  position: absolute;
-  top: 1.75%;
-  margin: 0 -6%;
-  opacity: 1;
-  background: #d24b2e;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 1.30%;
+    margin: 0 -6%;
+    opacity: 1;
+    background-image: url(/assets/important-images/notif-02.png);
+    background-size: cover;
+    cursor: pointer;
 }
 #notfication-header {
   position: absolute;
