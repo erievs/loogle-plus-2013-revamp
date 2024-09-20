@@ -8,6 +8,8 @@ if (strpos($current_url, 'whats_hot.php') !== false) {
     $icon = "whats_hot";
 } elseif (strpos($current_url, 'profile.php') !== false) {
     $icon = "profile";
+} elseif (strpos($current_url, '+') !== false) {
+    $icon = "profile";
 } elseif (strpos($current_url, 'communities.php') !== false) { // Fixed typo
     $icon = "communities";
 } elseif (strpos($current_url, 'photos.php') !== false) {
@@ -380,4 +382,3 @@ $(document).ready(function() {
     });
 });
 </script>
-
