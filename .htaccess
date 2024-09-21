@@ -1,7 +1,10 @@
-ErrorDocument 403 /err.php
-ErrorDocument 404 /err.php
+ErrorDocument 403 https://loogle.cc/err.php
+ErrorDocument 404 https://loogle.cc/err.php
 
 Options -Indexes
 
 RewriteEngine On
+RewriteCond %{THE_REQUEST} \s/profile\.php\?profile=([^\s&]+) [NC]
+RewriteRule ^profile\.php$ /+%1? [R=302,L]
+
 RewriteRule ^\+([a-zA-Z0-9_]+)$ /profile.php?profile=$1 [L]
