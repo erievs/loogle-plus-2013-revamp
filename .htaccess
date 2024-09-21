@@ -1,5 +1,5 @@
-ErrorDocument 403 https://loogle.cc/err.php
-ErrorDocument 404 https://loogle.cc/err.php
+ErrorDocument 403 /err.php
+ErrorDocument 404 /err.php
 
 Options -Indexes
 
