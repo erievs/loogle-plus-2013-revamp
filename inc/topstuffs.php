@@ -8,8 +8,6 @@ if (strpos($current_url, 'whats_hot.php') !== false) {
     $icon = "whats_hot";
 } elseif (strpos($current_url, 'profile.php') !== false) {
     $icon = "profile";
-} elseif (strpos($current_url, '+') !== false) {
-    $icon = "profile";
 } elseif (strpos($current_url, 'communities.php') !== false) { // Fixed typo
     $icon = "communities";
 } elseif (strpos($current_url, 'photos.php') !== false) {
@@ -118,7 +116,7 @@ function fetchMentions() {
 
                 gifImage.click(function() {
                  var originalSrc = $(this).attr('src');
-                 $(this).attr('src', 'http://googlerock.free.fr/images/mr._jingles/Jingle_2_2013.gif');
+                 $(this).attr('src', '<?php echo $siteurl?>/assets/important-images/belldude.gif');
                  $(this).toggleClass("play-animation");
     
                       setTimeout(function() {
@@ -149,7 +147,7 @@ function dismissMention(mentionElement, postId) {
     
     mentionElement.find('.exit').off('click').on('click', function(event) {
         subtractOne();
-        mentionElement.fadeOut(300, function () {
+        mentionElement.fadeOut(250, function () {
             $(this).remove();
         });
         return false; 
@@ -382,3 +380,4 @@ $(document).ready(function() {
     });
 });
 </script>
+
