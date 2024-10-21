@@ -381,3 +381,11 @@ img [src="null"] {
 #colour-title-thingy-info {
   
 }
+
+p#numsfornot {
+  color: #fff;
+  font-weight: 450;
+  margin-left: 8px;
+  margin-top: 3px;
+  cursor: pointer;
+}
