@@ -1,9 +1,9 @@
 <?php
 
 $db_host = "localhost";
-$db_user = "";
-$db_pass = "";
-$db_name = "";
+$db_user = "root";
+$db_pass = "nicknick";
+$db_name = "loogle";
 
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
     $protocol = 'https';  
@@ -15,10 +15,10 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 
 $host = $_SERVER['HTTP_HOST'] ?? '';
 
-if (strpos($host, 'loogle.cc') !== false) {
-    $siteurl = $protocol . "://loogle.cc";  
-} elseif (strpos($host, 'plus.loogle.mooo') !== false) {
-    $siteurl = $protocol . "://plus.loogle.mooo";  
+if (strpos($host, 'localhost:8090') !== false) {
+    $siteurl = $protocol . "://localhost:8090";  
+} elseif (strpos($host, 'localhost:8090') !== false) {
+    $siteurl = $protocol . "://localhost:8090";  
 } else {
 
     header('HTTP/1.0 400 Bad Request');
