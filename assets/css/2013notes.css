@@ -1,13 +1,15 @@
 .settings-icon-side {
-  background-image: url("assets/icons/ncon.png");
-  background-position: -427px -793px;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-  transform: scale(1,1);
-  margin-left: -647px;
-  left: -198%;
-}
+    background-position: -355px -808px;
+    width: 22px;
+    height: 24px;
+    margin-right: 10px;
+    transform: scale(1,1);
+    margin-left: 6px;
+    left: -198%;
+    background-image: url("assets/icons/astlas2.png");
+    margin-bottom: -2px;
+    scale: 1.35;
+  }
 
 #notificationContainer {
   background-color: rgba(229, 229, 229, 1);

@@ -1,6 +1,6 @@
 /* Welcome to hacky fix land */
 
-#ronnieisnum1{
+#ronnieisnum1 {
   position: relative;
   top: 1.65px;
   height: 30px;
@@ -9,15 +9,17 @@
 
 .fromthehousewemadeourhome {
   background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -110px;
+  width: 14px;
+  left: 2px;
+  position: relative;
 }
 
 /* Higher Res -> Higher Up, The lower the style, the lower it is loaded! */
 
-
 /* 900p 16:9 */
 @media (max-width: 1600px) {
   .main-header .search-bar {
-      margin-left: -15px;
+    margin-left: -15px;
   }
 }
 
@@ -26,7 +28,6 @@
     margin-left: 25px;
   }
 }
-
 
 @media (max-width: 1350px) {
   .main-header .search-bar {
@@ -37,13 +38,13 @@
 /* 720p 16:9 */
 @media (max-width: 1280px) {
   .main-header .search-bar {
-      margin-left: 95px;
+    margin-left: 95px;
   }
 }
 
 @media (max-width: 1150px) {
   .main-header .search-bar {
-      margin-left: 125px;
+    margin-left: 125px;
   }
 }
 
@@ -51,11 +52,9 @@
   .main-header .search-bar {
     margin-left: 50px;
     position: relative;
-    left: 75px
+    left: 75px;
   }
 }
-
-
 
 /* 540p 16:9 */
 @media (max-width: 960px) {
@@ -78,23 +77,20 @@
   }
 }
 
-
-
 /* Speicaltily Fixes for weird res */
 
-@media (width:1440px) {
+@media (width: 1440px) {
   .search-container {
     margin-left: 3.5%;
+  }
 }
-}
-
 
 @media (max-width: 700px) {
   .main-header .search-bar {
-      margin-left: -40px;
-      position: relative;
-      left: 128px;
-      width: 75%;
+    margin-left: -40px;
+    position: relative;
+    left: 128px;
+    width: 75%;
   }
 }
 
@@ -105,14 +101,14 @@
     left: 163px;
     width: 50%;
     top: 1px;
-}
+  }
 }
 
 #ronnieisnum1 {
-    position: relative;
-    top: 3px;
-    height: 30px;
-    right: 14px;
+  position: relative;
+  top: 4px;
+  height: 30px;
+  right: 14px;
 }
 
 @media (max-width: 720px) {
@@ -123,7 +119,8 @@
   }
 
   .fromthehousewemadeourhome {
-    background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -35px -110px;
+    background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png)
+      no-repeat -35px -110px;
   }
 
   #ronnieisnum1 {

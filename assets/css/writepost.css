@@ -5,315 +5,316 @@
 /* use photo-icon as a base, override this them with IDs (we can chnage it later but I want to get this update done soon) */
 
 .photo-icon {
-    padding: 10px;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-  }
+  padding: 10px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
 
 .post-create-icons {   display: flex;   justify-content: left;   align-items: center;   margin-left: 30px;   gap: 37px;  margin-top: 15px;   line-height: 15px; }
 
 .post-create textarea {
-  width: 98%;
-  height: 100px;
-  resize: none;
-  border: none;
-  outline: none;
-  background: #fff;
+width: 98%;
+height: 100px;
+resize: none;
+border: none;
+outline: none;
+background: #fff;
 }
 
 .post-create-icons {
-  line-height: 15px;
-  color: #8b8b8b;
+line-height: 15px;
+color: #8b8b8b;
 }
 .post-create-icons {
-  line-height: 15px;
-  color: #8b8b8b;
-  font-size: 12px;
+line-height: 15px;
+color: #8b8b8b;
+font-size: 12px;
 }
 .post-create-icons {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  margin-left: 30px;
-  gap: 37px;
-  margin-top: 15px;
-  line-height: 15px;
-  margin-top: 1;
-  margin-top: 18px;
-}
-
-.pfp-write-post {
-    width: 125px;
-    height: 125px;
-    overflow: hidden;
-    border-radius: 50%; 
-}
-
-.round-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
+display: flex;
+justify-content: left;
+align-items: center;
+margin-left: 30px;
+gap: 37px;
+margin-top: 15px;
+line-height: 15px;
+margin-top: 1;
+margin-top: 18px;
 }
 
 .pfp-write-post {
   width: 125px;
   height: 125px;
   overflow: hidden;
-  border-radius: 50%;
-  height: 10px;
-  top: -110px;
-  position: relative;
-  top: 10px;
+  border-radius: 50%; 
+}
+
+.round-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+}
+
+.pfp-write-post {
+width: 125px;
+height: 125px;
+overflow: hidden;
+border-radius: 50%;
+height: 10px;
+top: -110px;
+position: relative;
+top: 10px;
 }
 
 .post-create textarea {
-  width: 98%;
-  height: 100px;
-  resize: none;
-  border: none;
-  outline: none;
-  background: #fff;
+width: 98%;
+height: 100px;
+resize: none;
+border: none;
+outline: none;
+background: #fff;
 }
 
 .pfp-write-post {
-  width: 100px;
-  height: 125px;
-  overflow: hidden;
-  border-radius: 50%;
-  height: 100px;
-  top: -110px;
-  position: relative;
-  top: 10px;
-  left: 100px;
+width: 100px;
+height: 125px;
+overflow: hidden;
+border-radius: 50%;
+height: 100px;
+top: -110px;
+position: relative;
+top: 10px;
+left: 100px;
 }
 
 .pfp-write-post {
-  width: 100px;
-  height: 125px;
-  overflow: hidden;
-  border-radius: 50%;
-  height: 100px;
-  top: -110px;
-  position: relative;
-  top: 10px;
-  left: 18px;
-  height: 100px;
-}
-.attach-photos-row {
-    display: flex;
-    align-items: center;
-    margin-left: 60px
-}
-
-.attach, .photo-icon, .photo-text {
-    margin-right: 10px; 
-}
-
-.photo-icon {
-    background-color: #f0f0f0; 
-    padding: 10px; 
-    border-radius: 50%; 
-}
-
-.attach {
-    font-weight: bold;
-}
-
-.level-2 {
-    display: none;
-}
-
-.write-post {
-    height: 118px;
-}
-.photo-icon {
-
-  padding: 10px;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-}
-.attach, .photo-icon, .photo-text {
-  margin-right: 30px;
-  font-size: 13px;
-  margin-top: 9px;
-}
-.photo-icon {
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  scale: 1.075;
-}
-
-
-.photo-icon, .photo-text{
-    font-size: 11px;
-    margin-left: 10px;
-}
-.attach, .photo-icon, .photo-text {
-    margin-left: 33px;
-  font-size: 13px;
-  margin-top: 9px;
-}
-.photo-icon, .photo-text {
-  font-size: 11px;
-
-  width: -4px;
-}
-
-.attach-photos-row {
-    display: flex;
-    align-items: center;
-}
-
-.attach, .photo-icon, .photo-text {
-    margin-right: 20px; 
-}
-
-.photo-icon {
-    
-    background-color: #f0f0f0; 
-    padding: 10px; 
-    border-radius: 50%; 
-}
-
-.photo-text {
-    font-weight: bold;
-}
-.attach, .photo-icon, .photo-text {
-  margin-right: -29px;
-}
-.attach-photos-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.attach-photos-row {
-    display: flex;
-    align-items: center;
-}
-
-.attach, .photo-icon, .photos {
-    margin-right: 20px; 
-}
-
-.photo-icon {
-    
-    background-color: #f0f0f0; 
-    padding: 10px; 
-    border-radius: 50%; 
-}
-
-.photo-text {
-    font-weight: bold;
+width: 100px;
+height: 125px;
+overflow: hidden;
+border-radius: 50%;
+height: 100px;
+top: -110px;
+position: relative;
+top: 8px;
+left: 18px;
+height: 100px;
 }
 .attach-photos-row {
   display: flex;
   align-items: center;
-  margin-left: 30px;
+  margin-left: 60px
 }
 
-.attach, .photo-icon, .photos {
-  margin-right: 0px;
-}
-.post-create textarea {
-  width: 98%;
-  height: 100px;
-  resize: none;
-  border: none;
-  outline: none;
-  background: #fff;
+.attach, .photo-icon, .photo-text {
+  margin-right: 10px; 
 }
 
-#image-preview {
-  width: 70%;
-  height: 250px;
+.photo-icon {
+  background-color: #f0f0f0; 
+  padding: 10px; 
+  border-radius: 50%; 
 }
 
-.level-2p5 {
+.attach {
+  font-weight: bold;
+}
+
+.level-2 {
   display: none;
 }
 
+.write-post {
+  height: 118px;
+}
+.photo-icon {
+
+padding: 10px;
+border-radius: 50%;
+width: 20px;
+height: 20px;
+}
+.attach, .photo-icon, .photo-text {
+margin-right: 30px;
+font-size: 13px;
+margin-top: 9px;
+}
+.photo-icon {
+background-color: #f0f0f0;
+padding: 10px;
+border-radius: 50%;
+width: 20px;
+height: 20px;
+scale: 1.075;
+}
+
+
+.photo-icon, .photo-text{
+  font-size: 11px;
+  margin-left: 10px;
+}
+.attach, .photo-icon, .photo-text {
+  margin-left: 33px;
+font-size: 13px;
+margin-top: 9px;
+}
+.photo-icon, .photo-text {
+font-size: 11px;
+
+width: -4px;
+}
+
+.attach-photos-row {
+  display: flex;
+  align-items: center;
+}
+
+.attach, .photo-icon, .photo-text {
+  margin-right: 20px; 
+}
+
+.photo-icon {
+  
+  background-color: #f0f0f0; 
+  padding: 10px; 
+  border-radius: 50%; 
+}
+
+.photo-text {
+  font-weight: bold;
+}
+.attach, .photo-icon, .photo-text {
+margin-right: -29px;
+}
+.attach-photos-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.attach-photos-row {
+  display: flex;
+  align-items: center;
+}
+
+.attach, .photo-icon, .photos {
+  margin-right: 20px; 
+}
+
+.photo-icon {
+  
+  background-color: #f0f0f0; 
+  padding: 10px; 
+  border-radius: 50%; 
+}
+
+.photo-text {
+  font-weight: bold;
+}
+.attach-photos-row {
+display: flex;
+align-items: center;
+margin-left: 30px;
+}
+
+.attach, .photo-icon, .photos {
+margin-right: 0px;
+}
+.post-create textarea {
+width: 98%;
+height: 100px;
+resize: none;
+border: none;
+outline: none;
+background: #fff;
+bottom: 90px;
+}
+
+#image-preview {
+width: 70%;
+height: 250px;
+}
+
+.level-2p5 {
+display: none;
+}
+
 #bobisbackbutfuckhim {
-  background-image: url('assets/icons/astlas.png');
-  background-position: -157px 237px;
-  left: 20px;
-  position: relative;
+background-image: url('assets/icons/astlas.png');
+background-position: -157px 237px;
+left: 20px;
+position: relative;
 }
 
 #mymotherquestionmark {
-  background-image: url('assets/icons/astlas.png');
-  background-position: -99px 166px;
+background-image: url('assets/icons/astlas.png');
+background-position: -99px 166px;
 }
 
 #videosarebackbaby {
-  background-image: url('assets/icons/astlas.png');
-  margin-left: 62px;
-  margin-top: 9px;
-  position: relative;
-  top: 2px;
-  width: -3px;
-  height: 1px;
-  background-position-x: 49px;
-  background-size: 24px;
-  background-position-y: 552px;
+background-image: url('assets/icons/astlas.png');
+margin-left: 62px;
+margin-top: 9px;
+position: relative;
+top: 2px;
+width: -3px;
+height: 1px;
+background-position-x: 49px;
+background-size: 24px;
+background-position-y: 552px;
 }
 
 .add-link {
-  font-weight: bold;
+font-weight: bold;
 
 }
 
 #pthingy1 {
-  top: 63px;
-  position: relative;
-  left: 43px;
+top: 63px;
+position: relative;
+left: 43px;
 }
 
 .link-preview {
-  display: flex;
+display: flex;
 }
 
 .favicon-container {
-  width: 30%; /* Decreased width to accommodate bigger image */
+width: 30%; /* Decreased width to accommodate bigger image */
 }
 
 .content-container {
-  width: 70%; /* Adjusted width to accommodate text */
-  padding-left: 10px; /* Add padding for spacing between favicon and text */
+width: 70%; /* Adjusted width to accommodate text */
+padding-left: 10px; /* Add padding for spacing between favicon and text */
 }
 
 .favicon-img {
-  width: 100%; /* Fill the entire width of the container */
-  height: 100%; /* Fill the entire height of the container */
-  object-fit: cover; /* Ensure the image covers the entire container */
+width: 100%; /* Fill the entire width of the container */
+height: 100%; /* Fill the entire height of the container */
+object-fit: cover; /* Ensure the image covers the entire container */
 }
 
 
 .link-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 12px;
-  width: 300px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+font-size: 12px;
+width: 300px;
 }
 
 .content-container h2 {
-  font-size: 17px;
-  max-height: 2.2em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  width: 300px;
+font-size: 17px;
+max-height: 2.2em;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: normal;
+width: 300px;
 
 }
 
 
 .content-container {
-  width: 299.2px;
+width: 299.2px;
 }
 
 .content-container {
@@ -321,20 +322,24 @@ width: 320px;
 } 
 
 .favicon-img {
-  width: 200px;
-  max-height: 90px;
+width: 200px;
+max-height: 90px;
 }
 
 .favicon-container {
-  margin-left: 14px;
+margin-left: 14px;
 
 
 }
 
 #fuckdisshitiamout {
-  max-height: 3.2em; /* Two lines plus a bit for line height */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
+max-height: 3.2em; /* Two lines plus a bit for line height */
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: normal;
 }
 
+.triangle {
+  top: 102.2px;
+  z-index: 0;
+}

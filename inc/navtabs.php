@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 
@@ -7,8 +8,6 @@ include("important/db.php");
 $profileget = htmlspecialchars($_GET['profile']);
 
 $username = $_GET['username'];
-
-
 
 ?>
 
@@ -43,6 +42,8 @@ $username = $_GET['username'];
             <li role="presentation"><a href="about.php?profile=<?php echo $username?>&icon=about">About</a></li>
             <li role="presentation"><a href="profile.php?profile=<?php echo $username?>">Posts</a></li>
             <li role="presentation" class="active"><a id="bobuncleyour" href="#" class="active">Photos</a></li>
+        <?php } elseif ($icon == 'search') { ?>
+            <li role="presentation" class="active"><a id="bobuncleyour" href="#" class="active">Everything</a></li>
         <?php }  elseif ($icon == 'about') { ?>
             <li role="presentation" class="active"><a href="#">About</a></li>
             <li role="presentation"><a href="profile.php?profile=<?php echo $profileget?>">Posts</a></li>

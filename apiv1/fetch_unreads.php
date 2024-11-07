@@ -21,7 +21,7 @@ if (isset($_SESSION['username']) && isset($_GET['username'])) {
     $totalUnread = 0;
 
     if ($result && $row = $result->fetch_assoc()) {
-        $totalUnread = $row['total_unread'];
+        $totalUnread = max(0, (int)$row['total_unread']); 
     }
 
     $stmt->close();

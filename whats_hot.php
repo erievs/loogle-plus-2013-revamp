@@ -24,7 +24,7 @@ if(isset($_GET['trump'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
  
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-4.0.0-beta.2.min.js"></script>
 
     <title>Loogle+</title>
 	<link rel="stylesheet" href="assets/css/2013isamess.css">

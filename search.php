@@ -81,6 +81,7 @@ textarea {
 	<link rel="stylesheet" href="assets/css/2013notes.css">
     <link rel="stylesheet" href="assets/css/univesalcoolstuff.css">
     <link rel="stylesheet" href="assets/css/headerfix.css">
+    <link rel="stylesheet" href="assets/css/2013search.css">
     <link rel="icon" 
       type="image/png" 
       href="assets/important-images/fav.png" />
@@ -98,7 +99,35 @@ textarea {
 
 </div>
 
+
 <div class="content">
+
+    <div id="alert-section">
+        <div class="alert alert-info" role="alert" id="alert-search">
+            <script>
+
+                const urlParams = new URLSearchParams(window.location.search);
+                let query = urlParams.has('q') ? urlParams.get('q') : null;
+
+                if (!query) {
+                    query = getQueryParamFromUrl('query');
+                }
+
+                if (query) {
+                    console.log('Query parameter found:', query);
+                } else {
+                    console.log('No relevant query parameter found.');
+                }
+
+                document.querySelector('.search-bar').value = query;
+                                
+
+                document.getElementById('alert-search').textContent = query;
+            </script>
+        </div>
+    </div>
+
+
     <div class="container" id="posts-container">
 
     </div>
@@ -194,9 +223,12 @@ function onScroll() {
     }
 }
 
+
 function fetchPosts(currentPage) {
 
-const apiUrl = `<?php echo $siteurl; ?>/apiv1/fetch_posts_api.php?page=${currentPage}`;
+
+const apiUrl = `<?php echo $siteurl; ?>/apiv1/search_posts.php?query=${query}`;
+console.log(apiUrl); 
 
 console.log('Fetching URL:', apiUrl);
 
@@ -1396,7 +1428,7 @@ for (let i = 0; i < Math.min(data.length); i++) {
                     });
                 });
 
-                const commentInput = $('<textarea>').attr({
+        const commentInput = $('<textarea>').attr({
                     type: 'text',
                     id: 'comment-input-' + postID,
                     placeholder: 'Add a comment...'

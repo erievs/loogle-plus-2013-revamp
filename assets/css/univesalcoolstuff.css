@@ -389,3 +389,7 @@ p#numsfornot {
   margin-top: 3px;
   cursor: pointer;
 }
+
+.postTextAreaClass {
+  font-size: 16;
+}

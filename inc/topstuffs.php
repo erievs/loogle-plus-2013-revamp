@@ -16,8 +16,10 @@ if (strpos($current_url, 'whats_hot.php') !== false) {
     $icon = "about";
 } elseif (strpos($current_url, 'index.php') !== false) {
     $icon = "home";
+} elseif (strpos($current_url, 'search.php') !== false) {
+    $icon = "search";
 } else {
-    $icon = "home"; // Optional: handle cases where URL does not match any condition
+    $icon = "home"; 
 }
 
 
@@ -130,16 +132,18 @@ function fetchMentions() {
 }
 
 function subtractOne() {
-        var $numElement = $('#numsfornot'); 
-        var currentValue = parseInt($numElement.text(), 10); 
+    var $numElement = $('#numsfornot'); 
+    var currentValue = parseInt($numElement.text(), 10); 
+
+    if (currentValue > 0) {
         var newValue = currentValue - 1; 
         $numElement.text(newValue); 
+    }
 }
 
 function dismissMention(mentionElement, postId) {
-
     mentionElement.on('click', function(event) {
-        console.log('You think you just fell out of a coconut tree?');
+        console.log('Redirect triggered');
         if (!$(event.target).closest('.exit').length) {
             window.location.href = '<?php echo $siteurl; ?>/view_post.php?id=' + postId;
         }
@@ -150,7 +154,7 @@ function dismissMention(mentionElement, postId) {
         mentionElement.fadeOut(250, function () {
             $(this).remove();
         });
-        return false; 
+        return false;
     });
 
     $.ajax({
@@ -161,11 +165,14 @@ function dismissMention(mentionElement, postId) {
             post_id: postId
         },
         success: function(response) {
+            console.log('Mention dismissed successfully');
         },
         error: function(xhr, status, error) {
+            console.error('Failed to dismiss mention', error);
         }
     });
 }
+
 
 $(document).ready(function() {
     $('#mentionsContainer').on('mouseenter', function() {
@@ -192,8 +199,10 @@ $(document).ready(function() {
                 echo 'com-c-icon';
             } elseif ($icon == "photos" || $icon == "about") {
                 echo 'photo-p-icon';
+            } elseif ($icon == "search") {
+                echo 'home-h-icon';
             } else {
-                echo 'default-icon'; 
+                echo 'home-h-icon'; 
             }
         ?>" id="open-sidebar-1"></span>
         <p style="font-size: 16px; top: 2px; position: relative;"> > </p>
@@ -207,15 +216,15 @@ $(document).ready(function() {
     <a href="/">
 	 <img class="logo" src="/assets/images/logo.png" alt="Logo">
 	</a>
+        
     <div class="search-container">
-		<form>
-        <input class="search-bar" type="text">
-        <button class="ifyouwalkandiwasgone" id="ronnieisnum1" type="submit">
-		 <span class="fromthehousewemadeourhome"></span>
-		</button>
-		</form>
-    </div>  
-
+        <form id="searchForm" action="<?php echo $siteurl?>/search.php" method="get">
+            <input class="search-bar" type="text" name="q" id="queryInput">
+            <button class="ifyouwalkandiwasgone" id="ronnieisnum1" type="submit">
+                <span class="fromthehousewemadeourhome"></span>
+            </button>
+        </form>
+    </div>
 
 
 <div class="notif-icon-side">
@@ -262,6 +271,10 @@ $(document).ready(function() {
 
     if ($icon == "home") {
 		echo 'Home';
+	}
+
+    if ($icon == "search") {
+		echo 'Search';
 	}
 
     if ($icon == "communties") {
@@ -324,6 +337,8 @@ $(document).ready(function() {
             echo 'profile-p-icon';
         } elseif ($icon == "home") {
             echo 'home-h-icon';
+        } elseif ($icon == "search") {
+            echo 'home-h-icon';
         } elseif ($icon == "whats_hot") {
             echo 'hot-h-icon';
         } elseif ($icon == "communities") { // Fixed typo
@@ -333,7 +348,7 @@ $(document).ready(function() {
         } elseif ($icon == "about") {
             echo 'photo-p-icon';
         } else {
-            echo 'default-icon'; 
+            echo 'home-h-icon';
         }
     ?> home-icon"></span>
     <span class="home-icon"><?php 
@@ -347,9 +362,12 @@ $(document).ready(function() {
             echo 'Communties'; 
         } elseif ($icon == "photos") {
             echo 'Photos';
+        } elseif ($icon == "search") {
+            echo 'Search';
         } elseif ($icon == "about") {
             echo 'Profile';
         }
+        
     ?> </span>
     <span class="arrow-icon"> > </span>
 </div>
@@ -379,5 +397,25 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var query = urlParams.get('q') || ''; 
+
+        $('#queryInput').val(query); 
+
+        $('#searchForm').on('submit', function(event) {
+            var searchQuery = $('#queryInput').val().trim(); 
+            if (searchQuery) {
+                $(this).attr('action', 'search.php?q=' + encodeURIComponent(searchQuery));
+            } else {
+                event.preventDefault(); 
+                alert('Please enter a search term.'); 
+            }
+        });
+    });
 </script>
 

@@ -81,18 +81,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $isCommandLine) {
         }
     }
 
+    function filterContent($content) {
+
+        // example with trump, i'll probbaly remove it
+        // if you love this man just idk just delete the 
+        // patterns
+
+        $patterns = [
+            '/\bloving Trump\b/i',            
+            '/\bTrump is (great|good|awesome|amazing)\b/i' 
+        ];
+    
+        $replacements = [
+            'disliking Trump',                
+            'Trump is not so great'           
+        ];
+    
+        $filteredContent = preg_replace($patterns, $replacements, $content);
+    
+        return $filteredContent;
+    }
+    
+    $postContent = filterContent($postContent);
+    
     if (empty($postContent) && empty($imageURL) && empty($post_link) && empty($post_link_url)) {
         $response['status'] = 'error';
         $response['message'] = 'Invalid request. At least one content field (postContent, post_link, or post_link_url) must be provided.';
         echo json_encode($response);
         exit;
-    }
+    }    
 
     function extractMentions($content) {
         preg_match_all('/\+([a-zA-Z0-9_]+)/', $content, $matches);
-        return $matches[1];
+    
+        $uniqueMentions = array_unique($matches[1]);
+    
+        return $uniqueMentions;
     }
-
+    
     $mentions = extractMentions($postContent);
 
     $rateLimitFile = sys_get_temp_dir() . '/' . 'ratelimit.txt';
