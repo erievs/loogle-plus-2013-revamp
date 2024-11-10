@@ -47,8 +47,9 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
         $plus_one = isset($post['plus_one']) ? $post['plus_one'] + 1 : 1;
 
         $comments = getCommentsForPost($post['id']);
-
-        $posts[] = array(
+		$profile_image_url = $siteurl . "/apiv1/fetch_pfp_api.php?username=" . urlencode($comment['username']);
+     
+		$posts[] = array(
             'id' => $post['id'],
             'username' => $post['username'],
             'content' => $post['content'],
@@ -59,7 +60,8 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
             'created_at' => $post['created_at'],
             'plus_one' => $plus_one,
             'plus_one_usernames' => $post['plus_one_usernames'],
-            'comments' => $comments 
+            'comments' => $comments,
+			'profile_image_url' => $profile_image_url
         );
     }
 
