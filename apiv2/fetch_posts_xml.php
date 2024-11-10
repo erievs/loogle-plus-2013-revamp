@@ -5,9 +5,9 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
-function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $disablePagination = false) {
+function getPostsFromDatabase($username = null, $disablePagination = false) {
     include("../important/db.php");
-    global $siteurl; // Ensure $siteurl is properly included
+    global $siteurl; 
 
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -17,24 +17,12 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
 
     $conn->set_charset("utf8");
 
-    if ($disablePagination) {
-        $query = "SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC";
-        if ($username !== null) {
-            $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC");
-            $stmt->bind_param("s", $username);
-        } else {
-            $stmt = $conn->prepare($query);
-        }
+    $query = "SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC";
+    if ($username !== null) {
+        $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC");
+        $stmt->bind_param("s", $username);
     } else {
-        $offset = ($page - 1) * $postsPerPage;
-
-        if ($username !== null) {
-            $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' AND username = ? ORDER BY created_at DESC LIMIT ?, ?");
-            $stmt->bind_param("sii", $username, $offset, $postsPerPage);
-        } else {
-            $stmt = $conn->prepare("SELECT * FROM posts WHERE visibility = 'v' ORDER BY created_at DESC LIMIT ?, ?");
-            $stmt->bind_param("ii", $offset, $postsPerPage);
-        }
+        $stmt = $conn->prepare($query);
     }
 
     $stmt->execute();
@@ -42,6 +30,7 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
     $posts = array();
 
     while ($post = $result->fetch_assoc()) {
+
         $image_url = !empty($post['image_url']) ? $siteurl . str_replace('..', '', $post['image_url']) : null;
         $post_url = !empty($post['post_link_url']) ? $post['post_link_url'] : null;
         $video_url = !empty($post['post_url']) ? $post['post_url'] : null;
@@ -51,7 +40,7 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
             'id' => $post['id'],
             'username' => $post['username'],
             'content' => $post['content'],
-            'image_url' => $image_url, // Image URL updated to use $siteurl
+            'image_url' => $image_url, 
             'post_link' => $post['post_link'],
             'post_link_url' => $post_url,
             'post_url' => $video_url,
@@ -67,23 +56,17 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
     return $posts;
 }
 
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$postsPerPage = 15;
-
-$disablePagination = isset($_GET['disable_pagination']) && $_GET['disable_pagination'] === 'true';
-
 if (isset($_GET['username'])) {
     $username = $_GET['username'];
-    $postsData = getPostsFromDatabase($username, $page, $postsPerPage, $disablePagination);
+    $postsData = getPostsFromDatabase($username);
 } else {
-    $postsData = getPostsFromDatabase(null, $page, $postsPerPage, $disablePagination);
+    $postsData = getPostsFromDatabase(null);
 }
 
 $feedTitle = "Loogle"; 
 $feedLink = $siteurl . "/posts"; 
 $feedUpdated = date(DATE_ATOM);
 
-// Start the Atom feed
 echo '<?xml version="1.0" encoding="UTF-8"?>';
 echo '<feed xmlns="http://www.w3.org/2005/Atom">';
 echo "<title>$feedTitle</title>";
@@ -108,4 +91,3 @@ foreach ($postsData as $post) {
 
 echo '</feed>';
 ?>
-
