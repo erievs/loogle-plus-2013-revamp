@@ -1,0 +1,36 @@
+#bob-button {
+    margin-right: 10px;
+    border: none;
+    color: #fff;
+    padding: 0px 20px;
+    cursor: pointer;
+    background: #f0f0f0;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    height: 33px;
+    border-radius: 2px;
+    text-align: center;
+    top: 8px;
+    position: relative;
+    left: 20px;
+  }
+
+  .camera-icon {
+    position: absolute;
+    right: 10px; /* Adjust the position as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer; /* Optional: Change cursor to pointer for better UX */
+}
+
+
+.message-container {
+  position: relative;
+  display: inline-block;
+}
+
+#image-message {
+  scale: 0.05;
+  left: 46%;
+  position: relative;
+  top: 2px;
+}

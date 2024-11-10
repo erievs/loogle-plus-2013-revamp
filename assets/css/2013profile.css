@@ -1,0 +1,491 @@
+.banner {
+  width: 100%;
+  height: 10%;
+  overflow: hidden;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-end; 
+}
+
+.banner img {
+  width: 100%;
+  height: auto;
+}
+
+.scrolled .banner {
+  height: 5%;
+}
+
+.sticky-header .menu {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+  background-color: #ffff;
+  margin: 15% auto;
+  padding: 0px;
+  border: none; 
+  width: 800px;
+  border-radius: 0; 
+  height: 425px;
+  bottom: 6%;
+}
+
+.modal-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 74%;
+  height: 40px;
+  background-color: #dadada;
+  border-top: 1px solid #ddd;
+  padding: 1px;
+  margin-left: 181px;
+}
+
+.ifyouwalkandiwasgone, .close-banner {
+  padding: 6px 20px;
+  margin-left: 10px;
+  border-radius: 2px;
+  border: 1px solid #3079ed;
+  cursor: pointer;
+  top: 13x;
+  position: relative;
+  top: 2px;
+}
+
+.ifyouwalkandiwasgone {
+  background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+  background-color: #4d90fe;
+  color: #fff;
+}
+
+.close-banner {
+  background-color: #FFFF;
+  color: #000;
+  border: black;
+  border-block-color: black;
+  border: 0.15px solid gray;
+  margin-left: 85px;
+  margin-top: -1px;
+}
+
+#pfp-upload {
+  background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+  color: #fff;
+  font-weight: bold;
+}
+
+#banner-upload-inside-cool {
+  background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+  color: #fff;
+  font-weight: bold;
+  margin-left: 40px;
+}
+
+#comment-span {
+  display: flex;
+margin-bottom: 2px;
+
+}
+
+#comment-time {
+  color: #b3b3b3;
+  margin-left: 2px;
+  font-size: 11px;
+  top: 3px;
+  position: relative;
+  margin: 0 10px;
+  left: -2px; 
+}
+  
+
+#uploadbanner-pfp-banner.modal-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  top: 0;
+  left: 0; 
+  background-color: #fff; 
+  padding: 0px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+#uploadbanner-pfp-banner-cool.modal-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  top: 0;
+  left: 0; 
+  background-color: #fff; 
+  padding: 0px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.modal-content {
+  width: 700px; 
+}
+
+.top-submenus {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.top-submenus li {
+  margin-bottom: 10px;
+}
+
+.top-submenus li a {
+  color: #000; 
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.top-submenus li.highlighted a {
+  font-weight: bold; 
+}
+
+.top-submenus li a {
+  color: #000; 
+  text-decoration: none;
+  font-size: 12px; 
+  padding-left: 10px; 
+  border-left: 2px solid transparent;
+}
+
+.top-submenus li.highlighted a {
+  color: #bb5b45; 
+  border-left: 2px solid #bb5b45;
+  font-weight: bold;
+}
+.modal-side {
+  width: 179px;
+  height: 435px;
+  padding: 0px;
+  
+  box-shadow: 1 2 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+#select-text {
+position: relative;
+top: 10px;
+left: 16px;
+font-size: 16px;
+}
+
+.ifyouwalkandiwasgone, .close-banner {
+  background-color: #d4d4d4;
+  color: #000;
+  border: black;
+  border-block-color: #6a6a6a;
+  border: 0.01px solid #6a6a6a;
+  margin-left: 79px;
+  margin-top: -1px;
+  scale: 0.8;
+  border-block-color: rgba(106, 106, 106, 0.5);
+  border: 0.01px solid rgba(106, 106, 106, 0.5);
+  font-weight: bold;
+  left: -187px;
+  top: 3px;
+}
+
+#pfp-upload {
+  color: #fff;
+  position: relative;
+  left: -88px;
+  top: 3px;
+}
+
+#com-upload {
+  color: #fff;
+  position: relative;
+  left: -88px;
+  top: 3px;
+}
+
+#banner-upload {
+  color: #fff;
+  position: relative;
+  left: -88px;
+  top: 3px;
+}
+
+.upload-area {
+  width: calc(100% - 200px); 
+  height: 150px; 
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+}
+
+.upload-area {
+  border: 2px dashed #ccc;
+  padding: 20px; 
+  height: 320px;
+  margin-top: 5%;
+  width: 500px;
+  background: #ffffff;
+}
+
+.upload-area-banner {
+  width: calc(100% - 200px); 
+  height: 150px; 
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+}
+
+.com-area-banner {
+  width: calc(100% - 200px); 
+  height: 150px; 
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+}
+
+.upload-area-pfp {
+  width: calc(100% - 200px); 
+  height: 150px; 
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+}
+
+.upload-area-banner {
+  border: 2px dashed #ccc;
+  padding: 20px; 
+  height: 320px;
+  margin-top: 5%;
+  width: 500px;
+  background: #ffffff;
+}
+
+.upload-area-com {
+  border: 2px dashed #ccc;
+  padding: 20px; 
+  height: 320px;
+  margin-top: 5%;
+  width: 500px;
+  background: #ffffff;
+}
+
+.upload-area-pfp {
+  border: 2px dashed #ccc;
+  padding: 20px; 
+  height: 320px;
+  margin-top: 5%;
+  width: 500px;
+  background: #ffffff;
+}
+
+
+.vertical-dashed-hr {
+  border: none; 
+  border-left: 1px dashed #ccc; 
+  height: 100%; 
+}
+
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+  margin-right: 10px;
+}
+
+#pfp-upload-inside {
+  color: #fff;
+  font-weight: bold;
+  padding: 7px 11px;
+  border: black;
+  background-color: #3a80f4;
+  top: -6px;
+  margin-left: 55px;
+}
+
+#com-upload-inside {
+  color: #fff;
+  font-weight: bold;
+  padding: 7px 11px;
+  border: black;
+  background-color: #3a80f4;
+  top: -6px;
+  margin-left: 55px;
+}
+
+#banner-upload-inside {
+  color: #fff;
+  font-weight: bold;
+  padding: 7px 11px;
+  border: black;
+  background-color: #3a80f4;
+  top: -6px;
+  margin-left: 55px;
+}
+
+.inside-job {
+ color: rgba(209,209,209,255); 
+ text-align: center;
+ margin-top: 19%;
+}
+
+#bwc {
+font-size: 20px;
+margin-bottom: -87px;
+bottom: 18px;
+position: relative;
+}
+
+#lwc {
+  font-size: small;
+}
+
+.pfp-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+.change-photo-button {
+    display: block;
+    position: absolute;
+    bottom: 26px;
+    right: 10px;
+
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100px;
+    height: 25px;
+
+    left: -16px;
+}
+
+.sb-card-body-arrow {
+    display: inline-block;
+    width: 10px; 
+    height: 10px; 
+    background-color: inherit; 
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    position: absolute;
+    top: -5px;
+    right: 5px;
+}
+
+#whatsmyteacheryappingtoday {
+  width: 116px;
+  height: 37px;
+  border-radius: none;
+  background: #2a2a2c;
+  font-size: 11px;
+  scale: 0.75;
+}
+
+#cam {
+  background-position: -91.5px 216px;
+  background-image: url('assets/icons/astlas.png');
+  scale: 1.1;
+  fill: white;
+}
+
+.cricle {
+  background: #353b3e;
+ border-radius: 100%;
+  width: 32px;
+  height: 32px;
+  margin-left: 42px;
+  top: 17px;
+  position: relative;
+}
+
+#custom-profile-arrow {
+  z-index: 1;
+scale: 0.85;
+top: 46px;
+  position: relative;
+  left: 58px;
+  color: black;
+  background-color: #2a2a2c;
+  border-color: #2a2a2c;
+}
+
+#pfp-upload-inside-cool {
+  color: #fff;
+  font-weight: bold;
+  padding: 7px 11px;
+  border: black;
+  background-color: #3a80f4;
+  top: -6px;
+  margin-left: 55px;
+}
+
+#com-upload-inside-cool {
+  color: #fff;
+  font-weight: bold;
+  padding: 7px 11px;
+  border: black;
+  background-color: #3a80f4;
+  top: -6px;
+  margin-left: 55px;
+}
+
+.main-header .search-bar {
+  margin-right: -73px;
+  width: 463px;
+  height: 30px;
+  border: 1px solid #D0D0D0;
+  box-shadow: 1px 1px 5px #F3F3F3;
+  flex: 1;
+  padding-left: 5px;
+}
+
+@media (max-width: 9000px){
+.ifyouwalkandiwasgone {
+  left: 50px;
+  top: 2px;
+  position: relative;
+  height: 37px;
+} 
+}
+
+
+.sticky-header .nav-tabs>li.active>a {
+  background: none;
+  border: none;
+  border-bottom: 3px solid #007bff;
+  color: #007bff;
+  padding-bottom: 8px;
+}
+
+.sub-header .nav-tabs > li.active > a {
+  font-weight: bold;
+  border-bottom: 3px solid #007bff;
+  color: #007bff;
+  padding-bottom: 7px;
+}
+
+.sub-header .nav-tabs > li.active > a {
+  color: #007bff;
+  font-weight: bold;
+  z-index: 999;
+}

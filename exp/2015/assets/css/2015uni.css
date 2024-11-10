@@ -1,0 +1,66 @@
+header.nav-wrapper {
+    background-color: #d34836;
+    color: white;
+    text-align: left;
+    font-size: 24px;
+    margin-bottom: 103px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    font-family: 'Product Sans', 'Open Sans', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    box-sizing: border-box;
+    height: 60px;
+}
+
+.left-shit {
+    display: flex;
+    align-items: center;
+}
+
+.current-user {
+    display: flex;
+    align-items: center;
+}
+
+.get-tf-away-bitch, .sidenav-trigger {
+    display: flex;
+    align-items: center;
+}
+
+.material-icons {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.home-bound {
+    display: flex;
+    align-items: center;
+    width: 100px;
+    height: 28px;
+    border-right: 1.5px solid #ffffff4a;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#home-text-navbar {
+    margin-top: 28px;
+}
+
+#pfp-navbar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.username {
+    font-family: 'Product Sans', 'Open Sans', sans-serif; 
+    font-weight: bold;
+    margin-right: 10px;
+}

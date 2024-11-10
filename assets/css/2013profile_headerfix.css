@@ -1,0 +1,26 @@
+
+/* Base */
+#ronnieisnum1 {
+  position: relative;
+  top: 3px;
+  height: 38px;
+  right: 14px;
+  left: -20px;
+  width: 100px;
+}
+
+.fromthehousewemadeourhome {
+  background: url(//web.archive.org/web/20130601001530im_/http://www.google.com/images/nav_logo124.png) no-repeat -36px -110px;
+  left: 11.5px;
+  position: relative;
+}
+
+@media (min-width: 900px) and (max-width: 1100px) {
+  .main-header .search-bar {
+    width: 420px;
+  }
+
+  #ronnieisnum1 {
+    top: 4px;
+  }
+}
