@@ -7,7 +7,6 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
 function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $disablePagination = false) {
     include("../important/db.php");
-    global $siteurl;
 
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
@@ -47,8 +46,8 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
         $plus_one = isset($post['plus_one']) ? $post['plus_one'] + 1 : 1;
 
         $comments = getCommentsForPost($post['id']);
-		$profile_image_url = $siteurl . "/apiv1/fetch_pfp_api.php?username=" . urlencode($comment['username']);
-     
+		$profile_image_url = $siteurl . "/apiv1/fetch_pfp_api.php?name=" . urlencode($post['username']);
+
 		$posts[] = array(
             'id' => $post['id'],
             'username' => $post['username'],
@@ -60,8 +59,8 @@ function getPostsFromDatabase($username = null, $page = 1, $postsPerPage = 16, $
             'created_at' => $post['created_at'],
             'plus_one' => $plus_one,
             'plus_one_usernames' => $post['plus_one_usernames'],
+			'profile_image_url' => $profile_image_url,
             'comments' => $comments,
-			'profile_image_url' => $profile_image_url
         );
     }
 
@@ -92,7 +91,7 @@ function getCommentsForPost($post_id) {
 
         while ($comment = $result->fetch_assoc()) {
 
-            $profile_image_url = $siteurl . "/apiv1/fetch_pfp_api.php?username=" . urlencode($comment['username']);
+            $profile_image_url = $siteurl . "/apiv1/fetch_pfp_api.php?name=" . urlencode($comment['username']);
 
             $comments[] = array(
                 'username' => $comment['username'],
